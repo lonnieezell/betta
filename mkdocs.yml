@@ -1,0 +1,48 @@
+site_name: YourVendor/YourPackage
+site_description: Documentation for YourVendor/YourPackage
+
+theme:
+  name: material
+  icon:
+    repo: fontawesome/brands/github
+  palette:
+    # Palette toggle for light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    # Palette toggle for dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.instant
+    - content.code.copy
+    - navigation.footer
+    - content.action.edit
+    - navigation.top
+    - search.suggest
+    - search.highlight
+    - search.share
+
+repo_url: https://github.com/vendor/package
+edit_uri: edit/develop/docs/
+copyright: Copyright &copy; 2025 Your Name.
+
+markdown_extensions:
+  - pymdownx.superfences
+  - pymdownx.highlight:
+      use_pygments: false
+  - admonition
+  - pymdownx.details
+
+plugins:
+  - search
+
+nav:
+  - Home: index.md
+  - Installation: installation.md
+  - Changelog: changelog.md
