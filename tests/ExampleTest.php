@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /**
- * This file is part of YourVendor/YourPackage.
+ * This file is part of Myth/Betta.
  *
  * (c) Your Name <you@example.com>
  *
@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Tests;
 
 use CodeIgniter\Test\CIUnitTestCase;
-use YourVendor\YourPackage\Exceptions\PackageException;
+use Myth\Betta\Exceptions\PackageException;
 
 /**
  * @internal

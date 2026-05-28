@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /**
- * This file is part of YourVendor/YourPackage.
+ * This file is part of Myth/Betta.
  *
  * (c) Your Name <you@example.com>
  *
@@ -11,7 +11,7 @@ declare(strict_types=1);
  * the LICENSE file that was distributed with this source code.
  */
 
-namespace YourVendor\YourPackage\Config;
+namespace Myth\Betta\Config;
 
 use CodeIgniter\Config\BaseService;
 

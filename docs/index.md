@@ -1,4 +1,4 @@
-# YourVendor/YourPackage
+# Myth/Betta
 
 Welcome to the documentation.
 

@@ -1,137 +1,128 @@
-# YourVendor/YourPackage
+# Betta
 
-A starter template for building CodeIgniter 4 packages. Replace `YourVendor`, `YourPackage`, and related placeholders throughout the codebase before publishing.
+A drop-in CodeIgniter 4 package that gives beta-stage applications a complete feedback collection and triage system. It ships with a public-facing form endpoint, a database-backed storage layer, and a full CLI toolkit for filtering, reviewing, grouping, and prioritizing user feedback — with no separate admin UI required.
 
-## Starting a New Project from This Template
+An optional AI-powered grouping command uses an LLM to cluster similar feedback items on demand.
 
-1. Create a new empty repo on GitHub (no README, no .gitignore).
-2. Clone this template and point it at your new repo:
+**[Full Documentation →](https://lonnieezell.github.io/betta)**
 
-```bash
-git clone https://github.com/lonnieezell/codeigniter-package-skeleton.git your-package-name
-cd your-package-name
-git remote set-url origin https://github.com/YOUR_ORG/your-package-name.git
-git push -u origin main
-```
-
-3. Find and replace all placeholder strings throughout the codebase:
-
-| Placeholder | Replace with |
-|---|---|
-| `YourVendor` | Your Composer vendor name (e.g. `Acme`) |
-| `YourPackage` | Your package name (e.g. `MyAddon`) |
-| `vendor/package` | Your Composer package slug (e.g. `acme/my-addon`) |
-
-4. Run `composer install` (or `docker compose up`) to install dependencies.
-
-> **Note on GitHub Workflows:** The CI workflows in `.github/workflows/` are configured to trigger on PRs targeting `main` or pushes directly to `main`. If your project uses a different branching strategy (e.g., PRs go to `develop`, or you use a `release` branch), update the `branches:` values in each workflow file to match.
+---
 
 ## Requirements
 
 - PHP 8.2+
-- CodeIgniter 4.7+
+- CodeIgniter 4.3+
 
-## Project Structure
+---
 
-```
-src/
-  Config/
-    Registrar.php   # Hooks into CI4's auto-discovery (filters, etc.)
-    Services.php    # Register package services
-  Exceptions/
-    PackageException.php
-tests/
-  ExampleTest.php
-  _support/         # Test helpers and fixtures
-docs/
-  index.md          # Documentation home page
-  installation.md   # Installation guide
-  changelog.md      # Changelog
-mkdocs.yml          # MkDocs configuration (Material theme)
-```
-
-## Getting Started with Docker
-
-The repo includes a Docker setup using PHP 8.4 with all CI4-required extensions and Xdebug for coverage. Dependencies are installed automatically on first run.
-
-Start the dev server (visits `http://localhost:8080` to see the CI4 welcome page):
+## Installation
 
 ```bash
-docker compose up
+composer require newmythmedia/ci4-beta-feedback
+php spark migrate --all
 ```
 
-Rebuild the image after changing the `Dockerfile`:
+That's it. Routes, Spark commands, and migrations are all auto-discovered by CI4 — no manual bootstrapping required.
+
+---
+
+## Configuration
+
+Override the default config by creating `app/Config/BetaFeedback.php` in your host app:
+
+```php
+// app/Config/BetaFeedback.php
+use Myth\Betta\Config\BetaFeedback as BaseBetaFeedback;
+
+class BetaFeedback extends BaseBetaFeedback
+{
+    public string $routePrefix = 'feedback';
+    public bool   $acceptSubmissions = true;
+    public string $anthropicApiKey   = '';   // or use env('ANTHROPIC_API_KEY')
+}
+```
+
+To enable the AI-powered `feedback:analyze` command, add your Anthropic API key to `.env`:
+
+```
+ANTHROPIC_API_KEY=sk-ant-...
+```
+
+To publish views for customization:
 
 ```bash
-composer docker:build
+php spark feedback:publish --views
 ```
 
-## Running Tests
+---
+
+## Collecting Feedback
+
+The package registers these routes automatically:
+
+```
+GET  /feedback         → renders the embeddable feedback form
+POST /feedback/submit  → accepts and stores submissions
+```
+
+Embed the form in any view:
+
+```php
+echo view('Myth\Betta\Views\form');
+```
+
+The form submits via `fetch()` with a non-JS POST fallback. No frontend framework required.
+
+---
+
+## CLI Commands
+
+All triage workflows run via `php spark feedback:*`.
+
+### List feedback
 
 ```bash
-composer docker:test            # run phpunit in Docker
-composer docker:test:coverage   # run with HTML coverage report (build/phpunit/html/)
-
-# or locally
-composer test
-composer test:coverage
+php spark feedback:list
+php spark feedback:list --category=bug --status=new
+php spark feedback:list --ungrouped
+php spark feedback:list --cluster=3 --limit=50
 ```
 
-## Code Quality
+### Review a single item
 
 ```bash
-composer docker:cs          # check coding style
-composer docker:cs-fix      # fix coding style
-composer docker:analyze     # PHPStan + Rector dry-run
-composer docker:rector      # apply Rector changes
-composer docker:ci          # run all checks (style, analysis, tests)
-
-# or locally (same commands without the docker: prefix)
-composer cs
-composer cs-fix
-composer analyze
-composer ci
+php spark feedback:review 142
 ```
 
-## Docker Shell
+Opens an interactive prompt to assign the item to a cluster, create a new cluster, or dismiss it.
 
-Open a bash shell inside the container:
+### Assign to a cluster
 
 ```bash
-composer docker:shell
+php spark feedback:group 142 3
 ```
 
-## Documentation (MkDocs)
-
-Docs live in `docs/` and are built with [Material for MkDocs](https://squidfunk.github.io/mkdocs-material/). Update `mkdocs.yml` with your `site_name`, `repo_url`, and `copyright` after cloning.
-
-**Install MkDocs** (requires Python 3 + pip):
+### Manage clusters
 
 ```bash
-pip3 install mkdocs mkdocs-material
+php spark feedback:clusters
+php spark feedback:clusters --priority=high
+php spark feedback:clusters --create "Mobile Layout Issues" --priority=high
+php spark feedback:clusters --edit=3 --label="Mobile Navigation" --priority=critical
+php spark feedback:clusters --delete=7
 ```
 
-**Preview locally** (live-reload at `http://127.0.0.1:8000`):
+### AI-powered grouping *(optional — requires Anthropic API key)*
 
 ```bash
-mkdocs serve
+php spark feedback:analyze            # review suggestions interactively
+php spark feedback:analyze --dry-run  # print suggestions only, no writes
+php spark feedback:analyze --apply    # auto-accept all suggestions
 ```
 
-**Build static output** to `site/`:
+Reads ungrouped feedback, asks AI to suggest clusters, and presents them for confirmation before writing anything. Costs roughly $0.002–$0.01 per run at 50 items.
 
-```bash
-mkdocs build
-```
-
-**Deploy to GitHub Pages** (done automatically by CI, but can be run manually):
-
-```bash
-mkdocs gh-deploy
-```
-
-## How the Package Integrates with CI4
-
-CI4 auto-discovers your package via `src/Config/Registrar.php`. Add filter aliases, routes, or other config there. Register services in `src/Config/Services.php`. No manual wiring needed in the host app — Composer autoload and CI4's discovery handle it automatically.
+---
 
 ## License
 
