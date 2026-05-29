@@ -5,7 +5,7 @@ declare(strict_types=1);
 /**
  * This file is part of Myth/Betta.
  *
- * (c) Lonnie Ezell <lonnieje@gmail.com>
+ * (c) Your Name <you@example.com>
  *
  * For the full copyright and license information, please view
  * the LICENSE file that was distributed with this source code.
@@ -52,8 +52,8 @@ class CreateBettaFeedbackTable extends Migration
                 'null'       => true,
             ],
             'sentiment' => [
-                'type'       => 'TINYINT',
-                'null'       => true,
+                'type' => 'TINYINT',
+                'null' => true,
             ],
             'status' => [
                 'type'       => 'VARCHAR',
@@ -62,10 +62,10 @@ class CreateBettaFeedbackTable extends Migration
                 'default'    => 'new',
             ],
             'cluster_id' => [
-                'type'     => 'INT',
+                'type'       => 'INT',
                 'constraint' => 10,
-                'unsigned' => true,
-                'null'     => true,
+                'unsigned'   => true,
+                'null'       => true,
             ],
             'created_at' => [
                 'type' => 'DATETIME',

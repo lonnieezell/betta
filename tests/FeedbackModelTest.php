@@ -5,7 +5,7 @@ declare(strict_types=1);
 /**
  * This file is part of Myth/Betta.
  *
- * (c) Lonnie Ezell <lonnieje@gmail.com>
+ * (c) Your Name <you@example.com>
  *
  * For the full copyright and license information, please view
  * the LICENSE file that was distributed with this source code.
@@ -32,7 +32,6 @@ final class FeedbackModelTest extends CIUnitTestCase
     protected $migrate     = true;
     protected $migrateOnce = true;
     protected $refresh     = false;
-
     private FeedbackModel $model;
 
     protected function setUp(): void

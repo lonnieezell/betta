@@ -5,7 +5,7 @@ declare(strict_types=1);
 /**
  * This file is part of Myth/Betta.
  *
- * (c) Lonnie Ezell <lonnieje@gmail.com>
+ * (c) Your Name <you@example.com>
  *
  * For the full copyright and license information, please view
  * the LICENSE file that was distributed with this source code.
@@ -14,9 +14,7 @@ declare(strict_types=1);
 namespace Tests;
 
 use CodeIgniter\Test\CIUnitTestCase;
-use Myth\Betta\Enums\CategoryEnum;
 use Myth\Betta\Enums\PriorityEnum;
-use Myth\Betta\Enums\StatusEnum;
 use Myth\Betta\Models\FeedbackClusterModel;
 use Myth\Betta\Models\FeedbackModel;
 use Tests\Support\DatabaseTestTrait;
@@ -33,7 +31,6 @@ final class FeedbackClusterModelTest extends CIUnitTestCase
     protected $migrate     = true;
     protected $migrateOnce = true;
     protected $refresh     = false;
-
     private FeedbackClusterModel $model;
 
     protected function setUp(): void
@@ -123,8 +120,8 @@ final class FeedbackClusterModelTest extends CIUnitTestCase
         $feedbackModel->insert(['message' => 'Item 2', 'cluster_id' => $clusterId]);
         $feedbackModel->insert(['message' => 'Item 3', 'cluster_id' => $clusterId]);
 
-        $results  = $this->model->findAllWithCount();
-        $cluster  = array_values(array_filter($results, static fn ($r) => $r->id === $clusterId))[0];
+        $results = $this->model->findAllWithCount();
+        $cluster = array_values(array_filter($results, static fn ($r) => $r->id === $clusterId))[0];
         $this->assertSame(3, $cluster->item_count);
     }
 
@@ -138,9 +135,9 @@ final class FeedbackClusterModelTest extends CIUnitTestCase
         $feedbackModel->insert(['message' => 'For B', 'cluster_id' => $clusterB]);
         $feedbackModel->insert(['message' => 'For B 2', 'cluster_id' => $clusterB]);
 
-        $results  = $this->model->findAllWithCount();
-        $a        = array_values(array_filter($results, static fn ($r) => $r->id === $clusterA))[0];
-        $b        = array_values(array_filter($results, static fn ($r) => $r->id === $clusterB))[0];
+        $results = $this->model->findAllWithCount();
+        $a       = array_values(array_filter($results, static fn ($r) => $r->id === $clusterA))[0];
+        $b       = array_values(array_filter($results, static fn ($r) => $r->id === $clusterB))[0];
 
         $this->assertSame(1, $a->item_count);
         $this->assertSame(2, $b->item_count);
