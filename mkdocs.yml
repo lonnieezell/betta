@@ -49,4 +49,7 @@ plugins:
 nav:
   - Home: index.md
   - Installation: installation.md
+  - Database: database.md
+  - Models: models.md
+  - Enums: enums.md
   - Changelog: changelog.md
