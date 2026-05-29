@@ -21,6 +21,7 @@ parameters:
 			- Myth\Betta\Config
 		additionalServices:
 			- Myth\Betta\Config\Services
+	treatPhpDocTypesAsCertain: false
 	strictRules:
 		allRules: false
 		disallowedLooseComparison: true

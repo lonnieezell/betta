@@ -15,7 +15,8 @@
         }
     ],
     "require": {
-        "php": "^8.2"
+        "php": "^8.2",
+        "codeigniter4/framework": "^4.5"
     },
     "require-dev": {
         "codeigniter/phpstan-codeigniter": "^1.3",
@@ -23,6 +24,9 @@
         "codeigniter4/framework": "^4.7",
         "mockery/mockery": "^1.0",
         "phpstan/phpstan-strict-rules": "^2.0"
+    },
+    "suggest": {
+        "myth/scribe": "Required for AI-assisted feedback clustering via spark feedback:analyze"
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
