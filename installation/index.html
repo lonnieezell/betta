@@ -14,7 +14,7 @@
         <link rel="prev" href="..">
       
       
-        <link rel="next" href="../changelog/">
+        <link rel="next" href="../database/">
       
       
         
@@ -362,10 +362,135 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#install-the-package" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Install the package
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#optional-ai-clustering" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Optional: AI clustering
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#optional-override-config" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Optional: override config
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#next-steps" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Next steps
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
       
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../database/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Database
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../models/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Models
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../enums/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Enums
+  
+
+    
+  </span>
+  
+  
+
+      </a>
     </li>
   
 
@@ -434,6 +559,50 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#install-the-package" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Install the package
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#optional-ai-clustering" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Optional: AI clustering
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#optional-override-config" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Optional: override config
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#next-steps" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Next steps
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -460,13 +629,44 @@
 
 
 <h1 id="installation">Installation</h1>
-<p>Install via Composer:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>composer<span class="w"> </span>require<span class="w"> </span>myth/betta
-</code></pre></div>
 <h2 id="requirements">Requirements</h2>
 <ul>
-<li>PHP 8.1+</li>
-<li>CodeIgniter 4.3.5+</li>
+<li>PHP 8.2+</li>
+<li>CodeIgniter 4.5+ (required for PHP enum model casting)</li>
+</ul>
+<h2 id="install-the-package">Install the package</h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>composer<span class="w"> </span>require<span class="w"> </span>myth/betta
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>php<span class="w"> </span>spark<span class="w"> </span>migrate<span class="w"> </span>--all
+</code></pre></div>
+<p>CI4 auto-discovers the package — routes, Spark commands, and migrations are all wired up with no manual bootstrapping.</p>
+<h2 id="optional-ai-clustering">Optional: AI clustering</h2>
+<p>To use <code>spark feedback:analyze</code>, install <code>myth/scribe</code> and configure an API key:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>composer<span class="w"> </span>require<span class="w"> </span>myth/scribe
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>php<span class="w"> </span>spark<span class="w"> </span>config:publish<span class="w"> </span>Myth<span class="se">\S</span>cribe<span class="se">\C</span>onfig<span class="se">\A</span>I
+</code></pre></div>
+<p>Then add your key to <code>.env</code>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>CLAUDE_API_KEY=sk-ant-...
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a># or OPENAI_API_KEY=sk-...
+</code></pre></div>
+<p><code>myth/betta</code> works fine without Scribe — the <code>feedback:analyze</code> command just exits cleanly if it isn't installed.</p>
+<h2 id="optional-override-config">Optional: override config</h2>
+<p>You don't need to publish the config to override it. Create <code>app/Config/Betta.php</code> and extend the package class:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="cp">&lt;?php</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="k">use</span> <span class="nx">Myth\Betta\Config\Betta</span> <span class="k">as</span> <span class="nx">BaseBetta</span><span class="p">;</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="k">class</span> <span class="nc">Betta</span> <span class="k">extends</span> <span class="nx">BaseBetta</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="p">{</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>    <span class="k">public</span> <span class="nx">string</span> <span class="nv">$routePrefix</span> <span class="o">=</span> <span class="s1">&#39;betta&#39;</span><span class="p">;</span>   <span class="c1">// default: &#39;feedback&#39;</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>    <span class="k">public</span> <span class="nx">bool</span> <span class="nv">$acceptSubmissions</span> <span class="o">=</span> <span class="k">false</span><span class="p">;</span>  <span class="c1">// close the form</span>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>    <span class="k">public</span> <span class="nx">int</span> <span class="nv">$maxMessageLength</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">;</span>     <span class="c1">// default: 2000</span>
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="p">}</span>
+</code></pre></div>
+<p>CI4's config cascade picks this up automatically — no publish step needed.</p>
+<h2 id="next-steps">Next steps</h2>
+<ul>
+<li><a href="../database/">Database</a> — what the two tables store</li>
+<li><a href="../models/">Models</a> — working with <code>FeedbackModel</code> and <code>FeedbackClusterModel</code></li>
 </ul>
 
 
@@ -520,13 +720,13 @@
         
         
           
-          <a href="../changelog/" class="md-footer__link md-footer__link--next" aria-label="Next: Changelog">
+          <a href="../database/" class="md-footer__link md-footer__link--next" aria-label="Next: Database">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                Changelog
+                Database
               </div>
             </div>
             <div class="md-footer__button md-icon">
