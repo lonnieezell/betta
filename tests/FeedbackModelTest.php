@@ -38,6 +38,8 @@ final class FeedbackModelTest extends CIUnitTestCase
     protected function setUp(): void
     {
         parent::setUp();
+        $this->db->table('betta_feedback')->truncate();
+        $this->db->table('feedback_clusters')->truncate();
         $this->model = new FeedbackModel();
     }
 

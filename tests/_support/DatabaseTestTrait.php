@@ -15,10 +15,6 @@ namespace Tests\Support;
 
 use CodeIgniter\Test\DatabaseTestTrait as CIDatabaseTestTrait;
 
-/**
- * Wraps CI4's DatabaseTestTrait with defaults for the Myth/Betta package tests.
- * Individual test classes may override $namespace, $DBGroup, $migrate, etc.
- */
 trait DatabaseTestTrait
 {
     use CIDatabaseTestTrait;

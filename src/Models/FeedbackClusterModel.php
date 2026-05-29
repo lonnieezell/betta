@@ -43,16 +43,25 @@ class FeedbackClusterModel extends Model
 
     /**
      * Returns all clusters with a computed item_count from a COUNT() join.
+     * Manually casts priority to PriorityEnum and item_count to int so the
+     * return type is consistent regardless of DB driver.
      *
      * @return list<object>
      */
     public function findAllWithCount(): array
     {
-        return $this->db->table('feedback_clusters AS fc')
+        $results = $this->db->table('feedback_clusters AS fc')
             ->select('fc.*, COUNT(fb.id) AS item_count')
             ->join('betta_feedback AS fb', 'fb.cluster_id = fc.id', 'left')
             ->groupBy('fc.id')
             ->get()
             ->getResultObject();
+
+        foreach ($results as $row) {
+            $row->priority   = PriorityEnum::from($row->priority);
+            $row->item_count = (int) $row->item_count;
+        }
+
+        return $results;
     }
 }

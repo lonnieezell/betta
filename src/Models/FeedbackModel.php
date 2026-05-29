@@ -52,6 +52,9 @@ class FeedbackModel extends Model
 
     /** @var array<string, mixed> */
     protected $validationRules = [
-        'message' => 'required',
+        'message'   => 'required',
+        'category'  => 'permit_empty|in_list[bug,ux,feature,other]',
+        'status'    => 'permit_empty|in_list[new,reviewed,grouped,dismissed]',
+        'sentiment' => 'permit_empty|in_list[-1,0,1]',
     ];
 }

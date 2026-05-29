@@ -39,6 +39,8 @@ final class FeedbackClusterModelTest extends CIUnitTestCase
     protected function setUp(): void
     {
         parent::setUp();
+        $this->db->table('betta_feedback')->truncate();
+        $this->db->table('feedback_clusters')->truncate();
         $this->model = new FeedbackClusterModel();
     }
 
@@ -89,6 +91,17 @@ final class FeedbackClusterModelTest extends CIUnitTestCase
             $row = $this->model->find($id);
             $this->assertSame($priority, $row->priority);
         }
+    }
+
+    public function testFindAllWithCountReturnsPriorityAsEnum(): void
+    {
+        $id      = $this->model->insert(['label' => 'Enum check', 'priority' => PriorityEnum::Critical]);
+        $results = $this->model->findAllWithCount();
+
+        $cluster = array_values(array_filter($results, static fn ($r) => $r->id === $id))[0];
+        $this->assertInstanceOf(PriorityEnum::class, $cluster->priority);
+        $this->assertSame(PriorityEnum::Critical, $cluster->priority);
+        $this->assertIsInt($cluster->item_count);
     }
 
     public function testFindAllWithCountReturnsZeroItemsForEmptyCluster(): void
