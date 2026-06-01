@@ -1,0 +1,104 @@
+<?php
+
+declare(strict_types=1);
+
+/**
+ * This file is part of Myth/Betta.
+ *
+ * (c) Your Name <you@example.com>
+ *
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
+ */
+
+namespace Myth\Betta\Controllers;
+
+use CodeIgniter\HTTP\RedirectResponse;
+use CodeIgniter\HTTP\ResponseInterface;
+use Myth\Betta\Config\Betta;
+use Myth\Betta\Enums\CategoryEnum;
+use Myth\Betta\Models\FeedbackModel;
+
+class FeedbackController extends \CodeIgniter\Controller
+{
+    protected $helpers = ['form', 'url'];
+
+    private Betta $config;
+
+    public function __construct()
+    {
+        $this->config = config(Betta::class);
+    }
+
+    public function index(): string
+    {
+        if (! $this->config->acceptSubmissions) {
+            return $this->renderView('closed');
+        }
+
+        return $this->renderView('page', [
+            'categories' => CategoryEnum::cases(),
+        ]);
+    }
+
+    public function submit(): ResponseInterface|RedirectResponse
+    {
+        if (! $this->config->acceptSubmissions) {
+            return redirect()->to($this->config->routePrefix);
+        }
+
+        $rules = [
+            'category' => 'permit_empty|in_list[bug,ux,feature,other]',
+            'message'  => 'required',
+            'email'    => 'permit_empty|valid_email',
+        ];
+
+        $isJson = $this->isJsonRequest();
+
+        if (! $this->validate($rules)) {
+            if ($isJson) {
+                return $this->response
+                    ->setStatusCode(422)
+                    ->setJSON(['errors' => $this->validator->getErrors()]);
+            }
+
+            return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
+        }
+
+        $urlContext = $this->request->getPost('url_context')
+            ?: $this->request->getHeaderLine('Referer');
+
+        $model = new FeedbackModel();
+        $model->insert([
+            'session_id'  => hash('sha256', session_id()),
+            'email'       => $this->request->getPost('email'),
+            'category'    => CategoryEnum::from($this->request->getPost('category') ?: 'other'),
+            'message'     => $this->request->getPost('message'),
+            'url_context' => $urlContext ?: null,
+        ]);
+
+        if ($isJson) {
+            return $this->response->setJSON(['ok' => true]);
+        }
+
+        return redirect()->to($this->config->routePrefix)->with('feedback_success', 'Thank you for your feedback!');
+    }
+
+    private function renderView(string $view, array $data = []): string
+    {
+        $override = APPPATH . 'Views/vendor/betta/' . $view . '.php';
+        if (is_file($override)) {
+            return view($override, $data);
+        }
+
+        return view('Myth\Betta\Views\\' . $view, $data);
+    }
+
+    private function isJsonRequest(): bool
+    {
+        $accept = $this->request->getHeaderLine('Accept');
+        $xhr    = $this->request->getHeaderLine('X-Requested-With');
+
+        return str_contains($accept, 'application/json') || strtolower($xhr) === 'xmlhttprequest';
+    }
+}
