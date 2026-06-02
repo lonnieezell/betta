@@ -61,7 +61,7 @@ class FeedbackClusterModel extends Model
      * Manually casts priority to PriorityEnum and item_count to int so the
      * return type is consistent regardless of DB driver.
      *
-     * @param 'updated_at'|'count' $sort
+     * @param 'count'|'updated_at' $sort
      *
      * @return list<object>
      */

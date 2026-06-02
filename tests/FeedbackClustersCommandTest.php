@@ -111,7 +111,7 @@ final class FeedbackClustersCommandTest extends CIUnitTestCase
     {
         $this->runCommand('feedback:cluster:create "Login Bugs"');
 
-        $this->assertSame(1, $this->clusters->countAll());
+        $this->assertCount(1, $this->clusters->findAll());
         $cluster = $this->clusters->first();
         $this->assertSame('Login Bugs', $cluster->label);
     }

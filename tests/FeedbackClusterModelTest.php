@@ -178,7 +178,7 @@ final class FeedbackClusterModelTest extends CIUnitTestCase
     {
         // Insert in order; the second insert will have a later updated_at
         $idA = $this->model->insert(['label' => 'Cluster A']);
-        $idB = $this->model->insert(['label' => 'Cluster B']);
+        $this->model->insert(['label' => 'Cluster B']);
 
         // Touch cluster A to make it most recently updated
         $this->model->update($idA, ['label' => 'Cluster A updated']);
@@ -212,6 +212,7 @@ final class FeedbackClusterModelTest extends CIUnitTestCase
 
         $items = $feedbackModel->where('cluster_id IS NULL', null, false)->findAll();
         $this->assertCount(2, $items);
+
         foreach ($items as $item) {
             $this->assertSame(StatusEnum::New, $item->status);
         }
