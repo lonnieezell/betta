@@ -32,15 +32,15 @@ class FeedbackGroupCommand extends BaseCommand
     /**
      * @param array<int|string, string|null> $params
      */
-    public function run(array $params): void
+    public function run(array $params)
     {
-        $feedbackId = isset($params[0]) ? (int) $params[0] : null;
-        $clusterId  = isset($params[1]) ? (int) $params[1] : null;
+        $feedbackId = isset($params[0]) && ctype_digit((string) $params[0]) ? (int) $params[0] : null;
+        $clusterId  = isset($params[1]) && ctype_digit((string) $params[1]) ? (int) $params[1] : null;
 
-        if ($feedbackId === null || $clusterId === null) {
+        if ($feedbackId === null || $feedbackId <= 0 || $clusterId === null || $clusterId <= 0) {
             CLI::error('Usage: feedback:group <id> <cluster_id>');
 
-            return;
+            return EXIT_ERROR;
         }
 
         $feedbackModel = new FeedbackModel();
@@ -49,19 +49,23 @@ class FeedbackGroupCommand extends BaseCommand
         if ($feedbackModel->find($feedbackId) === null) {
             CLI::error("Feedback item {$feedbackId} not found.");
 
-            return;
+            return EXIT_ERROR;
         }
 
         if ($clusterModel->find($clusterId) === null) {
             CLI::error("Cluster {$clusterId} not found.");
 
-            return;
+            return EXIT_ERROR;
         }
 
-        $feedbackModel->update($feedbackId, [
+        if (! $feedbackModel->update($feedbackId, [
             'cluster_id' => $clusterId,
             'status'     => StatusEnum::Grouped,
-        ]);
+        ])) {
+            CLI::error("Failed to assign feedback {$feedbackId} to cluster {$clusterId}.");
+
+            return EXIT_ERROR;
+        }
 
         CLI::write("Feedback {$feedbackId} assigned to cluster {$clusterId}.");
     }
