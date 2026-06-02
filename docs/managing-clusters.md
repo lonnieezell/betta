@@ -99,6 +99,55 @@ Type `yes` to proceed or anything else to abort.
 !!! warning "Deletion is not reversible"
     There's no undo. If you want to preserve the grouping, consider renaming or reprioritising the cluster instead of deleting it.
 
+## Assigning an item to a cluster
+
+```bash
+php spark feedback:group <id> <cluster_id>
+```
+
+Sets `cluster_id` and flips the item's status to `grouped` in one step. Both arguments are required.
+
+```bash
+php spark feedback:group 142 3
+```
+
+On success:
+
+```
+Feedback 142 assigned to cluster 3.
+```
+
+If either ID doesn't exist you'll get a clear error and a non-zero exit code:
+
+```
+Feedback item 142 not found.
+```
+
+```
+Cluster 3 not found.
+```
+
+The non-zero exit makes it safe to use in scripts — failures won't silently pass through `&&` chains.
+
+### Bulk reassignment
+
+Because the command is non-interactive, it's easy to loop over a list of IDs in a shell script:
+
+```bash
+for id in 142 143 144 145; do
+    php spark feedback:group "$id" 3
+done
+```
+
+Or pipe IDs from another command:
+
+```bash
+php spark feedback:list --status new --limit 50 | awk '{print $1}' | xargs -I{} php spark feedback:group {} 3
+```
+
+!!! tip "Finding item IDs"
+    Use `php spark feedback:list` to browse unassigned items and note their IDs before running a bulk assignment.
+
 ## Next steps
 
 - [Browsing Feedback](browsing-feedback.md) — filter and view individual items, including by cluster
