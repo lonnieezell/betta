@@ -505,6 +505,34 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#assigning-an-item-to-a-cluster" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Assigning an item to a cluster
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Assigning an item to a cluster">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#bulk-reassignment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bulk reassignment
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#next-steps" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -730,6 +758,34 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#assigning-an-item-to-a-cluster" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Assigning an item to a cluster
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Assigning an item to a cluster">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#bulk-reassignment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bulk reassignment
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#next-steps" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -826,6 +882,34 @@
 <div class="admonition warning">
 <p class="admonition-title">Deletion is not reversible</p>
 <p>There's no undo. If you want to preserve the grouping, consider renaming or reprioritising the cluster instead of deleting it.</p>
+</div>
+<h2 id="assigning-an-item-to-a-cluster">Assigning an item to a cluster</h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>php<span class="w"> </span>spark<span class="w"> </span>feedback:group<span class="w"> </span>&lt;id&gt;<span class="w"> </span>&lt;cluster_id&gt;
+</code></pre></div>
+<p>Sets <code>cluster_id</code> and flips the item's status to <code>grouped</code> in one step. Both arguments are required.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>php<span class="w"> </span>spark<span class="w"> </span>feedback:group<span class="w"> </span><span class="m">142</span><span class="w"> </span><span class="m">3</span>
+</code></pre></div>
+<p>On success:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>Feedback 142 assigned to cluster 3.
+</code></pre></div>
+<p>If either ID doesn't exist you'll get a clear error and a non-zero exit code:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>Feedback item 142 not found.
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>Cluster 3 not found.
+</code></pre></div>
+<p>The non-zero exit makes it safe to use in scripts — failures won't silently pass through <code>&amp;&amp;</code> chains.</p>
+<h3 id="bulk-reassignment">Bulk reassignment</h3>
+<p>Because the command is non-interactive, it's easy to loop over a list of IDs in a shell script:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="k">for</span><span class="w"> </span>id<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="m">142</span><span class="w"> </span><span class="m">143</span><span class="w"> </span><span class="m">144</span><span class="w"> </span><span class="m">145</span><span class="p">;</span><span class="w"> </span><span class="k">do</span>
+<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a><span class="w">    </span>php<span class="w"> </span>spark<span class="w"> </span>feedback:group<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$id</span><span class="s2">&quot;</span><span class="w"> </span><span class="m">3</span>
+<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a><span class="k">done</span>
+</code></pre></div>
+<p>Or pipe IDs from another command:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a>php<span class="w"> </span>spark<span class="w"> </span>feedback:list<span class="w"> </span>--status<span class="w"> </span>new<span class="w"> </span>--limit<span class="w"> </span><span class="m">50</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>awk<span class="w"> </span><span class="s1">&#39;{print $1}&#39;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>xargs<span class="w"> </span>-I<span class="o">{}</span><span class="w"> </span>php<span class="w"> </span>spark<span class="w"> </span>feedback:group<span class="w"> </span><span class="o">{}</span><span class="w"> </span><span class="m">3</span>
+</code></pre></div>
+<div class="admonition tip">
+<p class="admonition-title">Finding item IDs</p>
+<p>Use <code>php spark feedback:list</code> to browse unassigned items and note their IDs before running a bulk assignment.</p>
 </div>
 <h2 id="next-steps">Next steps</h2>
 <ul>
