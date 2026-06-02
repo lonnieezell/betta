@@ -38,6 +38,12 @@ class FeedbackReviewCommand extends BaseCommand
 
         $startId = isset($params[0]) && ctype_digit($params[0]) ? (int) $params[0] : null;
 
+        if ($startId !== null && $startId <= 0) {
+            CLI::error('Usage: feedback:review [id]');
+
+            return EXIT_ERROR;
+        }
+
         if ($startId !== null) {
             $item = $feedbackModel->find($startId);
             if ($item === null) {
@@ -56,7 +62,14 @@ class FeedbackReviewCommand extends BaseCommand
 
         while ($item !== null) {
             $this->displayItem($item);
-            $feedbackModel->update($item->id, ['status' => StatusEnum::Reviewed]);
+
+            if ($item->status === StatusEnum::New) {
+                if (! $feedbackModel->update($item->id, ['status' => StatusEnum::Reviewed])) {
+                    CLI::error("Failed to mark feedback {$item->id} as reviewed.");
+
+                    return EXIT_ERROR;
+                }
+            }
 
             $action = $this->promptAction();
 
@@ -65,7 +78,11 @@ class FeedbackReviewCommand extends BaseCommand
             }
 
             if ($action === 'd') {
-                $feedbackModel->update($item->id, ['status' => StatusEnum::Dismissed]);
+                if (! $feedbackModel->update($item->id, ['status' => StatusEnum::Dismissed])) {
+                    CLI::error("Failed to dismiss feedback {$item->id}.");
+
+                    return EXIT_ERROR;
+                }
                 CLI::write("Feedback {$item->id} dismissed.");
             } elseif ($action === 'a') {
                 $this->handleAssign($item, $feedbackModel, $clusterModel);
@@ -85,8 +102,8 @@ class FeedbackReviewCommand extends BaseCommand
     private function displayItem(object $item): void
     {
         CLI::write('');
-        $category = $item->category instanceof \BackedEnum ? $item->category->value : (string) $item->category;
-        $status   = $item->status instanceof \BackedEnum ? $item->status->value : (string) $item->status;
+        $category = $item->category->value;
+        $status   = $item->status->value;
         CLI::write(CLI::color("--- Feedback #{$item->id} ({$category} / {$status}) ---", 'yellow'));
         CLI::write('Email:   ' . ($item->email ?? '—'));
         CLI::write('URL:     ' . ($item->url_context ?? '—'));
@@ -107,10 +124,6 @@ class FeedbackReviewCommand extends BaseCommand
         return $action;
     }
 
-    /**
-     * @param FeedbackModel        $feedbackModel
-     * @param FeedbackClusterModel $clusterModel
-     */
     private function handleAssign(object $item, FeedbackModel $feedbackModel, FeedbackClusterModel $clusterModel): void
     {
         $clusters = $clusterModel->findAll();
@@ -121,17 +134,21 @@ class FeedbackReviewCommand extends BaseCommand
             return;
         }
 
+        $clusterMap = [];
+
         foreach ($clusters as $cluster) {
             CLI::write("[{$cluster->id}] {$cluster->label}");
+            $clusterMap[$cluster->id] = true;
         }
 
         $clusterId = null;
 
         while ($clusterId === null) {
             $input = (string) CLI::prompt('Cluster ID');
+            $inputId = ctype_digit($input) ? (int) $input : 0;
 
-            if (ctype_digit($input) && $clusterModel->find((int) $input) !== null) {
-                $clusterId = (int) $input;
+            if ($inputId > 0 && isset($clusterMap[$inputId])) {
+                $clusterId = $inputId;
             } else {
                 CLI::error("Cluster '{$input}' not found.");
             }
@@ -150,8 +167,23 @@ class FeedbackReviewCommand extends BaseCommand
      */
     private function handleNewCluster(object $item, FeedbackModel $feedbackModel, FeedbackClusterModel $clusterModel): void
     {
-        $label     = (string) CLI::prompt('Cluster label');
+        $label = '';
+
+        while ($label === '') {
+            $label = trim((string) CLI::prompt('Cluster label'));
+
+            if ($label === '') {
+                CLI::error('Cluster label cannot be empty.');
+            }
+        }
+
         $clusterId = $clusterModel->insert(['label' => $label]);
+
+        if ($clusterId === false) {
+            CLI::error('Failed to create cluster.');
+
+            return;
+        }
 
         $feedbackModel->update($item->id, [
             'cluster_id' => $clusterId,

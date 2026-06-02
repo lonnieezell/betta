@@ -110,6 +110,16 @@ final class FeedbackReviewCommandTest extends CIUnitTestCase
         $this->assertStringContainsString('9999', $output);
     }
 
+    public function testLoadByIdDoesNotOverwriteNonNewStatus(): void
+    {
+        $id = $this->feedback->insert(['message' => 'already dismissed', 'status' => StatusEnum::Dismissed]);
+
+        $this->runCommand("feedback:review {$id}", "q\n");
+
+        $item = $this->feedback->find($id);
+        $this->assertSame(StatusEnum::Dismissed, $item->status);
+    }
+
     // -------------------------------------------------------------------------
     // q — quit
     // -------------------------------------------------------------------------
@@ -211,6 +221,17 @@ final class FeedbackReviewCommandTest extends CIUnitTestCase
 
         $cluster = $this->clusters->find($item->cluster_id);
         $this->assertSame('Navigation Bugs', $cluster->label);
+    }
+
+    public function testNewClusterRejectsEmptyLabelAndRetries(): void
+    {
+        $id = $this->feedback->insert(['message' => 'issue', 'status' => StatusEnum::New]);
+
+        $this->runCommand('feedback:review', "n\n\nReal Label\n");
+
+        $item    = $this->feedback->find($id);
+        $cluster = $this->clusters->find($item->cluster_id);
+        $this->assertSame('Real Label', $cluster->label);
     }
 
     public function testNewClusterAutoAdvancesAfterCreating(): void
