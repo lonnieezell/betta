@@ -37,6 +37,7 @@ final class FeedbackControllerTest extends CIUnitTestCase
     {
         parent::setUp();
         $this->db->table('betta_feedback')->truncate();
+        config(Betta::class)->acceptSubmissions = true;
     }
 
     public function testGetFeedbackRendersForm(): void
@@ -56,7 +57,6 @@ final class FeedbackControllerTest extends CIUnitTestCase
 
         $result->assertStatus(200);
         $result->assertSee('not currently accepting');
-        $config->acceptSubmissions = true;
     }
 
     public function testPostSubmitSavesRowWithAllFields(): void
@@ -80,7 +80,7 @@ final class FeedbackControllerTest extends CIUnitTestCase
         $this->assertSame('user@example.com', $row->email);
         $this->assertSame('https://example.com/page', $row->url_context);
         $this->assertNotEmpty($row->session_id);
-        $this->assertSame(64, strlen($row->session_id)); // sha256 hex length
+        $this->assertSame(64, strlen((string) $row->session_id)); // sha256 hex length
     }
 
     public function testPostSubmitStoresSessionIdAsHash(): void

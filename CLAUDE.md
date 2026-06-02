@@ -6,6 +6,18 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 A CodeIgniter 4 package skeleton/template. The placeholder strings `Myth`, `Betta`, and `myth/betta` throughout the codebase must be replaced before publishing a real package.
 
+## General Guidelines
+
+- Follow PSR-12 coding style.
+- Use PHPDoc for all public methods/properties and complex private methods.
+- Use type declarations and strict types.
+- Write clear commit messages and maintain a clean Git history.
+- Include unit tests for all new features and bug fixes.
+- Ensure all CI workflows pass before merging.
+- Always use import statements for classes, even within the same namespace, never fully-qualified class names inline.
+- When in doubt, follow the existing code style and patterns in this repository.
+- Always use the database Query Builder or Models for database interactions, never raw SQL queries.
+
 ## Commands
 
 ### Testing

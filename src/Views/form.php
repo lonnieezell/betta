@@ -1,7 +1,10 @@
 <?php
 
+use Myth\Betta\Enums\CategoryEnum;
+
 /**
- * @var array<\Myth\Betta\Enums\CategoryEnum> $categories
+ * @var list<CategoryEnum> $categories
+ * @var string             $submitUrl
  */
 ?>
 <div class="betta-feedback-form">
@@ -11,7 +14,7 @@
 
     <?php if (session()->has('errors')): ?>
         <ul class="betta-errors">
-            <?php foreach (session('errors') as $field => $error): ?>
+            <?php foreach (session('errors') as $error): ?>
                 <li><?= esc($error) ?></li>
             <?php endforeach ?>
         </ul>
@@ -19,7 +22,7 @@
 
     <div class="betta-success-message" style="display:none"></div>
 
-    <?= form_open('feedback/submit', ['id' => 'betta-form']) ?>
+    <?= form_open($submitUrl, ['id' => 'betta-form']) ?>
 
         <input type="hidden" name="url_context" value="">
 
@@ -95,6 +98,10 @@ document.addEventListener('DOMContentLoaded', function () {
                     if (span) { span.textContent = errors[field]; }
                 });
             }
+        })
+        .catch(function () {
+            var errorSpan = form.querySelector('[data-error="message"]');
+            if (errorSpan) { errorSpan.textContent = 'Could not submit feedback. Please try again.'; }
         });
     });
 });

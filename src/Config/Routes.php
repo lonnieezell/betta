@@ -11,7 +11,13 @@ declare(strict_types=1);
  * the LICENSE file that was distributed with this source code.
  */
 
-$betta  = config(\Myth\Betta\Config\Betta::class);
+use CodeIgniter\Router\RouteCollection;
+use Myth\Betta\Config\Betta;
+
+/** @var RouteCollection $routes */
+
+/** @phpstan-ignore codeigniter.factoriesClassConstFetch */
+$betta  = config(Betta::class);
 $prefix = $betta->routePrefix;
 
 $routes->get($prefix, '\Myth\Betta\Controllers\FeedbackController::index');

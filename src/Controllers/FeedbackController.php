@@ -13,20 +13,20 @@ declare(strict_types=1);
 
 namespace Myth\Betta\Controllers;
 
-use CodeIgniter\HTTP\RedirectResponse;
+use CodeIgniter\Controller;
 use CodeIgniter\HTTP\ResponseInterface;
 use Myth\Betta\Config\Betta;
 use Myth\Betta\Enums\CategoryEnum;
 use Myth\Betta\Models\FeedbackModel;
 
-class FeedbackController extends \CodeIgniter\Controller
+class FeedbackController extends Controller
 {
     protected $helpers = ['form', 'url'];
-
-    private Betta $config;
+    private readonly Betta $config;
 
     public function __construct()
     {
+        /** @phpstan-ignore codeigniter.factoriesClassConstFetch */
         $this->config = config(Betta::class);
     }
 
@@ -38,10 +38,11 @@ class FeedbackController extends \CodeIgniter\Controller
 
         return $this->renderView('page', [
             'categories' => CategoryEnum::cases(),
+            'submitUrl'  => $this->config->routePrefix . '/submit',
         ]);
     }
 
-    public function submit(): ResponseInterface|RedirectResponse
+    public function submit(): ResponseInterface
     {
         if (! $this->config->acceptSubmissions) {
             return redirect()->to($this->config->routePrefix);
@@ -65,16 +66,21 @@ class FeedbackController extends \CodeIgniter\Controller
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
 
-        $urlContext = $this->request->getPost('url_context')
-            ?: $this->request->getHeaderLine('Referer');
+        $posted     = $this->request->getPost('url_context');
+        $urlContext = ($posted !== null && $posted !== '')
+            ? $posted
+            : $this->request->getHeaderLine('Referer');
+
+        $rawCategory = $this->request->getPost('category');
+        $category    = ($rawCategory !== null && $rawCategory !== '') ? $rawCategory : 'other';
 
         $model = new FeedbackModel();
         $model->insert([
             'session_id'  => hash('sha256', session_id()),
             'email'       => $this->request->getPost('email'),
-            'category'    => CategoryEnum::from($this->request->getPost('category') ?: 'other'),
+            'category'    => CategoryEnum::from($category),
             'message'     => $this->request->getPost('message'),
-            'url_context' => $urlContext ?: null,
+            'url_context' => ($urlContext !== '') ? $urlContext : null,
         ]);
 
         if ($isJson) {
