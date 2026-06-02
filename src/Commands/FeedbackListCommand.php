@@ -23,10 +23,8 @@ class FeedbackListCommand extends BaseCommand
     protected $group       = 'Betta';
     protected $name        = 'feedback:list';
     protected $description = 'Browse and filter feedback submissions.';
-
-    protected $arguments = [];
-
-    protected $options = [
+    protected $arguments   = [];
+    protected $options     = [
         '--category'  => 'Filter by category (bug, ux, feature, other)',
         '--status'    => 'Filter by status (default: new)',
         '--ungrouped' => 'Show only items with no cluster assignment',
@@ -34,6 +32,9 @@ class FeedbackListCommand extends BaseCommand
         '--limit'     => 'Maximum rows to return (default: 20)',
     ];
 
+    /**
+     * @param array<int|string, string|null> $params
+     */
     public function run(array $params): void
     {
         $category  = $params['category'] ?? CLI::getOption('category');
@@ -47,7 +48,7 @@ class FeedbackListCommand extends BaseCommand
             status: (string) $status,
             ungrouped: $ungrouped,
             cluster: $cluster !== null ? (int) $cluster : null,
-            limit: $limit !== null ? (int) $limit : 20,
+            limit: $limit !== null ? max(1, (int) $limit) : 20,
         );
 
         $rows = (new FeedbackModel())->forList($filters);
@@ -61,15 +62,15 @@ class FeedbackListCommand extends BaseCommand
         $tableData = [];
 
         foreach ($rows as $row) {
-            $preview = mb_strlen($row->message) > 50
-                ? mb_substr($row->message, 0, 50) . '…'
+            $preview = mb_strlen((string) $row->message) > 50
+                ? mb_substr((string) $row->message, 0, 50) . '…'
                 : $row->message;
 
             $tableData[] = [
                 (string) $row->id,
                 $row->category,
                 $row->status,
-                $row->cluster_label,
+                $row->cluster_label ?? '—',
                 $preview,
             ];
         }

@@ -34,7 +34,6 @@ final class FeedbackListCommandTest extends CIUnitTestCase
     protected $migrate     = true;
     protected $migrateOnce = true;
     protected $refresh     = false;
-
     private FeedbackModel $feedback;
     private FeedbackClusterModel $clusters;
 
@@ -249,9 +248,9 @@ final class FeedbackListCommandTest extends CIUnitTestCase
     private function runCommand(string $cmd): string
     {
         $io = new MockInputOutput();
-        CLI::setInputOutput($io);
+        CLI::setInputOutput($io); // @phpstan-ignore staticMethod.internal
         command($cmd);
-        CLI::resetInputOutput();
+        CLI::resetInputOutput(); // @phpstan-ignore staticMethod.internal
 
         return $io->getOutput();
     }

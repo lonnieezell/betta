@@ -65,7 +65,7 @@ class FeedbackModel extends Model
     public function forList(FeedbackListFilters $filters): array
     {
         $builder = $this->db->table('betta_feedback AS f')
-            ->select('f.id, f.category, f.status, f.message, COALESCE(fc.label, \'—\') AS cluster_label')
+            ->select('f.id, f.category, f.status, f.message, fc.label AS cluster_label')
             ->join('feedback_clusters AS fc', 'fc.id = f.cluster_id', 'left')
             ->where('f.status', $filters->status)
             ->orderBy('f.created_at', 'DESC')
