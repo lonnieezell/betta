@@ -1,7 +1,10 @@
 <?php
+
+use Myth\Betta\Enums\CategoryEnum;
+
 /**
- * @var list<\Myth\Betta\Enums\CategoryEnum> $categories
- * @var string                               $submitUrl
+ * @var list<CategoryEnum> $categories
+ * @var string             $submitUrl
  */
 ?>
 <!DOCTYPE html>
