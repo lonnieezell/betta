@@ -126,8 +126,8 @@ final class FeedbackReviewCommandTest extends CIUnitTestCase
 
     public function testQuitExitsImmediatelyWithoutAdvancing(): void
     {
-        $id1 = $this->feedback->insert(['message' => 'first', 'status' => StatusEnum::New]);
-        $id2 = $this->feedback->insert(['message' => 'second', 'status' => StatusEnum::New]);
+        $this->feedback->insert(['message' => 'first', 'status' => StatusEnum::New]);
+        $this->feedback->insert(['message' => 'second', 'status' => StatusEnum::New]);
 
         $this->runCommand('feedback:review', "q\n");
 
@@ -219,7 +219,7 @@ final class FeedbackReviewCommandTest extends CIUnitTestCase
         $this->assertSame(StatusEnum::Grouped, $item->status);
         $this->assertNotNull($item->cluster_id);
 
-        $cluster = $this->clusters->find($item->cluster_id);
+        $cluster = $this->clusters->find((int) $item->cluster_id);
         $this->assertSame('Navigation Bugs', $cluster->label);
     }
 
@@ -230,7 +230,7 @@ final class FeedbackReviewCommandTest extends CIUnitTestCase
         $this->runCommand('feedback:review', "n\n\nReal Label\n");
 
         $item    = $this->feedback->find($id);
-        $cluster = $this->clusters->find($item->cluster_id);
+        $cluster = $this->clusters->find((int) $item->cluster_id);
         $this->assertSame('Real Label', $cluster->label);
     }
 

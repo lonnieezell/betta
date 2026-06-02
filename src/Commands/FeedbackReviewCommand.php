@@ -63,12 +63,9 @@ class FeedbackReviewCommand extends BaseCommand
         while ($item !== null) {
             $this->displayItem($item);
 
-            if ($item->status === StatusEnum::New) {
-                if (! $feedbackModel->update($item->id, ['status' => StatusEnum::Reviewed])) {
-                    CLI::error("Failed to mark feedback {$item->id} as reviewed.");
-
-                    return EXIT_ERROR;
-                }
+            if ($item->status === StatusEnum::New && ! $feedbackModel->update($item->id, ['status' => StatusEnum::Reviewed])) {
+                CLI::error("Failed to mark feedback {$item->id} as reviewed.");
+                return EXIT_ERROR;
             }
 
             $action = $this->promptAction();
@@ -118,7 +115,7 @@ class FeedbackReviewCommand extends BaseCommand
         $valid = ['a', 'n', 'd', 'q'];
 
         do {
-            $action = strtolower((string) CLI::prompt('Action (a=assign, n=new cluster, d=dismiss, q=quit)'));
+            $action = strtolower(CLI::prompt('Action (a=assign, n=new cluster, d=dismiss, q=quit)'));
         } while (! in_array($action, $valid, true));
 
         return $action;
@@ -144,7 +141,7 @@ class FeedbackReviewCommand extends BaseCommand
         $clusterId = null;
 
         while ($clusterId === null) {
-            $input = (string) CLI::prompt('Cluster ID');
+            $input   = CLI::prompt('Cluster ID');
             $inputId = ctype_digit($input) ? (int) $input : 0;
 
             if ($inputId > 0 && isset($clusterMap[$inputId])) {
@@ -161,16 +158,12 @@ class FeedbackReviewCommand extends BaseCommand
         CLI::write("Feedback {$item->id} assigned to cluster {$clusterId}.");
     }
 
-    /**
-     * @param FeedbackModel        $feedbackModel
-     * @param FeedbackClusterModel $clusterModel
-     */
     private function handleNewCluster(object $item, FeedbackModel $feedbackModel, FeedbackClusterModel $clusterModel): void
     {
         $label = '';
 
         while ($label === '') {
-            $label = trim((string) CLI::prompt('Cluster label'));
+            $label = trim(CLI::prompt('Cluster label'));
 
             if ($label === '') {
                 CLI::error('Cluster label cannot be empty.');
