@@ -42,6 +42,7 @@ use Rector\EarlyReturn\Rector\If_\RemoveAlwaysElseRector;
 use Rector\EarlyReturn\Rector\Return_\PreparedValueToEarlyReturnRector;
 use Rector\Php55\Rector\String_\StringClassNameToClassConstantRector;
 use Rector\Php73\Rector\FuncCall\StringifyStrNeedlesRector;
+use Rector\Php84\Rector\MethodCall\NewMethodCallWithoutParenthesesRector;
 use Rector\PHPUnit\AnnotationsToAttributes\Rector\Class_\AnnotationWithValueToAttributeRector;
 use Rector\PHPUnit\CodeQuality\Rector\Class_\YieldDataProviderRector;
 use Rector\PHPUnit\CodeQuality\Rector\MethodCall\AssertEmptyNullableObjectToAssertInstanceofRector;
@@ -114,6 +115,9 @@ return static function (RectorConfig $rectorConfig): void {
 
         // Ignore for readability
         RemoveNullArgOnNullDefaultParamRector::class,
+
+        // PHP 8.4 only syntax — package requires PHP 8.2+
+        NewMethodCallWithoutParenthesesRector::class,
     ]);
 
     // auto import fully qualified class names

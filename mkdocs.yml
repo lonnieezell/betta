@@ -50,6 +50,7 @@ nav:
   - Home: index.md
   - Installation: installation.md
   - Collecting Feedback: collecting-feedback.md
+  - Browsing Feedback: browsing-feedback.md
   - Database: database.md
   - Models: models.md
   - Enums: enums.md
