@@ -65,6 +65,7 @@ class FeedbackReviewCommand extends BaseCommand
 
             if ($item->status === StatusEnum::New && ! $feedbackModel->update($item->id, ['status' => StatusEnum::Reviewed])) {
                 CLI::error("Failed to mark feedback {$item->id} as reviewed.");
+
                 return EXIT_ERROR;
             }
 
