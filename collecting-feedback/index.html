@@ -11,10 +11,10 @@
       
       
       
-        <link rel="prev" href="../models/">
+        <link rel="prev" href="../installation/">
       
       
-        <link rel="next" href="../changelog/">
+        <link rel="next" href="../database/">
       
       
         
@@ -25,7 +25,7 @@
     
     
       
-        <title>Enums - Myth/Betta</title>
+        <title>Collecting Feedback - Myth/Betta</title>
       
     
     
@@ -76,7 +76,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#enums" class="md-skip">
+        <a href="#collecting-feedback" class="md-skip">
           Skip to content
         </a>
       
@@ -112,7 +112,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Enums
+              Collecting Feedback
             
           </span>
         </div>
@@ -316,10 +316,37 @@
       
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../collecting-feedback/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Collecting Feedback
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -335,6 +362,193 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#how-it-works" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How it works
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Configuration
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Configuration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#options" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Options
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Options">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#routeprefix" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        $routePrefix
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#acceptsubmissions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        $acceptSubmissions
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-gets-saved" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What gets saved
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-views" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The views
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="The views">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#embedding-the-form-in-your-own-layout" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Embedding the form in your own layout
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#overriding-views" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Overriding views
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#response-formats" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Response formats
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Response formats">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#json-fetch-path" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        JSON (fetch path)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#plain-post" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Plain POST
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#next-steps" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Next steps
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -397,37 +611,10 @@
       
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Enums
-  
-
-    
-  </span>
-  
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../enums/" class="md-nav__link">
         
   
   
@@ -443,92 +630,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#categoryenum" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        CategoryEnum
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#statusenum" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        StatusEnum
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#priorityenum" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        PriorityEnum
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#sentimentenum" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        SentimentEnum
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#using-enums-in-queries" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Using enums in queries
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#next-steps" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Next steps
-      
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -587,10 +688,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#categoryenum" class="md-nav__link">
+  <a href="#how-it-works" class="md-nav__link">
     <span class="md-ellipsis">
       
-        CategoryEnum
+        How it works
       
     </span>
   </a>
@@ -598,10 +699,66 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#statusenum" class="md-nav__link">
+  <a href="#configuration" class="md-nav__link">
     <span class="md-ellipsis">
       
-        StatusEnum
+        Configuration
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Configuration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#options" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Options
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Options">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#routeprefix" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        $routePrefix
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#acceptsubmissions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        $acceptSubmissions
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-gets-saved" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What gets saved
       
     </span>
   </a>
@@ -609,35 +766,80 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#priorityenum" class="md-nav__link">
+  <a href="#the-views" class="md-nav__link">
     <span class="md-ellipsis">
       
-        PriorityEnum
+        The views
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="The views">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#embedding-the-form-in-your-own-layout" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Embedding the form in your own layout
       
     </span>
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
-  <a href="#sentimentenum" class="md-nav__link">
+        
+          <li class="md-nav__item">
+  <a href="#overriding-views" class="md-nav__link">
     <span class="md-ellipsis">
       
-        SentimentEnum
+        Overriding views
       
     </span>
   </a>
   
 </li>
+        
+      </ul>
+    </nav>
+  
+</li>
       
         <li class="md-nav__item">
-  <a href="#using-enums-in-queries" class="md-nav__link">
+  <a href="#response-formats" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Using enums in queries
+        Response formats
       
     </span>
   </a>
+  
+    <nav class="md-nav" aria-label="Response formats">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#json-fetch-path" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        JSON (fetch path)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#plain-post" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Plain POST
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -669,7 +871,7 @@
 
 
   
-    <a href="https://github.com/myth/betta/edit/develop/docs/enums.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
+    <a href="https://github.com/myth/betta/edit/develop/docs/collecting-feedback.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
       
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
     </a>
@@ -677,66 +879,166 @@
   
 
 
-<h1 id="enums">Enums</h1>
-<p>The four enums in <code>Myth\Betta\Enums\</code> back the enum-typed columns in <code>betta_feedback</code> and <code>feedback_clusters</code>. CI4's model layer casts these automatically on read, so you always get enum instances back from a <code>find()</code> call.</p>
-<h2 id="categoryenum">CategoryEnum</h2>
-<p>Classifies what kind of feedback was submitted.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="x">use Myth\Betta\Enums\CategoryEnum;</span>
+<h1 id="collecting-feedback">Collecting Feedback</h1>
+<p>This page covers everything about the public-facing feedback endpoint: the routes that get auto-discovered, the config options that control behavior, the three views, and how to swap in your own templates.</p>
+<h2 id="how-it-works">How it works</h2>
+<p>Installing the package gives you two routes automatically — no manual wiring needed:</p>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>URL</th>
+<th>Behavior</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>GET</code></td>
+<td><code>/feedback</code></td>
+<td>Renders the feedback form (or the closed page)</td>
+</tr>
+<tr>
+<td><code>POST</code></td>
+<td><code>/feedback/submit</code></td>
+<td>Validates and saves a submission</td>
+</tr>
+</tbody>
+</table>
+<p>Both routes respect your <code>$routePrefix</code> config, so if you change the prefix they both update together.</p>
+<p>The <code>POST</code> endpoint does content negotiation out of the box. Send <code>Accept: application/json</code> (or the <code>X-Requested-With: XMLHttpRequest</code> header) and you'll get a JSON response. Leave it as a plain form POST and you'll get a redirect with flash messages. The bundled form handles this automatically via <code>fetch()</code> with a graceful non-JS fallback.</p>
+<h2 id="configuration">Configuration</h2>
+<p>Create <code>app/Config/Betta.php</code> in your host app to override any option:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="cp">&lt;?php</span>
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="x">CategoryEnum::Bug      // &#39;bug&#39;</span>
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="x">CategoryEnum::UX       // &#39;ux&#39;</span>
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="x">CategoryEnum::Feature  // &#39;feature&#39;</span>
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="x">CategoryEnum::Other    // &#39;other&#39;  ← column default</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="k">namespace</span> <span class="nx">Config</span><span class="p">;</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="k">use</span> <span class="nx">Myth\Betta\Config\Betta</span> <span class="k">as</span> <span class="nx">BettaConfig</span><span class="p">;</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="k">class</span> <span class="nc">Betta</span> <span class="k">extends</span> <span class="nx">BettaConfig</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="p">{</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>    <span class="k">public</span> <span class="nx">string</span> <span class="nv">$routePrefix</span> <span class="o">=</span> <span class="s1">&#39;feedback&#39;</span><span class="p">;</span>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>    <span class="k">public</span> <span class="nx">bool</span> <span class="nv">$acceptSubmissions</span> <span class="o">=</span> <span class="k">true</span><span class="p">;</span>
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="p">}</span>
 </code></pre></div>
-<p><strong>Column:</strong> <code>betta_feedback.category</code> (VARCHAR 20, default <code>other</code>)</p>
-<h2 id="statusenum">StatusEnum</h2>
-<p>Tracks where a feedback item is in the triage workflow.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="x">use Myth\Betta\Enums\StatusEnum;</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="x">StatusEnum::New        // &#39;new&#39;       ← column default, needs review</span>
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="x">StatusEnum::Reviewed   // &#39;reviewed&#39;  set automatically on view</span>
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="x">StatusEnum::Grouped    // &#39;grouped&#39;   assigned to a cluster</span>
-<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="x">StatusEnum::Dismissed  // &#39;dismissed&#39; hidden from default list</span>
+<h3 id="options">Options</h3>
+<h4 id="routeprefix"><code>$routePrefix</code></h4>
+<p>The URL segment for both routes. Defaults to <code>feedback</code>.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="x">// Registers GET /beta-feedback and POST /beta-feedback/submit</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="x">public string $routePrefix = &#39;beta-feedback&#39;;</span>
 </code></pre></div>
-<p><strong>Column:</strong> <code>betta_feedback.status</code> (VARCHAR 20, default <code>new</code>)</p>
-<h2 id="priorityenum">PriorityEnum</h2>
-<p>Ranks how urgently a cluster needs attention.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="x">use Myth\Betta\Enums\PriorityEnum;</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="x">PriorityEnum::Low       // &#39;low&#39;</span>
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="x">PriorityEnum::Medium    // &#39;medium&#39;  ← column default</span>
-<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="x">PriorityEnum::High      // &#39;high&#39;</span>
-<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="x">PriorityEnum::Critical  // &#39;critical&#39;</span>
+<h4 id="acceptsubmissions"><code>$acceptSubmissions</code></h4>
+<p>Set to <code>false</code> to stop accepting new feedback without removing the routes. Visitors will see <code>closed.php</code> instead of the form.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="x">public bool $acceptSubmissions = false;</span>
 </code></pre></div>
-<p><strong>Column:</strong> <code>feedback_clusters.priority</code> (VARCHAR 20, default <code>medium</code>)</p>
-<h2 id="sentimentenum">SentimentEnum</h2>
-<p>Records the emotional tone of a feedback submission. It's int-backed so it sorts naturally.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="x">use Myth\Betta\Enums\SentimentEnum;</span>
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>
-<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="x">SentimentEnum::Negative  // -1</span>
-<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="x">SentimentEnum::Neutral   //  0</span>
-<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="x">SentimentEnum::Positive  //  1</span>
-</code></pre></div>
-<p><strong>Column:</strong> <code>betta_feedback.sentiment</code> (TINYINT, nullable — omit if unknown)</p>
-<hr />
-<h2 id="using-enums-in-queries">Using enums in queries</h2>
-<p>All four enums are native PHP backed enums, so you can use <code>cases()</code>, <code>from()</code>, and <code>tryFrom()</code> as usual:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="x">// Get all feedback that still needs review</span>
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="x">$items = (new FeedbackModel())</span>
-<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="x">    -&gt;where(&#39;status&#39;, StatusEnum::New-&gt;value)</span>
-<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="x">    -&gt;findAll();</span>
-<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>
-<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="x">// Convert a user-supplied string safely</span>
-<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="x">$category = CategoryEnum::tryFrom($input) ?? CategoryEnum::Other;</span>
-</code></pre></div>
-<div class="admonition warning">
-<p class="admonition-title">Pass instances, not values, to model methods</p>
-<p>When inserting or updating via the model, pass the enum instance (<code>StatusEnum::Reviewed</code>), not the backing value (<code>'reviewed'</code>). The model's write cast expects an enum object. Passing a string will throw a <code>CastException</code>.</p>
+<div class="admonition tip">
+<p class="admonition-title">Flip the switch without a deploy</p>
+<p>Since <code>Betta</code> extends <code>BaseConfig</code>, you can also drive <code>$acceptSubmissions</code> from a <code>.env</code> value: <code>betta.acceptSubmissions = false</code>. Useful for quickly closing the form without touching code.</p>
 </div>
+<h2 id="what-gets-saved">What gets saved</h2>
+<p>Every successful submission stores:</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Source</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>session_id</code></td>
+<td><code>sha256(session_id())</code></td>
+<td>Pseudonymous — not reversible to a real session</td>
+</tr>
+<tr>
+<td><code>category</code></td>
+<td>POST <code>category</code> field</td>
+<td>One of <code>bug</code>, <code>ux</code>, <code>feature</code>, <code>other</code></td>
+</tr>
+<tr>
+<td><code>message</code></td>
+<td>POST <code>message</code> field</td>
+<td>Required</td>
+</tr>
+<tr>
+<td><code>email</code></td>
+<td>POST <code>email</code> field</td>
+<td>Optional; validated if provided</td>
+</tr>
+<tr>
+<td><code>url_context</code></td>
+<td>POST <code>url_context</code> field, then <code>Referer</code> header</td>
+<td>The page the user was on when they submitted</td>
+</tr>
+</tbody>
+</table>
+<p>The <code>url_context</code> hidden field is populated by JavaScript (<code>window.location.href</code>) before submission, so you get the exact page — not just the previous URL from the <code>Referer</code> header.</p>
+<h2 id="the-views">The views</h2>
+<p>Three views ship with the package:</p>
+<table>
+<thead>
+<tr>
+<th>View</th>
+<th>Rendered when</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>page.php</code></td>
+<td><code>$acceptSubmissions</code> is <code>true</code> — the full standalone page</td>
+</tr>
+<tr>
+<td><code>form.php</code></td>
+<td>Embedded inside <code>page.php</code>; also embeddable in your own layouts</td>
+</tr>
+<tr>
+<td><code>closed.php</code></td>
+<td><code>$acceptSubmissions</code> is <code>false</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="embedding-the-form-in-your-own-layout">Embedding the form in your own layout</h3>
+<p>You don't have to use <code>page.php</code>. Render just the form fragment anywhere:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="cp">&lt;?</span><span class="o">=</span> <span class="nx">view</span><span class="p">(</span><span class="s1">&#39;Myth\Betta\Views\form&#39;</span><span class="p">,</span> <span class="p">[</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>    <span class="s1">&#39;categories&#39;</span> <span class="o">=&gt;</span> <span class="nx">\Myth\Betta\Enums\CategoryEnum</span><span class="o">::</span><span class="na">cases</span><span class="p">(),</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>    <span class="s1">&#39;submitUrl&#39;</span>  <span class="o">=&gt;</span> <span class="nx">config</span><span class="p">(</span><span class="nx">\Myth\Betta\Config\Betta</span><span class="o">::</span><span class="na">class</span><span class="p">)</span><span class="o">-&gt;</span><span class="na">routePrefix</span> <span class="o">.</span> <span class="s1">&#39;/submit&#39;</span><span class="p">,</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="p">])</span> <span class="cp">?&gt;</span>
+</code></pre></div>
+<h3 id="overriding-views">Overriding views</h3>
+<p>Drop a replacement file into your host app at <code>app/Views/vendor/betta/{view}.php</code> and it takes precedence over the package view. The controller checks that path first.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>app/
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>  Views/
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>    vendor/
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>      betta/
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>        form.php      ← overrides the package form
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>        page.php      ← overrides the full-page wrapper
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>        closed.php    ← overrides the closed state page
+</code></pre></div>
+<p>You only need to create the files you want to override — the rest fall back to the package defaults.</p>
+<h2 id="response-formats">Response formats</h2>
+<h3 id="json-fetch-path">JSON (fetch path)</h3>
+<p>Send <code>Accept: application/json</code> to get structured responses:</p>
+<p><strong>Success (200)</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="p">{</span><span class="w"> </span><span class="nt">&quot;ok&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w"> </span><span class="p">}</span>
+</code></pre></div></p>
+<p><strong>Validation failure (422)</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="p">{</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="w">  </span><span class="nt">&quot;errors&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="w">    </span><span class="nt">&quot;message&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;The message field is required.&quot;</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="w">  </span><span class="p">}</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="p">}</span>
+</code></pre></div></p>
+<h3 id="plain-post">Plain POST</h3>
+<ul>
+<li><strong>Success</strong> → redirect to <code>/{routePrefix}</code> with a <code>feedback_success</code> flash message</li>
+<li><strong>Validation failure</strong> → redirect back with an <code>errors</code> flash and repopulated input via <code>withInput()</code></li>
+</ul>
+<p>The bundled <code>form.php</code> handles both paths — it reads flash messages on load and intercepts submissions with <code>fetch()</code> when JavaScript is available.</p>
 <h2 id="next-steps">Next steps</h2>
 <ul>
-<li><a href="../models/">Models</a> — how the models use these enums for casting</li>
-<li><a href="../database/">Database</a> — the column definitions behind each enum</li>
+<li><a href="../database/">Database</a> — the schema behind feedback storage</li>
+<li><a href="../models/">Models</a> — querying and working with saved feedback</li>
+<li><a href="../enums/">Enums</a> — the category, status, sentiment, and priority types</li>
 </ul>
 
 
@@ -773,7 +1075,7 @@
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
           
-          <a href="../models/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Models">
+          <a href="../installation/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Installation">
             <div class="md-footer__button md-icon">
               
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
@@ -783,20 +1085,20 @@
                 Previous
               </span>
               <div class="md-ellipsis">
-                Models
+                Installation
               </div>
             </div>
           </a>
         
         
           
-          <a href="../changelog/" class="md-footer__link md-footer__link--next" aria-label="Next: Changelog">
+          <a href="../database/" class="md-footer__link md-footer__link--next" aria-label="Next: Database">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                Changelog
+                Database
               </div>
             </div>
             <div class="md-footer__button md-icon">
