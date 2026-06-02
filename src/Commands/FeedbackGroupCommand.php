@@ -32,10 +32,10 @@ class FeedbackGroupCommand extends BaseCommand
     /**
      * @param array<int|string, string|null> $params
      */
-    public function run(array $params)
+    public function run(array $params): int
     {
-        $feedbackId = isset($params[0]) && ctype_digit((string) $params[0]) ? (int) $params[0] : null;
-        $clusterId  = isset($params[1]) && ctype_digit((string) $params[1]) ? (int) $params[1] : null;
+        $feedbackId = isset($params[0]) && ctype_digit($params[0]) ? (int) $params[0] : null;
+        $clusterId  = isset($params[1]) && ctype_digit($params[1]) ? (int) $params[1] : null;
 
         if ($feedbackId === null || $feedbackId <= 0 || $clusterId === null || $clusterId <= 0) {
             CLI::error('Usage: feedback:group <id> <cluster_id>');
@@ -68,5 +68,7 @@ class FeedbackGroupCommand extends BaseCommand
         }
 
         CLI::write("Feedback {$feedbackId} assigned to cluster {$clusterId}.");
+
+        return EXIT_SUCCESS;
     }
 }
