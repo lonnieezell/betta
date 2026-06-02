@@ -15,6 +15,7 @@ namespace Tests;
 
 use CodeIgniter\Test\CIUnitTestCase;
 use Myth\Betta\Enums\PriorityEnum;
+use Myth\Betta\Enums\StatusEnum;
 use Myth\Betta\Models\FeedbackClusterModel;
 use Myth\Betta\Models\FeedbackModel;
 use Tests\Support\DatabaseTestTrait;
@@ -141,5 +142,92 @@ final class FeedbackClusterModelTest extends CIUnitTestCase
 
         $this->assertSame(1, $a->item_count);
         $this->assertSame(2, $b->item_count);
+    }
+
+    // -------------------------------------------------------------------------
+    // findAllWithCount — filter and sort
+    // -------------------------------------------------------------------------
+
+    public function testFindAllWithCountFiltersByPriority(): void
+    {
+        $this->model->insert(['label' => 'High cluster', 'priority' => PriorityEnum::High]);
+        $this->model->insert(['label' => 'Low cluster', 'priority' => PriorityEnum::Low]);
+
+        $results = $this->model->findAllWithCount(priority: PriorityEnum::High);
+
+        $this->assertCount(1, $results);
+        $this->assertSame('High cluster', $results[0]->label);
+    }
+
+    public function testFindAllWithCountSortsByCountDesc(): void
+    {
+        $feedbackModel = new FeedbackModel();
+        $clusterA      = $this->model->insert(['label' => 'Few items']);
+        $clusterB      = $this->model->insert(['label' => 'Many items']);
+        $feedbackModel->insert(['message' => 'Item', 'cluster_id' => $clusterB]);
+        $feedbackModel->insert(['message' => 'Item', 'cluster_id' => $clusterB]);
+        $feedbackModel->insert(['message' => 'Item', 'cluster_id' => $clusterA]);
+
+        $results = $this->model->findAllWithCount(sort: 'count');
+
+        $this->assertSame('Many items', $results[0]->label);
+        $this->assertSame('Few items', $results[1]->label);
+    }
+
+    public function testFindAllWithCountDefaultSortIsUpdatedAtDesc(): void
+    {
+        // Insert in order; the second insert will have a later updated_at
+        $idA = $this->model->insert(['label' => 'Cluster A']);
+        $this->model->insert(['label' => 'Cluster B']);
+
+        // Touch cluster A to make it most recently updated
+        $this->model->update($idA, ['label' => 'Cluster A updated']);
+
+        $results = $this->model->findAllWithCount();
+
+        $this->assertSame('Cluster A updated', $results[0]->label);
+        $this->assertSame('Cluster B', $results[1]->label);
+    }
+
+    // -------------------------------------------------------------------------
+    // deleteWithUngroup
+    // -------------------------------------------------------------------------
+
+    public function testDeleteWithUngroupRemovesCluster(): void
+    {
+        $id = $this->model->insert(['label' => 'To delete']);
+        $this->model->deleteWithUngroup($id);
+
+        $this->assertNull($this->model->find($id));
+    }
+
+    public function testDeleteWithUngroupResetsGroupedItemsToNew(): void
+    {
+        $feedbackModel = new FeedbackModel();
+        $id            = $this->model->insert(['label' => 'Cluster']);
+        $feedbackModel->insert(['message' => 'Item 1', 'cluster_id' => $id, 'status' => StatusEnum::Grouped]);
+        $feedbackModel->insert(['message' => 'Item 2', 'cluster_id' => $id, 'status' => StatusEnum::Reviewed]);
+
+        $this->model->deleteWithUngroup($id);
+
+        $items = $feedbackModel->where('cluster_id IS NULL', null, false)->findAll();
+        $this->assertCount(2, $items);
+
+        foreach ($items as $item) {
+            $this->assertSame(StatusEnum::New, $item->status);
+        }
+    }
+
+    public function testDeleteWithUngroupLeavesDismissedItemsUntouched(): void
+    {
+        $feedbackModel = new FeedbackModel();
+        $id            = $this->model->insert(['label' => 'Cluster']);
+        $feedbackId    = $feedbackModel->insert(['message' => 'Dismissed item', 'cluster_id' => $id, 'status' => StatusEnum::Dismissed]);
+
+        $this->model->deleteWithUngroup($id);
+
+        $item = $feedbackModel->find($feedbackId);
+        $this->assertSame(StatusEnum::Dismissed, $item->status);
+        $this->assertSame($id, (int) $item->cluster_id);
     }
 }
