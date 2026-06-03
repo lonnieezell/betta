@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace Tests\Support;
 
-use Override;
 use Myth\Scribe\Response\ScribeResponse;
+use Override;
 
 /**
  * Named test-double response used by FakeScribeService.

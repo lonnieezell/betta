@@ -36,6 +36,7 @@ final readonly class FakeScribeService
         if ($this->shouldThrow) {
             throw new AIException('AI service unavailable');
         }
+
         return new FakeScribeResponse($this->suggestions);
     }
 }
