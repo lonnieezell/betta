@@ -16,7 +16,6 @@ namespace Myth\Betta\Models;
 use CodeIgniter\Model;
 use Myth\Betta\DTOs\FeedbackListFilters;
 use Myth\Betta\Enums\CategoryEnum;
-use Myth\Betta\Enums\SentimentEnum;
 use Myth\Betta\Enums\StatusEnum;
 
 class FeedbackModel extends Model
@@ -32,7 +31,6 @@ class FeedbackModel extends Model
         'category',
         'message',
         'url_context',
-        'sentiment',
         'status',
         'cluster_id',
         'github_issue_url',
@@ -46,16 +44,14 @@ class FeedbackModel extends Model
      * @var array<string, string>
      */
     protected array $casts = [
-        'category'  => 'enum[' . CategoryEnum::class . ']',
-        'status'    => 'enum[' . StatusEnum::class . ']',
-        'sentiment' => '?enum[' . SentimentEnum::class . ']',
+        'category' => 'enum[' . CategoryEnum::class . ']',
+        'status'   => 'enum[' . StatusEnum::class . ']',
     ];
 
     protected $validationRules = [
         'message'   => 'required',
-        'category'  => 'permit_empty|in_list[bug,ux,feature,other]',
-        'status'    => 'permit_empty|in_list[new,reviewed,grouped,dismissed]',
-        'sentiment' => 'permit_empty|in_list[-1,0,1]',
+        'category' => 'permit_empty|in_list[bug,ux,feature,other]',
+        'status'   => 'permit_empty|in_list[new,reviewed,grouped,dismissed]',
     ];
 
     /**

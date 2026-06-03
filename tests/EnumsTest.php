@@ -16,7 +16,6 @@ namespace Tests;
 use CodeIgniter\Test\CIUnitTestCase;
 use Myth\Betta\Enums\CategoryEnum;
 use Myth\Betta\Enums\PriorityEnum;
-use Myth\Betta\Enums\SentimentEnum;
 use Myth\Betta\Enums\StatusEnum;
 
 /**
@@ -48,22 +47,10 @@ final class EnumsTest extends CIUnitTestCase
         $this->assertSame('critical', PriorityEnum::Critical->value);
     }
 
-    public function testSentimentEnumCases(): void
-    {
-        $this->assertSame(-1, SentimentEnum::Negative->value);
-        $this->assertSame(0, SentimentEnum::Neutral->value);
-        $this->assertSame(1, SentimentEnum::Positive->value);
-    }
-
     public function testCategoryEnumFromValue(): void
     {
         $this->assertSame(CategoryEnum::Bug, CategoryEnum::from('bug'));
         $this->assertSame(CategoryEnum::Feature, CategoryEnum::from('feature'));
     }
 
-    public function testSentimentEnumFromValue(): void
-    {
-        $this->assertSame(SentimentEnum::Negative, SentimentEnum::from(-1));
-        $this->assertSame(SentimentEnum::Positive, SentimentEnum::from(1));
-    }
 }

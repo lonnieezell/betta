@@ -165,10 +165,6 @@ class FeedbackGithubCommand extends BaseCommand
             $lines[] = '**URL:** ' . $urlContext;
         }
 
-        if (isset($item->sentiment)) {
-            $lines[] = '**Sentiment:** ' . $item->sentiment;
-        }
-
         $createdAt = isset($item->created_at) ? (string) $item->created_at : '';
 
         if ($createdAt !== '') {

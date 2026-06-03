@@ -15,7 +15,6 @@ namespace Tests;
 
 use CodeIgniter\Test\CIUnitTestCase;
 use Myth\Betta\Enums\CategoryEnum;
-use Myth\Betta\Enums\SentimentEnum;
 use Myth\Betta\Enums\StatusEnum;
 use Myth\Betta\Models\FeedbackModel;
 use Tests\Support\DatabaseTestTrait;
@@ -45,10 +44,9 @@ final class FeedbackModelTest extends CIUnitTestCase
     public function testInsertAndFindReturnsEnumInstances(): void
     {
         $id = $this->model->insert([
-            'message'   => 'Great feature idea',
-            'category'  => CategoryEnum::Feature,
-            'status'    => StatusEnum::New,
-            'sentiment' => SentimentEnum::Positive,
+            'message'  => 'Great feature idea',
+            'category' => CategoryEnum::Feature,
+            'status'   => StatusEnum::New,
         ]);
 
         $this->assertIsInt($id);
@@ -59,9 +57,6 @@ final class FeedbackModelTest extends CIUnitTestCase
 
         $this->assertInstanceOf(StatusEnum::class, $row->status);
         $this->assertSame(StatusEnum::New, $row->status);
-
-        $this->assertInstanceOf(SentimentEnum::class, $row->sentiment);
-        $this->assertSame(SentimentEnum::Positive, $row->sentiment);
     }
 
     public function testDefaultCategoryIsOther(): void
@@ -98,14 +93,6 @@ final class FeedbackModelTest extends CIUnitTestCase
         $this->assertNull($this->model->find($id));
     }
 
-    public function testNullSentimentIsAllowed(): void
-    {
-        $id  = $this->model->insert(['message' => 'No sentiment']);
-        $row = $this->model->find($id);
-
-        $this->assertNull($row->sentiment);
-    }
-
     public function testAllEnumRoundTrips(): void
     {
         foreach (CategoryEnum::cases() as $category) {
@@ -118,12 +105,6 @@ final class FeedbackModelTest extends CIUnitTestCase
             $id  = $this->model->insert(['message' => 'test', 'status' => $status]);
             $row = $this->model->find($id);
             $this->assertSame($status, $row->status);
-        }
-
-        foreach (SentimentEnum::cases() as $sentiment) {
-            $id  = $this->model->insert(['message' => 'test', 'sentiment' => $sentiment]);
-            $row = $this->model->find($id);
-            $this->assertSame($sentiment, $row->sentiment);
         }
     }
 }
