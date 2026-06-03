@@ -59,7 +59,7 @@ use Myth\Betta\Enums\CategoryEnum;
 document.addEventListener('DOMContentLoaded', function () {
     var urlField = document.querySelector('[name="url_context"]');
     if (urlField) {
-        urlField.value = window.location.href;
+        urlField.value = window.location.origin + window.location.pathname;
     }
 
     var form = document.getElementById('betta-form');

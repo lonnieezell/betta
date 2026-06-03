@@ -128,6 +128,26 @@ final class FeedbackControllerTest extends CIUnitTestCase
         $this->assertSame('https://example.com/referer-page', $row->url_context);
     }
 
+    public function testPostSubmitStripsQueryParamsFromUrlContext(): void
+    {
+        $this->post('feedback/submit', [
+            'message'     => 'Test',
+            'url_context' => 'https://example.com/page?token=abc&email=user@example.com',
+        ]);
+
+        $row = (new FeedbackModel())->findAll()[0];
+        $this->assertSame('https://example.com/page', $row->url_context);
+    }
+
+    public function testPostSubmitStripsQueryParamsFromReferer(): void
+    {
+        $this->withHeaders(['Referer' => 'https://example.com/reset?token=secret'])
+            ->post('feedback/submit', ['message' => 'Test']);
+
+        $row = (new FeedbackModel())->findAll()[0];
+        $this->assertSame('https://example.com/reset', $row->url_context);
+    }
+
     public function testPostSubmitWithEmptyMessageReturns422Json(): void
     {
         $result = $this->withHeaders([

@@ -71,6 +71,9 @@ class FeedbackController extends Controller
             ? $posted
             : $this->request->getHeaderLine('Referer');
 
+        // Strip query string and fragment to avoid storing PII (tokens, emails, etc.)
+        $urlContext = substr($urlContext, 0, strcspn($urlContext, '?#'));
+
         $rawCategory = $this->request->getPost('category');
         $category    = ($rawCategory !== null && $rawCategory !== '') ? $rawCategory : 'other';
 
