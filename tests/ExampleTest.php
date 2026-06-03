@@ -23,7 +23,7 @@ final class ExampleTest extends CIUnitTestCase
 {
     public function testPackageException(): void
     {
-        $e = PackageException::forExample('something went wrong');
+        $e = new PackageException('something went wrong');
         $this->assertSame('something went wrong', $e->getMessage());
     }
 }
