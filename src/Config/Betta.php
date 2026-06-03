@@ -63,4 +63,10 @@ class Betta extends BaseConfig
      * Set via GITHUB_REPO environment variable.
      */
     public string $githubRepo = '';
+
+    /**
+     * Timeout in seconds for outbound GitHub API requests.
+     * Set to 0 to wait indefinitely (not recommended).
+     */
+    public int $githubTimeout = 30;
 }

@@ -46,6 +46,6 @@ class Services extends BaseService
         $owner = (string) (env('GITHUB_OWNER') ?? $config->githubOwner);
         $repo  = (string) (env('GITHUB_REPO') ?? $config->githubRepo);
 
-        return new GitHubService($token, $owner, $repo);
+        return new GitHubService($token, $owner, $repo, $config->githubTimeout);
     }
 }

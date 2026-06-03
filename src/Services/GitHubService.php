@@ -23,6 +23,7 @@ class GitHubService
         private readonly string $token,
         private readonly string $owner,
         private readonly string $repo,
+        private readonly int $timeout = 30,
     ) {
     }
 
@@ -51,7 +52,8 @@ class GitHubService
                     'X-GitHub-Api-Version' => '2022-11-28',
                     'User-Agent'           => 'myth/betta',
                 ],
-                'json' => $payload,
+                'json'    => $payload,
+                'timeout' => $this->timeout,
             ]);
         } catch (HTTPException $e) {
             throw new RuntimeException('GitHub API request failed: ' . $e->getMessage(), 0, $e);
