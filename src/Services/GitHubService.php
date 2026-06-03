@@ -58,7 +58,7 @@ class GitHubService
         }
 
         /** @var array<string, mixed>|null $data */
-        $data = json_decode($response->getBody(), true);
+        $data = json_decode((string) $response->getBody(), true);
 
         if (! is_array($data) || ! isset($data['html_url'])) {
             throw new RuntimeException('GitHub API did not return an issue URL. Response: ' . $response->getBody());

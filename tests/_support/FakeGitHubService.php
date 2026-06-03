@@ -19,7 +19,9 @@ namespace Tests\Support;
  */
 final class FakeGitHubService
 {
-    /** @var array<int, array<string, mixed>> */
+    /**
+     * @var array<int, array<string, mixed>>
+     */
     private array $created = [];
 
     /**

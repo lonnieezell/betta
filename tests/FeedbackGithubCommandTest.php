@@ -92,7 +92,7 @@ final class FeedbackGithubCommandTest extends CIUnitTestCase
         $this->assertCount(1, $github->getCreated());
         $item = $this->feedback->find($id);
         $this->assertNotNull($item->github_issue_url);
-        $this->assertStringContainsString('github.com', $item->github_issue_url);
+        $this->assertStringContainsString('github.com', (string) $item->github_issue_url);
     }
 
     public function testSingleItemTitleTruncatesLongMessage(): void
@@ -213,7 +213,7 @@ final class FeedbackGithubCommandTest extends CIUnitTestCase
     public function testClusterSkipsAlreadyExportedItems(): void
     {
         $clusterId = $this->clusters->insert(['label' => 'Auth Issues']);
-        $id1       = $this->feedback->insert([
+        $this->feedback->insert([
             'message'          => 'Login broken',
             'category'         => CategoryEnum::Bug,
             'cluster_id'       => $clusterId,
