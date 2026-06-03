@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Myth\Betta\Config;
 
 use CodeIgniter\Config\BaseService;
-use Myth\Betta\Config\Betta;
 use Myth\Betta\Services\GitHubService;
 use Myth\Scribe\Services\ScribeService;
 
@@ -45,7 +44,7 @@ class Services extends BaseService
 
         $token = (string) (env('GITHUB_TOKEN') ?? $config->githubToken);
         $owner = (string) (env('GITHUB_OWNER') ?? $config->githubOwner);
-        $repo  = (string) (env('GITHUB_REPO')  ?? $config->githubRepo);
+        $repo  = (string) (env('GITHUB_REPO') ?? $config->githubRepo);
 
         return new GitHubService($token, $owner, $repo);
     }

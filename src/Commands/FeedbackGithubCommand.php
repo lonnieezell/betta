@@ -51,7 +51,7 @@ class FeedbackGithubCommand extends BaseCommand
 
         $token = (string) (env('GITHUB_TOKEN') ?? '');
         $owner = (string) (env('GITHUB_OWNER') ?? '');
-        $repo  = (string) (env('GITHUB_REPO')  ?? '');
+        $repo  = (string) (env('GITHUB_REPO') ?? '');
 
         if (! $dryRun) {
             if ($token === '') {
