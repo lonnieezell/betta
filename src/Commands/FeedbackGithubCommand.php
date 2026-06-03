@@ -34,14 +34,6 @@ class FeedbackGithubCommand extends BaseCommand
         '--dry-run' => 'Print what would be created without calling the GitHub API.',
     ];
 
-    /** @var array<string, string> */
-    private array $categoryLabels = [
-        CategoryEnum::Bug->value     => 'bug',
-        CategoryEnum::UX->value      => 'ux',
-        CategoryEnum::Feature->value => 'feature',
-        CategoryEnum::Other->value   => 'other',
-    ];
-
     /**
      * @param array<int|string, string|null> $params
      */
@@ -99,7 +91,7 @@ class FeedbackGithubCommand extends BaseCommand
             return EXIT_ERROR;
         }
 
-        $this->processItem($item, $dryRun, null);
+        $this->processItem($item, $feedbackModel, $dryRun, null);
 
         return EXIT_SUCCESS;
     }
@@ -124,20 +116,18 @@ class FeedbackGithubCommand extends BaseCommand
             return EXIT_SUCCESS;
         }
 
-        $priority = isset($cluster->priority) && $cluster->priority instanceof PriorityEnum
-            ? $cluster->priority->value
-            : null;
+        $priority = $cluster->priority instanceof PriorityEnum ? $cluster->priority->value : null;
 
         foreach ($items as $item) {
-            $this->processItem($item, $dryRun, $priority);
+            $this->processItem($item, $feedbackModel, $dryRun, $priority);
         }
 
         return EXIT_SUCCESS;
     }
 
-    private function processItem(object $item, bool $dryRun, ?string $clusterPriority): void
+    private function processItem(object $item, FeedbackModel $feedbackModel, bool $dryRun, ?string $clusterPriority): void
     {
-        if (isset($item->github_issue_url) && $item->github_issue_url !== null && $item->github_issue_url !== '') {
+        if (! empty($item->github_issue_url)) {
             CLI::write(CLI::color("Feedback #{$item->id} already exported: {$item->github_issue_url}", 'yellow'));
 
             return;
@@ -173,8 +163,8 @@ class FeedbackGithubCommand extends BaseCommand
 
         $labels = [];
 
-        if (isset($this->categoryLabels[$category])) {
-            $labels[] = $this->categoryLabels[$category];
+        if (CategoryEnum::tryFrom($category) !== null) {
+            $labels[] = $category;
         }
 
         if ($clusterPriority !== null) {
@@ -197,7 +187,7 @@ class FeedbackGithubCommand extends BaseCommand
         try {
             $github = service('github');
             $url    = $github->createIssue($title, $body, $labels);
-            (new FeedbackModel())->update($item->id, ['github_issue_url' => $url]);
+            $feedbackModel->update($item->id, ['github_issue_url' => $url]);
             CLI::write(CLI::color("Feedback #{$item->id} → {$url}", 'green'));
         } catch (RuntimeException $e) {
             CLI::error("Failed to create issue for feedback #{$item->id}: " . $e->getMessage());

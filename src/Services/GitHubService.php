@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Myth\Betta\Services;
 
 use CodeIgniter\HTTP\Exceptions\HTTPException;
+use Config\Services as CIServices;
 use RuntimeException;
 
 class GitHubService
@@ -34,7 +35,7 @@ class GitHubService
      */
     public function createIssue(string $title, string $body, array $labels = []): string
     {
-        $client = \Config\Services::curlrequest();
+        $client = CIServices::curlrequest();
 
         $payload = ['title' => $title, 'body' => $body];
 
@@ -56,10 +57,10 @@ class GitHubService
             throw new RuntimeException('GitHub API request failed: ' . $e->getMessage(), 0, $e);
         }
 
-        /** @var array<string, mixed> $data */
+        /** @var array<string, mixed>|null $data */
         $data = json_decode($response->getBody(), true);
 
-        if (! isset($data['html_url'])) {
+        if (! is_array($data) || ! isset($data['html_url'])) {
             throw new RuntimeException('GitHub API did not return an issue URL. Response: ' . $response->getBody());
         }
 
