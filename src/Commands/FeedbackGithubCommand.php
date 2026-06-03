@@ -5,7 +5,7 @@ declare(strict_types=1);
 /**
  * This file is part of Myth/Betta.
  *
- * (c) Your Name <you@example.com>
+ * (c) Lonnie Ezell <lonnieje@gmail.com>
  *
  * For the full copyright and license information, please view
  * the LICENSE file that was distributed with this source code.
@@ -23,6 +23,8 @@ use RuntimeException;
 
 class FeedbackGithubCommand extends BaseCommand
 {
+    private const RATE_LIMIT_WARN_THRESHOLD = 100;
+
     protected $group       = 'Betta';
     protected $name        = 'feedback:github';
     protected $description = 'Create GitHub issues from a feedback item or an entire cluster.';
@@ -34,8 +36,6 @@ class FeedbackGithubCommand extends BaseCommand
         '--dry-run' => 'Print what would be created without calling the GitHub API.',
         '--delay'   => 'Milliseconds to wait between API requests in cluster mode (default 500).',
     ];
-
-    private const RATE_LIMIT_WARN_THRESHOLD = 100;
 
     /**
      * @param array<int|string, string|null> $params

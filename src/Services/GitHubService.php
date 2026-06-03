@@ -5,7 +5,7 @@ declare(strict_types=1);
 /**
  * This file is part of Myth/Betta.
  *
- * (c) Your Name <you@example.com>
+ * (c) Lonnie Ezell <lonnieje@gmail.com>
  *
  * For the full copyright and license information, please view
  * the LICENSE file that was distributed with this source code.
@@ -66,7 +66,7 @@ class GitHubService
             throw new RuntimeException('GitHub API request failed: ' . $e->getMessage(), 0, $e);
         }
 
-        $remaining = $response->getHeaderLine('X-RateLimit-Remaining');
+        $remaining                = $response->getHeaderLine('X-RateLimit-Remaining');
         $this->rateLimitRemaining = $remaining !== '' ? (int) $remaining : null;
 
         /** @var array<string, mixed>|null $data */
