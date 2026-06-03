@@ -15,6 +15,8 @@ namespace Tests;
 
 use CodeIgniter\Test\CIUnitTestCase;
 use CodeIgniter\Test\FeatureTestTrait;
+use CodeIgniter\Throttle\ThrottlerInterface;
+use Config\Services;
 use Myth\Betta\Config\Betta;
 use Myth\Betta\Models\FeedbackModel;
 use Tests\Support\DatabaseTestTrait;
@@ -38,6 +40,12 @@ final class FeedbackControllerTest extends CIUnitTestCase
         parent::setUp();
         $this->db->table('betta_feedback')->truncate();
         config(Betta::class)->acceptSubmissions = true;
+
+        // Default to a permissive throttler so the rate-limit filter never
+        // blocks tests that are not specifically testing rate limiting.
+        $permissive = $this->createMock(ThrottlerInterface::class);
+        $permissive->method('check')->willReturn(true);
+        Services::injectMock('throttler', $permissive);
     }
 
     public function testGetFeedbackRendersForm(): void
@@ -178,5 +186,42 @@ final class FeedbackControllerTest extends CIUnitTestCase
 
         $result->assertStatus(302);
         $result->assertSessionHas('feedback_success');
+    }
+
+    public function testPostSubmitReturns429WhenRateLimited(): void
+    {
+        $throttler = $this->createMock(ThrottlerInterface::class);
+        $throttler->method('check')->willReturn(false);
+        $throttler->method('getTokenTime')->willReturn(30);
+        Services::injectMock('throttler', $throttler);
+
+        $result = $this->post('feedback/submit', [
+            'category' => 'bug',
+            'message'  => 'Rate limited request',
+        ]);
+
+        $result->assertStatus(429);
+
+        Services::resetSingle('throttler');
+    }
+
+    public function testPostSubmitReturns429JsonWhenRateLimitedAndJsonRequest(): void
+    {
+        $throttler = $this->createMock(ThrottlerInterface::class);
+        $throttler->method('check')->willReturn(false);
+        $throttler->method('getTokenTime')->willReturn(30);
+        Services::injectMock('throttler', $throttler);
+
+        $result = $this->withHeaders(['Accept' => 'application/json'])
+            ->post('feedback/submit', [
+                'category' => 'bug',
+                'message'  => 'Rate limited JSON request',
+            ]);
+
+        $result->assertStatus(429);
+        $json = json_decode((string) $result->response()->getBody(), true);
+        $this->assertArrayHasKey('error', $json);
+
+        Services::resetSingle('throttler');
     }
 }

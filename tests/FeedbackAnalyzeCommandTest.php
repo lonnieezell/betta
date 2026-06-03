@@ -25,7 +25,6 @@ use Tests\Support\FeedbackCommandTestCase;
  */
 final class FeedbackAnalyzeCommandTest extends FeedbackCommandTestCase
 {
-
     // -------------------------------------------------------------------------
     // Empty queue
     // -------------------------------------------------------------------------

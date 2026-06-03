@@ -36,6 +36,17 @@ class Betta extends BaseConfig
     public int $analyzeBatchSize = 50;
 
     /**
+     * Maximum feedback submissions allowed per IP within $rateLimitWindow seconds.
+     * Set to 0 to disable rate limiting entirely.
+     */
+    public int $rateLimitRequests = 5;
+
+    /**
+     * Rolling window in seconds for the rate limit bucket.
+     */
+    public int $rateLimitWindow = 60;
+
+    /**
      * GitHub personal access token (needs `repo` scope).
      * Set via GITHUB_TOKEN environment variable — never hard-code credentials.
      */

@@ -25,7 +25,6 @@ use Tests\Support\FeedbackCommandTestCase;
  */
 final class FeedbackGithubCommandTest extends FeedbackCommandTestCase
 {
-
     // -------------------------------------------------------------------------
     // --dry-run single item
     // -------------------------------------------------------------------------

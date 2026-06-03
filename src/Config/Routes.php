@@ -21,4 +21,4 @@ $betta  = config(Betta::class);
 $prefix = $betta->routePrefix;
 
 $routes->get($prefix, '\Myth\Betta\Controllers\FeedbackController::index');
-$routes->post($prefix . '/submit', '\Myth\Betta\Controllers\FeedbackController::submit');
+$routes->post($prefix . '/submit', '\Myth\Betta\Controllers\FeedbackController::submit', ['filter' => 'betta-rate-limit']);

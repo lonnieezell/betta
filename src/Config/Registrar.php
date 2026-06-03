@@ -13,12 +13,16 @@ declare(strict_types=1);
 
 namespace Myth\Betta\Config;
 
+use Myth\Betta\Filters\RateLimitFilter;
+
 class Registrar
 {
     public static function Filters(): array
     {
         return [
-            'aliases' => [],
+            'aliases' => [
+                'betta-rate-limit' => RateLimitFilter::class,
+            ],
         ];
     }
 }
