@@ -152,7 +152,7 @@ final class FeedbackGithubCommandTest extends FeedbackCommandTestCase
         $id2       = $this->feedback->insert(['message' => 'Logout broken', 'category' => CategoryEnum::Bug, 'cluster_id' => $clusterId]);
         $this->injectGitHub();
 
-        $output = $this->runCommand("feedback:github {$clusterId} --cluster --dry-run");
+        $output = $this->runCommand("feedback:github {$clusterId} --cluster --dry-run --delay 0");
 
         $this->assertStringContainsString('Login broken', $output);
         $this->assertStringContainsString('Logout broken', $output);
@@ -173,7 +173,7 @@ final class FeedbackGithubCommandTest extends FeedbackCommandTestCase
         $id2       = $this->feedback->insert(['message' => 'Logout broken', 'category' => CategoryEnum::Bug, 'cluster_id' => $clusterId]);
         $github    = $this->injectGitHub();
 
-        $this->runCommand("feedback:github {$clusterId} --cluster");
+        $this->runCommand("feedback:github {$clusterId} --cluster --delay 0");
 
         $this->assertCount(2, $github->getCreated());
         $item1 = $this->feedback->find($id1);
@@ -194,7 +194,7 @@ final class FeedbackGithubCommandTest extends FeedbackCommandTestCase
         $id2    = $this->feedback->insert(['message' => 'Logout broken', 'category' => CategoryEnum::Bug, 'cluster_id' => $clusterId]);
         $github = $this->injectGitHub();
 
-        $output = $this->runCommand("feedback:github {$clusterId} --cluster");
+        $output = $this->runCommand("feedback:github {$clusterId} --cluster --delay 0");
 
         $this->assertCount(1, $github->getCreated());
         $this->assertStringContainsString('already exported', $output);
@@ -213,6 +213,46 @@ final class FeedbackGithubCommandTest extends FeedbackCommandTestCase
         $output = $this->runCommand('feedback:github 99999 --cluster');
 
         $this->assertStringContainsString('not found', $output);
+    }
+
+    // -------------------------------------------------------------------------
+    // Rate-limit warnings
+    // -------------------------------------------------------------------------
+
+    public function testLowRateLimitWarnsOperatorInClusterMode(): void
+    {
+        $clusterId = $this->clusters->insert(['label' => 'Low Limit Cluster']);
+        $this->feedback->insert(['message' => 'Bug A', 'category' => CategoryEnum::Bug, 'cluster_id' => $clusterId]);
+        $github = $this->injectGitHub();
+        $github->setRateLimitRemaining(42);
+
+        $output = $this->runCommand("feedback:github {$clusterId} --cluster --delay 0");
+
+        $this->assertStringContainsString('rate limit', strtolower($output));
+        $this->assertStringContainsString('42', $output);
+    }
+
+    public function testHighRateLimitNoWarning(): void
+    {
+        $clusterId = $this->clusters->insert(['label' => 'High Limit Cluster']);
+        $this->feedback->insert(['message' => 'Bug B', 'category' => CategoryEnum::Bug, 'cluster_id' => $clusterId]);
+        $github = $this->injectGitHub();
+        $github->setRateLimitRemaining(500);
+
+        $output = $this->runCommand("feedback:github {$clusterId} --cluster --delay 0");
+
+        $this->assertStringNotContainsString('rate limit', strtolower($output));
+    }
+
+    public function testNullRateLimitNoWarning(): void
+    {
+        $clusterId = $this->clusters->insert(['label' => 'No Limit Header Cluster']);
+        $this->feedback->insert(['message' => 'Bug C', 'category' => CategoryEnum::Bug, 'cluster_id' => $clusterId]);
+        $this->injectGitHub(); // default: getRateLimitRemaining() returns null
+
+        $output = $this->runCommand("feedback:github {$clusterId} --cluster --delay 0");
+
+        $this->assertStringNotContainsString('rate limit', strtolower($output));
     }
 
     // -------------------------------------------------------------------------

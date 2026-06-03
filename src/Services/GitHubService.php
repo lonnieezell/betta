@@ -19,12 +19,19 @@ use RuntimeException;
 
 class GitHubService
 {
+    private ?int $rateLimitRemaining = null;
+
     public function __construct(
         private readonly string $token,
         private readonly string $owner,
         private readonly string $repo,
         private readonly int $timeout = 30,
     ) {
+    }
+
+    public function getRateLimitRemaining(): ?int
+    {
+        return $this->rateLimitRemaining;
     }
 
     /**
@@ -58,6 +65,9 @@ class GitHubService
         } catch (HTTPException $e) {
             throw new RuntimeException('GitHub API request failed: ' . $e->getMessage(), 0, $e);
         }
+
+        $remaining = $response->getHeaderLine('X-RateLimit-Remaining');
+        $this->rateLimitRemaining = $remaining !== '' ? (int) $remaining : null;
 
         /** @var array<string, mixed>|null $data */
         $data = json_decode((string) $response->getBody(), true);

@@ -24,6 +24,8 @@ final class FakeGitHubService
      */
     private array $created = [];
 
+    private ?int $rateLimitRemaining = null;
+
     /**
      * @param list<string> $labels
      */
@@ -42,5 +44,15 @@ final class FakeGitHubService
     public function getCreated(): array
     {
         return $this->created;
+    }
+
+    public function setRateLimitRemaining(?int $remaining): void
+    {
+        $this->rateLimitRemaining = $remaining;
+    }
+
+    public function getRateLimitRemaining(): ?int
+    {
+        return $this->rateLimitRemaining;
     }
 }

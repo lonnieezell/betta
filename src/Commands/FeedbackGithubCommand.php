@@ -32,7 +32,10 @@ class FeedbackGithubCommand extends BaseCommand
     protected $options = [
         '--cluster' => 'Treat the ID as a cluster; create one issue per feedback item in it.',
         '--dry-run' => 'Print what would be created without calling the GitHub API.',
+        '--delay'   => 'Milliseconds to wait between API requests in cluster mode (default 500).',
     ];
+
+    private const RATE_LIMIT_WARN_THRESHOLD = 100;
 
     /**
      * @param array<int|string, string|null> $params
@@ -42,6 +45,7 @@ class FeedbackGithubCommand extends BaseCommand
         $id      = isset($params[0]) && ctype_digit($params[0]) ? (int) $params[0] : null;
         $cluster = array_key_exists('cluster', $params) || CLI::getOption('cluster') !== null;
         $dryRun  = array_key_exists('dry-run', $params) || CLI::getOption('dry-run') !== null;
+        $delayMs = (int) (CLI::getOption('delay') ?? $params['delay'] ?? 500);
 
         if ($id === null || $id <= 0) {
             CLI::error('Usage: feedback:github <id> [--cluster] [--dry-run]');
@@ -74,7 +78,7 @@ class FeedbackGithubCommand extends BaseCommand
         }
 
         if ($cluster) {
-            return $this->handleCluster($id, $dryRun);
+            return $this->handleCluster($id, $dryRun, $delayMs);
         }
 
         return $this->handleSingle($id, $dryRun);
@@ -96,7 +100,7 @@ class FeedbackGithubCommand extends BaseCommand
         return EXIT_SUCCESS;
     }
 
-    private function handleCluster(int $clusterId, bool $dryRun): int
+    private function handleCluster(int $clusterId, bool $dryRun, int $delayMs): int
     {
         $clusterModel = new FeedbackClusterModel();
         $cluster      = $clusterModel->find($clusterId);
@@ -118,7 +122,11 @@ class FeedbackGithubCommand extends BaseCommand
 
         $priority = $cluster->priority instanceof PriorityEnum ? $cluster->priority->value : null;
 
-        foreach ($items as $item) {
+        foreach ($items as $i => $item) {
+            if ($i > 0 && $delayMs > 0 && ! $dryRun) {
+                usleep($delayMs * 1000);
+            }
+
             $this->processItem($item, $feedbackModel, $dryRun, $priority);
         }
 
@@ -197,6 +205,12 @@ class FeedbackGithubCommand extends BaseCommand
             $url    = $github->createIssue($title, $body, $labels);
             $feedbackModel->update($item->id, ['github_issue_url' => $url]);
             CLI::write(CLI::color("Feedback #{$item->id} → {$url}", 'green'));
+
+            $remaining = $github->getRateLimitRemaining();
+
+            if ($remaining !== null && $remaining < self::RATE_LIMIT_WARN_THRESHOLD) {
+                CLI::write(CLI::color("Warning: GitHub rate limit low ({$remaining} requests remaining).", 'yellow'));
+            }
         } catch (RuntimeException $e) {
             CLI::error("Failed to create issue for feedback #{$item->id}: " . $e->getMessage());
         }
