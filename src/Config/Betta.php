@@ -34,4 +34,22 @@ class Betta extends BaseConfig
      * feedback:analyze batch. Override with --limit at the CLI.
      */
     public int $analyzeBatchSize = 50;
+
+    /**
+     * GitHub personal access token (needs `repo` scope).
+     * Set via GITHUB_TOKEN environment variable — never hard-code credentials.
+     */
+    public string $githubToken = '';
+
+    /**
+     * GitHub repository owner (user or organization name).
+     * Set via GITHUB_OWNER environment variable.
+     */
+    public string $githubOwner = '';
+
+    /**
+     * GitHub repository name.
+     * Set via GITHUB_REPO environment variable.
+     */
+    public string $githubRepo = '';
 }

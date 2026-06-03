@@ -35,6 +35,7 @@ class FeedbackModel extends Model
         'sentiment',
         'status',
         'cluster_id',
+        'github_issue_url',
     ];
     protected $useTimestamps = true;
     protected $dateFormat    = 'datetime';

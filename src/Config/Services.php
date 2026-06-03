@@ -14,6 +14,8 @@ declare(strict_types=1);
 namespace Myth\Betta\Config;
 
 use CodeIgniter\Config\BaseService;
+use Myth\Betta\Config\Betta;
+use Myth\Betta\Services\GitHubService;
 use Myth\Scribe\Services\ScribeService;
 
 class Services extends BaseService
@@ -25,5 +27,26 @@ class Services extends BaseService
     public static function scribe(bool $getShared = true): ScribeService
     {
         return static::getSharedInstance('scribe', $getShared);
+    }
+
+    /**
+     * Returns the GitHub API service.
+     * Credentials are read from GITHUB_TOKEN / GITHUB_OWNER / GITHUB_REPO env vars
+     * (with fallback to Betta config properties).
+     */
+    public static function github(bool $getShared = true): GitHubService
+    {
+        if ($getShared) {
+            return static::getSharedInstance('github');
+        }
+
+        /** @var Betta $config */
+        $config = config('Betta');
+
+        $token = (string) (env('GITHUB_TOKEN') ?: $config->githubToken);
+        $owner = (string) (env('GITHUB_OWNER') ?: $config->githubOwner);
+        $repo  = (string) (env('GITHUB_REPO')  ?: $config->githubRepo);
+
+        return new GitHubService($token, $owner, $repo);
     }
 }
