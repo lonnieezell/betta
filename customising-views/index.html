@@ -11,8 +11,10 @@
       
       
       
-        <link rel="prev" href="../managing-clusters/">
+        <link rel="prev" href="../collecting-feedback/">
       
+      
+        <link rel="next" href="../browsing-feedback/">
       
       
         
@@ -23,7 +25,7 @@
     
     
       
-        <title>AI Clustering - Myth/Betta</title>
+        <title>Customising Views & Config - Myth/Betta</title>
       
     
     
@@ -74,7 +76,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#ai-clustering" class="md-skip">
+        <a href="#customising-views-config" class="md-skip">
           Skip to content
         </a>
       
@@ -110,7 +112,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              AI Clustering
+              Customising Views & Config
             
           </span>
         </div>
@@ -341,10 +343,37 @@
       
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../customising-views/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Customising Views & Config
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -360,6 +389,98 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#publishing-views" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Publishing views
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Publishing views">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#how-overrides-work" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How overrides work
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#publishing-the-config" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Publishing the config
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#publishing-both-at-once" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Publishing both at once
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#overwrite-prompts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Overwrite prompts
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#next-steps" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Next steps
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -449,37 +570,10 @@
       
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    AI Clustering
-  
-
-    
-  </span>
-  
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../ai-clustering/" class="md-nav__link">
         
   
   
@@ -495,170 +589,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#prerequisites" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Prerequisites
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#basic-usage" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Basic usage
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#actions" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Actions
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#modes" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Modes
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Modes">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#-dry-run" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        --dry-run
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#-apply" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        --apply
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#-limit" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        --limit
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#configuration" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Configuration
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#how-the-ai-is-prompted" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        How the AI is prompted
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="How the AI is prompted">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#response-schema" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Response schema
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#error-handling" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Error handling
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#next-steps" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Next steps
-      
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -690,77 +620,22 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#prerequisites" class="md-nav__link">
+  <a href="#publishing-views" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Prerequisites
+        Publishing views
       
     </span>
   </a>
   
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#basic-usage" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Basic usage
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#actions" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Actions
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#modes" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Modes
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Modes">
+    <nav class="md-nav" aria-label="Publishing views">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#-dry-run" class="md-nav__link">
+  <a href="#how-overrides-work" class="md-nav__link">
     <span class="md-ellipsis">
       
-        --dry-run
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#-apply" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        --apply
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#-limit" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        --limit
+        How overrides work
       
     </span>
   </a>
@@ -773,10 +648,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#configuration" class="md-nav__link">
+  <a href="#publishing-the-config" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Configuration
+        Publishing the config
       
     </span>
   </a>
@@ -784,38 +659,21 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#how-the-ai-is-prompted" class="md-nav__link">
+  <a href="#publishing-both-at-once" class="md-nav__link">
     <span class="md-ellipsis">
       
-        How the AI is prompted
+        Publishing both at once
       
     </span>
   </a>
-  
-    <nav class="md-nav" aria-label="How the AI is prompted">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#response-schema" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Response schema
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#error-handling" class="md-nav__link">
+  <a href="#overwrite-prompts" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Error handling
+        Overwrite prompts
       
     </span>
   </a>
@@ -850,7 +708,7 @@
 
 
   
-    <a href="https://github.com/myth/betta/edit/develop/docs/ai-clustering.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
+    <a href="https://github.com/myth/betta/edit/develop/docs/customising-views.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
       
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
     </a>
@@ -858,121 +716,81 @@
   
 
 
-<h1 id="ai-clustering">AI Clustering</h1>
-<p><code>feedback:analyze</code> uses AI to group your ungrouped feedback into clusters automatically. Instead of manually reading each item and deciding where it belongs, you run the command and get a set of suggested clusters — then accept, skip, or tweak each one.</p>
-<p>It requires <a href="https://github.com/myth/scribe"><code>myth/scribe</code></a> to be installed. The rest of the package works fine without it.</p>
-<h2 id="prerequisites">Prerequisites</h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>composer<span class="w"> </span>require<span class="w"> </span>myth/scribe
+<h1 id="customising-views-config">Customising Views &amp; Config</h1>
+<p>The <code>feedback:publish</code> command copies the package's view files and/or config into your app so you can customise them. Published files take precedence over the package defaults automatically — no extra wiring needed.</p>
+<h2 id="publishing-views">Publishing views</h2>
+<p>Run this to copy all three view files into your app:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>php<span class="w"> </span>spark<span class="w"> </span>feedback:publish<span class="w"> </span>--views
 </code></pre></div>
-<p>If you run <code>feedback:analyze</code> without Scribe installed, you'll get a clear message and a non-zero exit code — nothing breaks.</p>
-<h2 id="basic-usage">Basic usage</h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>php<span class="w"> </span>spark<span class="w"> </span>feedback:analyze
+<p>That places the following files in your project:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>app/
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>  Views/
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>    vendor/
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>      betta/
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>        form.php      ← the feedback form fragment
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>        page.php      ← the full-page wrapper
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>        closed.php    ← shown when submissions are disabled
 </code></pre></div>
-<p>This fetches your ungrouped, non-dismissed feedback (up to <code>$analyzeBatchSize</code> items — see <a href="#configuration">Configuration</a>), sends them to the AI alongside your existing cluster labels, and walks you through the suggestions one by one.</p>
-<p>Each suggestion looks like this:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>New cluster: Login &amp; Auth Issues
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>Summary: Users are having trouble signing in and resetting passwords.
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>Items: 14, 27, 31, 58
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>Action ([y] Accept / [n] Skip / [e] Edit label):
-</code></pre></div>
-<p>When the AI spots an existing cluster that fits, it'll suggest assigning to it instead:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>Cluster: Mobile Crashes → existing cluster #3
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>Summary: App crashes reported on iOS 17 and Android 14.
-<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>Items: 22, 39
-<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>Action ([y] Accept / [n] Skip / [e] Edit label):
-</code></pre></div>
-<h2 id="actions">Actions</h2>
-<table>
-<thead>
-<tr>
-<th>Key</th>
-<th>What it does</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>y</code></td>
-<td>Accept the suggestion as-is. Creates or updates the cluster and assigns the items.</td>
-</tr>
-<tr>
-<td><code>n</code></td>
-<td>Skip this suggestion. Items stay ungrouped.</td>
-</tr>
-<tr>
-<td><code>e</code></td>
-<td>Edit the AI-suggested label before saving. The prompt pre-fills the AI label — overwrite it and press Enter.</td>
-</tr>
-</tbody>
-</table>
-<h2 id="modes">Modes</h2>
-<h3 id="-dry-run"><code>--dry-run</code></h3>
-<p>Prints suggestions without writing anything to the database. Useful for seeing what the AI thinks before committing.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>php<span class="w"> </span>spark<span class="w"> </span>feedback:analyze<span class="w"> </span>--dry-run
-</code></pre></div>
-<h3 id="-apply"><code>--apply</code></h3>
-<p>Accepts all suggestions automatically without any prompts. Good for scripts or when you trust the AI's groupings.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>php<span class="w"> </span>spark<span class="w"> </span>feedback:analyze<span class="w"> </span>--apply
-</code></pre></div>
-<h3 id="-limit"><code>--limit</code></h3>
-<p>Override how many ungrouped items are sent to the AI in this batch. Useful when you want to process a smaller slice of a large backlog.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>php<span class="w"> </span>spark<span class="w"> </span>feedback:analyze<span class="w"> </span>--limit<span class="w"> </span><span class="m">20</span>
-</code></pre></div>
-<h2 id="configuration">Configuration</h2>
-<p>Add this to your <code>app/Config/Betta.php</code> to change the default batch size:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="x">public int $analyzeBatchSize = 50;</span>
-</code></pre></div>
-<p>The default is <code>50</code>. <code>--limit</code> at the CLI always takes precedence.</p>
+<p>Edit any file and your changes are live immediately. You only need to keep the files you're actually changing — delete the rest and the package falls back to its own defaults.</p>
 <div class="admonition tip">
-<p class="admonition-title">Start small</p>
-<p>On a fresh install with hundreds of backlogged items, run with <code>--limit 30 --dry-run</code> first to get a feel for how the AI groups your specific data before applying anything.</p>
+<p class="admonition-title">Just want to tweak the form?</p>
+<p>You can publish only the views you need. Delete <code>page.php</code> and <code>closed.php</code> after publishing and the package will serve its built-in versions for those, while still using your custom <code>form.php</code>.</p>
 </div>
-<h2 id="how-the-ai-is-prompted">How the AI is prompted</h2>
-<p><code>ClusterFeedbackPrompt</code> builds the prompt that gets sent to Scribe. It has three methods that Scribe's driver reads:</p>
-<table>
-<thead>
-<tr>
-<th>Method</th>
-<th>What it returns</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>systemPrompt()</code></td>
-<td>Instructs the AI to produce 3–8 clusters and reference existing labels</td>
-</tr>
-<tr>
-<td><code>userPrompt()</code></td>
-<td>Existing cluster labels + ungrouped item IDs and messages</td>
-</tr>
-<tr>
-<td><code>schema()</code></td>
-<td>JSON schema defining the expected response shape</td>
-</tr>
-</tbody>
-</table>
-<p>You can extend or replace this class if you need different prompt logic — for example, to add domain-specific instructions or change the cluster count range. Swap in your subclass wherever <code>ClusterFeedbackPrompt</code> is instantiated in <code>FeedbackAnalyzeCommand</code>.</p>
-<h3 id="response-schema">Response schema</h3>
-<p>Each AI suggestion has this shape:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="p">{</span>
-<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="w">  </span><span class="nt">&quot;label&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Login &amp; Auth Issues&quot;</span><span class="p">,</span>
-<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="w">  </span><span class="nt">&quot;summary&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Users are having trouble signing in and resetting passwords.&quot;</span><span class="p">,</span>
-<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="w">  </span><span class="nt">&quot;ids&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="mi">14</span><span class="p">,</span><span class="w"> </span><span class="mi">27</span><span class="p">,</span><span class="w"> </span><span class="mi">31</span><span class="p">,</span><span class="w"> </span><span class="mi">58</span><span class="p">],</span>
-<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="w">  </span><span class="nt">&quot;existing_cluster_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span>
-<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="p">}</span>
+<h3 id="how-overrides-work">How overrides work</h3>
+<p>The controller checks <code>app/Views/vendor/betta/{view}.php</code> before falling back to the package view. <code>page.php</code> applies the same check for its embedded <code>form.php</code> — so if you publish <code>form.php</code>, <code>page.php</code> will use your version automatically, whether <code>page.php</code> itself is published or not.</p>
+<h2 id="publishing-the-config">Publishing the config</h2>
+<p>Run this to scaffold a config file in your app:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>php<span class="w"> </span>spark<span class="w"> </span>feedback:publish<span class="w"> </span>--config
 </code></pre></div>
-<ul>
-<li><code>existing_cluster_id</code> — <code>null</code> means create a new cluster; an integer means assign items to that existing cluster ID.</li>
-<li><code>label</code> and <code>summary</code> are required. <code>ids</code> is required and must be non-empty for the suggestion to do anything.</li>
-</ul>
-<h2 id="error-handling">Error handling</h2>
-<p>If the AI service throws an error, the command prints the message and exits with a non-zero code — it won't silently skip half your data or corrupt anything already written.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>AI error: upstream API returned 503
+<p>That writes <code>app/Config/Betta.php</code>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="cp">&lt;?php</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="k">declare</span><span class="p">(</span><span class="nx">strict_types</span><span class="o">=</span><span class="mi">1</span><span class="p">);</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="k">namespace</span> <span class="nx">Config</span><span class="p">;</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="k">use</span> <span class="nx">Myth\Betta\Config\Betta</span> <span class="k">as</span> <span class="nx">BettaConfig</span><span class="p">;</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="k">class</span> <span class="nc">Betta</span> <span class="k">extends</span> <span class="nx">BettaConfig</span>
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="p">{</span>
+<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a>    <span class="c1">// The route prefix for the feedback endpoints.</span>
+<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a>    <span class="c1">// Produces GET /{routePrefix} and POST /{routePrefix}/submit.</span>
+<a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a>    <span class="c1">// public string $routePrefix = &#39;feedback&#39;;</span>
+<a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a>
+<a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a>    <span class="c1">// Whether to accept new feedback submissions.</span>
+<a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a>    <span class="c1">// When false, the closed view is shown instead of the form.</span>
+<a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a>    <span class="c1">// public bool $acceptSubmissions = true;</span>
+<a id="__codelineno-3-18" name="__codelineno-3-18" href="#__codelineno-3-18"></a>
+<a id="__codelineno-3-19" name="__codelineno-3-19" href="#__codelineno-3-19"></a>    <span class="c1">// Maximum number of ungrouped items to send to the AI in a single</span>
+<a id="__codelineno-3-20" name="__codelineno-3-20" href="#__codelineno-3-20"></a>    <span class="c1">// feedback:analyze batch. Override with --limit at the CLI.</span>
+<a id="__codelineno-3-21" name="__codelineno-3-21" href="#__codelineno-3-21"></a>    <span class="c1">// public int $analyzeBatchSize = 50;</span>
+<a id="__codelineno-3-22" name="__codelineno-3-22" href="#__codelineno-3-22"></a><span class="p">}</span>
 </code></pre></div>
-<p>Any items already applied before the error are preserved. The command is safe to re-run after fixing the issue.</p>
+<p>All properties are commented out — they inherit their defaults from the package config. Uncomment and change only the ones you need:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="x">class Betta extends BettaConfig</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="x">{</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="x">    public string $routePrefix = &#39;beta-feedback&#39;;</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="x">    public bool $acceptSubmissions = false;</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="x">}</span>
+</code></pre></div>
+<p>CI4's config cascade picks up <code>app/Config/Betta.php</code> automatically. No registration required.</p>
+<div class="admonition note">
+<p class="admonition-title">You can also skip the publish step</p>
+<p>If all you need to change is one or two values, you can create <code>app/Config/Betta.php</code> by hand or drive values from <code>.env</code> (e.g. <code>betta.acceptSubmissions = false</code>) without publishing at all.</p>
+</div>
+<h2 id="publishing-both-at-once">Publishing both at once</h2>
+<p>The two flags are independent and can be combined in a single command:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>php<span class="w"> </span>spark<span class="w"> </span>feedback:publish<span class="w"> </span>--views<span class="w"> </span>--config
+</code></pre></div>
+<h2 id="overwrite-prompts">Overwrite prompts</h2>
+<p>If a file already exists at the destination, the command asks before overwriting it:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>Overwrite existing form.php? [y, n]:
+</code></pre></div>
+<p>Answer <code>y</code> to replace it with the current package version, or <code>n</code> to leave your file untouched. Each file is prompted separately, so you can selectively refresh just the ones you want.</p>
 <h2 id="next-steps">Next steps</h2>
 <ul>
-<li><a href="../managing-clusters/">Managing Clusters</a> — edit labels, set priorities, delete clusters the AI got wrong</li>
-<li><a href="../triaging-feedback/">Triaging Feedback</a> — manual item-by-item triage for the items that didn't cluster cleanly</li>
+<li><a href="../collecting-feedback/">Collecting Feedback</a> — config options and how the form endpoint works</li>
+<li><a href="../triaging-feedback/">Triaging Feedback</a> — reviewing and acting on submitted feedback</li>
 </ul>
 
 
@@ -1009,7 +827,7 @@
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
           
-          <a href="../managing-clusters/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Managing Clusters">
+          <a href="../collecting-feedback/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Collecting Feedback">
             <div class="md-footer__button md-icon">
               
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
@@ -1019,11 +837,27 @@
                 Previous
               </span>
               <div class="md-ellipsis">
-                Managing Clusters
+                Collecting Feedback
               </div>
             </div>
           </a>
         
+        
+          
+          <a href="../browsing-feedback/" class="md-footer__link md-footer__link--next" aria-label="Next: Browsing Feedback">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                Browsing Feedback
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
         
       </nav>
     
