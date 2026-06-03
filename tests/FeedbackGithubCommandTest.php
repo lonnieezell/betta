@@ -34,7 +34,6 @@ final class FeedbackGithubCommandTest extends FeedbackCommandTestCase
         $id = $this->feedback->insert([
             'message'  => 'The login button does not work on mobile.',
             'category' => CategoryEnum::Bug,
-            'email'    => 'user@example.com',
         ]);
         $this->injectGitHub();
 
@@ -42,7 +41,7 @@ final class FeedbackGithubCommandTest extends FeedbackCommandTestCase
 
         $this->assertStringContainsString('[Feedback] bug:', $output);
         $this->assertStringContainsString('The login button does not work on mobile.', $output);
-        $this->assertStringContainsString('user@example.com', $output);
+        $this->assertStringNotContainsString('Email:', $output);
         $item = $this->feedback->find($id);
         $this->assertNull($item->github_issue_url);
     }

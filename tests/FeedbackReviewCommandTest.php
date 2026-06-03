@@ -62,13 +62,13 @@ final class FeedbackReviewCommandTest extends CIUnitTestCase
 
     public function testLoadByIdDisplaysFullItemDetail(): void
     {
-        $id     = $this->feedback->insert(['message' => 'Cannot log in', 'email' => 'user@example.com', 'url_context' => 'https://example.com/login']);
+        $id     = $this->feedback->insert(['message' => 'Cannot log in', 'url_context' => 'https://example.com/login']);
         $output = $this->runCommand("feedback:review {$id}", "q\n");
 
         $this->assertStringContainsString((string) $id, $output);
         $this->assertStringContainsString('Cannot log in', $output);
-        $this->assertStringContainsString('user@example.com', $output);
         $this->assertStringContainsString('https://example.com/login', $output);
+        $this->assertStringNotContainsString('Email:', $output);
     }
 
     public function testViewingItemImmediatelySetsStatusReviewed(): void

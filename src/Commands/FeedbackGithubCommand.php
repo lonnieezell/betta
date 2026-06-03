@@ -153,12 +153,6 @@ class FeedbackGithubCommand extends BaseCommand
         $lines[] = '---';
         $lines[] = '**Category:** ' . $category;
 
-        $email = isset($item->email) ? (string) $item->email : '';
-
-        if ($email !== '') {
-            $lines[] = '**Email:** ' . $email;
-        }
-
         $urlContext = isset($item->url_context) ? (string) $item->url_context : '';
 
         if ($urlContext !== '') {

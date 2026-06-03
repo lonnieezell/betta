@@ -44,12 +44,6 @@ use Myth\Betta\Enums\CategoryEnum;
             <span data-error="message"></span>
         </div>
 
-        <div>
-            <label for="betta-email">Email (optional)</label>
-            <input type="email" id="betta-email" name="email" value="<?= set_value('email') ?>">
-            <span data-error="email"></span>
-        </div>
-
         <button type="submit">Send Feedback</button>
 
     <?= form_close() ?>

@@ -103,7 +103,6 @@ class FeedbackReviewCommand extends BaseCommand
         $category = $item->category->value;
         $status   = $item->status->value;
         CLI::write(CLI::color("--- Feedback #{$item->id} ({$category} / {$status}) ---", 'yellow'));
-        CLI::write('Email:   ' . ($item->email ?? '—'));
         CLI::write('URL:     ' . ($item->url_context ?? '—'));
         CLI::write('Date:    ' . ($item->created_at ?? '—'));
         CLI::write('');

@@ -50,8 +50,7 @@ class FeedbackController extends Controller
 
         $rules = [
             'category' => 'permit_empty|in_list[bug,ux,feature,other]',
-            'message'  => 'required',
-            'email'    => 'permit_empty|valid_email',
+            'message' => 'required',
         ];
 
         $isJson = $this->isJsonRequest();
@@ -79,9 +78,8 @@ class FeedbackController extends Controller
 
         $model = new FeedbackModel();
         $model->insert([
-            'session_id'  => hash('sha256', session_id()),
-            'email'       => $this->request->getPost('email'),
-            'category'    => CategoryEnum::from($category),
+            'session_id' => hash('sha256', session_id()),
+            'category'   => CategoryEnum::from($category),
             'message'     => $this->request->getPost('message'),
             'url_context' => ($urlContext !== '') ? $urlContext : null,
         ]);

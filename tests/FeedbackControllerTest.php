@@ -80,7 +80,6 @@ final class FeedbackControllerTest extends CIUnitTestCase
         $result = $this->post('feedback/submit', [
             'category'    => 'bug',
             'message'     => 'Something is broken',
-            'email'       => 'user@example.com',
             'url_context' => 'https://example.com/page',
         ]);
 
@@ -93,10 +92,20 @@ final class FeedbackControllerTest extends CIUnitTestCase
         $row = $rows[0];
         $this->assertSame('bug', $row->category->value);
         $this->assertSame('Something is broken', $row->message);
-        $this->assertSame('user@example.com', $row->email);
         $this->assertSame('https://example.com/page', $row->url_context);
         $this->assertNotEmpty($row->session_id);
         $this->assertSame(64, strlen((string) $row->session_id)); // sha256 hex length
+    }
+
+    public function testPostSubmitEmailFieldIsIgnored(): void
+    {
+        $this->post('feedback/submit', [
+            'message' => 'Test feedback',
+            'email'   => 'user@example.com',
+        ]);
+
+        $row = (new FeedbackModel())->findAll()[0];
+        $this->assertFalse(property_exists($row, 'email'));
     }
 
     public function testPostSubmitStoresSessionIdAsHash(): void
@@ -173,22 +182,6 @@ final class FeedbackControllerTest extends CIUnitTestCase
 
         $result->assertStatus(302);
         $result->assertSessionHas('errors');
-    }
-
-    public function testPostSubmitWithInvalidEmailReturns422Json(): void
-    {
-        $result = $this->withHeaders([
-            'Accept' => 'application/json',
-        ])->post('feedback/submit', [
-            'category' => 'bug',
-            'message'  => 'Valid message',
-            'email'    => 'not-an-email',
-        ]);
-
-        $result->assertStatus(422);
-        $json = json_decode((string) $result->response()->getBody(), true);
-        $this->assertArrayHasKey('errors', $json);
-        $this->assertArrayHasKey('email', $json['errors']);
     }
 
     public function testPostSubmitReturnsJsonOkOnFetchSuccess(): void

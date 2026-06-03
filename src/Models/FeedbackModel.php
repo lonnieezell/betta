@@ -27,7 +27,6 @@ class FeedbackModel extends Model
     protected $useSoftDeletes   = false;
     protected $allowedFields    = [
         'session_id',
-        'email',
         'category',
         'message',
         'url_context',
