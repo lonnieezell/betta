@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Myth\Betta\Config;
 
+use CodeIgniter\Filters\CSRF;
 use Myth\Betta\Filters\RateLimitFilter;
 
 class Registrar
@@ -22,6 +23,7 @@ class Registrar
         return [
             'aliases' => [
                 'betta-rate-limit' => RateLimitFilter::class,
+                'betta-csrf'       => CSRF::class,
             ],
         ];
     }

@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Tests;
 
+use CodeIgniter\Security\Exceptions\SecurityException;
+use CodeIgniter\Security\SecurityInterface;
 use CodeIgniter\Test\CIUnitTestCase;
 use CodeIgniter\Test\FeatureTestTrait;
 use CodeIgniter\Throttle\ThrottlerInterface;
@@ -40,6 +42,12 @@ final class FeedbackControllerTest extends CIUnitTestCase
         parent::setUp();
         $this->db->table('betta_feedback')->truncate();
         config(Betta::class)->acceptSubmissions = true;
+
+        // Bypass CSRF for tests that are not specifically testing CSRF protection.
+        $permissiveSecurity = $this->createMock(SecurityInterface::class);
+        $permissiveSecurity->method('verify')->willReturn($permissiveSecurity);
+        $permissiveSecurity->method('shouldRedirect')->willReturn(false);
+        Services::injectMock('security', $permissiveSecurity);
 
         // Default to a permissive throttler so the rate-limit filter never
         // blocks tests that are not specifically testing rate limiting.
@@ -203,6 +211,18 @@ final class FeedbackControllerTest extends CIUnitTestCase
         $result->assertStatus(429);
 
         Services::resetSingle('throttler');
+    }
+
+    public function testPostSubmitWithoutCsrfTokenThrowsSecurityException(): void
+    {
+        Services::resetSingle('security');
+
+        $this->expectException(SecurityException::class);
+
+        $this->post('feedback/submit', [
+            'category' => 'bug',
+            'message'  => 'Testing CSRF enforcement',
+        ]);
     }
 
     public function testPostSubmitReturns429JsonWhenRateLimitedAndJsonRequest(): void
