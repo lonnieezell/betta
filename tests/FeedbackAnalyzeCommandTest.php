@@ -14,44 +14,17 @@ declare(strict_types=1);
 namespace Tests;
 
 use CodeIgniter\CLI\CLI;
-use CodeIgniter\Test\CIUnitTestCase;
 use CodeIgniter\Test\Mock\MockInputOutput;
 use Config\Services;
 use Myth\Betta\Enums\StatusEnum;
-use Myth\Betta\Models\FeedbackClusterModel;
-use Myth\Betta\Models\FeedbackModel;
-use Tests\Support\DatabaseTestTrait;
 use Tests\Support\FakeScribeService;
+use Tests\Support\FeedbackCommandTestCase;
 
 /**
  * @internal
  */
-final class FeedbackAnalyzeCommandTest extends CIUnitTestCase
+final class FeedbackAnalyzeCommandTest extends FeedbackCommandTestCase
 {
-    use DatabaseTestTrait;
-
-    protected $namespace   = 'Myth\Betta';
-    protected $DBGroup     = 'tests';
-    protected $migrate     = true;
-    protected $migrateOnce = true;
-    protected $refresh     = false;
-    private FeedbackModel $feedback;
-    private FeedbackClusterModel $clusters;
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->db->table('betta_feedback')->truncate();
-        $this->db->table('feedback_clusters')->truncate();
-        $this->feedback = new FeedbackModel();
-        $this->clusters = new FeedbackClusterModel();
-    }
-
-    protected function tearDown(): void
-    {
-        parent::tearDown();
-        Services::reset(true);
-    }
 
     // -------------------------------------------------------------------------
     // Empty queue
