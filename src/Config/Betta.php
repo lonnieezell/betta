@@ -28,4 +28,10 @@ class Betta extends BaseConfig
      * When false, the closed view is shown instead of the form.
      */
     public bool $acceptSubmissions = true;
+
+    /**
+     * Maximum number of ungrouped items to send to the AI in a single
+     * feedback:analyze batch. Override with --limit at the CLI.
+     */
+    public int $analyzeBatchSize = 50;
 }
