@@ -207,11 +207,20 @@ class FeedbackAnalyzeCommand extends BaseCommand
             }
         }
 
-        foreach ((array) $suggestion['ids'] as $feedbackId) {
+        $ids = (array) $suggestion['ids'];
+
+        foreach ($ids as $feedbackId) {
             $feedbackModel->update((int) $feedbackId, [
                 'cluster_id' => $clusterId,
                 'status'     => StatusEnum::Grouped,
             ]);
         }
+
+        log_message('info', sprintf(
+            'betta.analyze: grouped %d item(s) into cluster #%d "%s"',
+            count($ids),
+            $clusterId,
+            $suggestion['label'],
+        ));
     }
 }

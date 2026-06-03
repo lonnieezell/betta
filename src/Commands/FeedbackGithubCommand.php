@@ -194,6 +194,7 @@ class FeedbackGithubCommand extends BaseCommand
             $github = service('github');
             $url    = $github->createIssue($title, $body, $labels);
             $feedbackModel->update($item->id, ['github_issue_url' => $url]);
+            log_message('info', "betta.github: issue created for feedback #{$item->id}: {$url}");
             CLI::write(CLI::color("Feedback #{$item->id} → {$url}", 'green'));
 
             $remaining = $github->getRateLimitRemaining();
@@ -202,6 +203,7 @@ class FeedbackGithubCommand extends BaseCommand
                 CLI::write(CLI::color("Warning: GitHub rate limit low ({$remaining} requests remaining).", 'yellow'));
             }
         } catch (RuntimeException $e) {
+            log_message('error', "betta.github: failed to create issue for feedback #{$item->id}: {$e->getMessage()}");
             CLI::error("Failed to create issue for feedback #{$item->id}: " . $e->getMessage());
         }
     }

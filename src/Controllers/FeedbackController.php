@@ -77,12 +77,13 @@ class FeedbackController extends Controller
         $category    = ($rawCategory !== null && $rawCategory !== '') ? $rawCategory : 'other';
 
         $model = new FeedbackModel();
-        $model->insert([
-            'session_id' => hash('sha256', session_id()),
-            'category'   => CategoryEnum::from($category),
+        $newId = $model->insert([
+            'session_id'  => hash('sha256', session_id()),
+            'category'    => CategoryEnum::from($category),
             'message'     => $this->request->getPost('message'),
             'url_context' => ($urlContext !== '') ? $urlContext : null,
         ]);
+        log_message('info', "betta.feedback: submission #{$newId} received (category={$category})");
 
         if ($isJson) {
             return $this->response->setJSON(['ok' => true]);

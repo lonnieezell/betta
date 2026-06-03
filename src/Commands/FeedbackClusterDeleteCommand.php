@@ -52,6 +52,7 @@ class FeedbackClusterDeleteCommand extends BaseCommand
         }
 
         $model->deleteWithUngroup($id);
+        log_message('info', "betta.cluster: cluster #{$id} \"{$cluster->label}\" deleted");
         CLI::write("Cluster #{$id} deleted.");
     }
 }
