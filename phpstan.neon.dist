@@ -10,6 +10,9 @@ parameters:
 		- tests/
 	bootstrapFiles:
 		- vendor/codeigniter4/framework/system/Test/bootstrap.php
+		- tests/_support/stubs/Myth/Scribe/Response/ScribeResponse.php
+		- tests/_support/stubs/Myth/Scribe/Services/ScribeService.php
+		- tests/_support/stubs/Myth/Scribe/Exceptions/AIException.php
 	universalObjectCratesClasses:
 		- Faker\Generator
 	scanDirectories:

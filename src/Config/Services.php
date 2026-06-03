@@ -14,8 +14,16 @@ declare(strict_types=1);
 namespace Myth\Betta\Config;
 
 use CodeIgniter\Config\BaseService;
+use Myth\Scribe\Services\ScribeService;
 
 class Services extends BaseService
 {
-    // Register your package services here
+    /**
+     * Returns the myth/scribe AI service.
+     * Requires myth/scribe to be installed (guarded by class_exists in callers).
+     */
+    public static function scribe(bool $getShared = true): ScribeService
+    {
+        return static::getSharedInstance('scribe', $getShared);
+    }
 }
