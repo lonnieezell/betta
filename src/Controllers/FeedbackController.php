@@ -94,7 +94,7 @@ class FeedbackController extends Controller
     {
         $override = APPPATH . 'Views/vendor/betta/' . $view . '.php';
         if (is_file($override)) {
-            return view($override, $data);
+            return view('vendor/betta/' . $view, $data);
         }
 
         return view('Myth\Betta\Views\\' . $view, $data);
