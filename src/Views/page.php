@@ -17,7 +17,9 @@ use Myth\Betta\Enums\CategoryEnum;
 <body>
     <main>
         <h1>Share Your Feedback</h1>
-        <?= view('Myth\Betta\Views\form', ['categories' => $categories, 'submitUrl' => $submitUrl]) ?>
+        <?= is_file(APPPATH . 'Views/vendor/betta/form.php')
+            ? view('vendor/betta/form', ['categories' => $categories, 'submitUrl' => $submitUrl])
+            : view('Myth\Betta\Views\form', ['categories' => $categories, 'submitUrl' => $submitUrl]) ?>
     </main>
 </body>
 </html>

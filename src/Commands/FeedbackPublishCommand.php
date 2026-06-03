@@ -42,7 +42,7 @@ class FeedbackPublishCommand extends BaseCommand
             return EXIT_ERROR;
         }
 
-        $appPath = isset($params['app-path']) ? rtrim((string) $params['app-path'], '/\\') . DIRECTORY_SEPARATOR : APPPATH;
+        $appPath = isset($params['app-path']) ? rtrim($params['app-path'], '/\\') . DIRECTORY_SEPARATOR : APPPATH;
 
         if ($publishViews) {
             $this->publishViews($appPath);
@@ -60,8 +60,10 @@ class FeedbackPublishCommand extends BaseCommand
         $srcDir  = dirname(__DIR__) . '/Views/';
         $destDir = $appPath . 'Views' . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'betta' . DIRECTORY_SEPARATOR;
 
-        if (! is_dir($destDir)) {
-            mkdir($destDir, 0755, true);
+        if (! is_dir($destDir) && ! mkdir($destDir, 0755, true)) {
+            CLI::error("Failed to create directory: {$destDir}");
+
+            return;
         }
 
         foreach (['form.php', 'page.php', 'closed.php'] as $file) {
@@ -73,7 +75,12 @@ class FeedbackPublishCommand extends BaseCommand
                 continue;
             }
 
-            copy($srcDir . $file, $dest);
+            if (! copy($srcDir . $file, $dest)) {
+                CLI::error("Failed to copy {$file}.");
+
+                continue;
+            }
+
             CLI::write("Published {$file} → " . $dest, 'green');
         }
     }
@@ -89,7 +96,13 @@ class FeedbackPublishCommand extends BaseCommand
         }
 
         $content = $this->buildConfigContent();
-        file_put_contents($dest, $content);
+
+        if (file_put_contents($dest, $content) === false) {
+            CLI::error("Failed to write: {$dest}");
+
+            return;
+        }
+
         CLI::write('Published Betta.php → ' . $dest, 'green');
     }
 

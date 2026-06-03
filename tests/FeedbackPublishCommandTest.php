@@ -44,7 +44,7 @@ final class FeedbackPublishCommandTest extends CIUnitTestCase
 
     public function testNoFlagsShowsError(): void
     {
-        $output = $this->runCommand("feedback:publish");
+        $output = $this->runCommand('feedback:publish');
 
         $this->assertStringContainsString('--views', $output);
         $this->assertStringContainsString('--config', $output);
@@ -56,7 +56,7 @@ final class FeedbackPublishCommandTest extends CIUnitTestCase
 
     public function testViewsFlagCopiesAllThreeViewFiles(): void
     {
-        $this->runCommand("feedback:publish --views");
+        $this->runCommand('feedback:publish --views');
 
         $destDir = $this->tmpDir . '/Views/vendor/betta/';
         $this->assertFileExists($destDir . 'form.php');
@@ -66,7 +66,7 @@ final class FeedbackPublishCommandTest extends CIUnitTestCase
 
     public function testViewsFlagCopiedFilesMatchSource(): void
     {
-        $this->runCommand("feedback:publish --views");
+        $this->runCommand('feedback:publish --views');
 
         $srcDir  = realpath(__DIR__ . '/../src/Views') . '/';
         $destDir = $this->tmpDir . '/Views/vendor/betta/';
@@ -81,7 +81,7 @@ final class FeedbackPublishCommandTest extends CIUnitTestCase
         $destDir = $this->tmpDir . '/Views/vendor/betta/';
         file_put_contents($destDir . 'form.php', 'original content');
 
-        $this->runCommand("feedback:publish --views", "n\n");
+        $this->runCommand('feedback:publish --views', "n\n");
 
         $this->assertSame('original content', file_get_contents($destDir . 'form.php'));
     }
@@ -91,7 +91,7 @@ final class FeedbackPublishCommandTest extends CIUnitTestCase
         $destDir = $this->tmpDir . '/Views/vendor/betta/';
         file_put_contents($destDir . 'form.php', 'original content');
 
-        $this->runCommand("feedback:publish --views", "y\n");
+        $this->runCommand('feedback:publish --views', "y\n");
 
         $srcDir = realpath(__DIR__ . '/../src/Views') . '/';
         $this->assertSame(file_get_contents($srcDir . 'form.php'), file_get_contents($destDir . 'form.php'));
@@ -99,7 +99,7 @@ final class FeedbackPublishCommandTest extends CIUnitTestCase
 
     public function testViewsFlagReportsEachCopiedFile(): void
     {
-        $output = $this->runCommand("feedback:publish --views");
+        $output = $this->runCommand('feedback:publish --views');
 
         $this->assertStringContainsString('form.php', $output);
         $this->assertStringContainsString('page.php', $output);
@@ -112,14 +112,14 @@ final class FeedbackPublishCommandTest extends CIUnitTestCase
 
     public function testConfigFlagWritesConfigFile(): void
     {
-        $this->runCommand("feedback:publish --config");
+        $this->runCommand('feedback:publish --config');
 
         $this->assertFileExists($this->tmpDir . '/Config/Betta.php');
     }
 
     public function testConfigFileIsSyntacticallyValid(): void
     {
-        $this->runCommand("feedback:publish --config");
+        $this->runCommand('feedback:publish --config');
 
         $path   = $this->tmpDir . '/Config/Betta.php';
         $output = null;
@@ -131,7 +131,7 @@ final class FeedbackPublishCommandTest extends CIUnitTestCase
 
     public function testConfigFileExtendsPackageConfig(): void
     {
-        $this->runCommand("feedback:publish --config");
+        $this->runCommand('feedback:publish --config');
 
         $content = (string) file_get_contents($this->tmpDir . '/Config/Betta.php');
         $this->assertStringContainsString('Myth\Betta\Config\Betta', $content);
@@ -140,7 +140,7 @@ final class FeedbackPublishCommandTest extends CIUnitTestCase
 
     public function testConfigFileContainsAllProperties(): void
     {
-        $this->runCommand("feedback:publish --config");
+        $this->runCommand('feedback:publish --config');
 
         $content = (string) file_get_contents($this->tmpDir . '/Config/Betta.php');
         $this->assertStringContainsString('routePrefix', $content);
@@ -150,7 +150,7 @@ final class FeedbackPublishCommandTest extends CIUnitTestCase
 
     public function testConfigFileIsInConfigNamespace(): void
     {
-        $this->runCommand("feedback:publish --config");
+        $this->runCommand('feedback:publish --config');
 
         $content = (string) file_get_contents($this->tmpDir . '/Config/Betta.php');
         $this->assertStringContainsString('namespace Config', $content);
@@ -161,7 +161,7 @@ final class FeedbackPublishCommandTest extends CIUnitTestCase
         $destFile = $this->tmpDir . '/Config/Betta.php';
         file_put_contents($destFile, '<?php // original');
 
-        $this->runCommand("feedback:publish --config", "n\n");
+        $this->runCommand('feedback:publish --config', "n\n");
 
         $this->assertSame('<?php // original', file_get_contents($destFile));
     }
@@ -171,14 +171,14 @@ final class FeedbackPublishCommandTest extends CIUnitTestCase
         $destFile = $this->tmpDir . '/Config/Betta.php';
         file_put_contents($destFile, '<?php // original');
 
-        $this->runCommand("feedback:publish --config", "y\n");
+        $this->runCommand('feedback:publish --config', "y\n");
 
         $this->assertStringNotContainsString('// original', (string) file_get_contents($destFile));
     }
 
     public function testConfigFlagReportsWrittenFile(): void
     {
-        $output = $this->runCommand("feedback:publish --config");
+        $output = $this->runCommand('feedback:publish --config');
 
         $this->assertStringContainsString('Betta.php', $output);
     }
@@ -189,7 +189,7 @@ final class FeedbackPublishCommandTest extends CIUnitTestCase
 
     public function testBothFlagsPublishViewsAndConfig(): void
     {
-        $this->runCommand("feedback:publish --views --config");
+        $this->runCommand('feedback:publish --views --config');
 
         $destDir = $this->tmpDir . '/Views/vendor/betta/';
         $this->assertFileExists($destDir . 'form.php');
