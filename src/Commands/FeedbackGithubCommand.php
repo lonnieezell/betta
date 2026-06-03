@@ -29,7 +29,7 @@ class FeedbackGithubCommand extends BaseCommand
     protected $arguments   = [
         'id' => 'Feedback item ID, or cluster ID when --cluster is used.',
     ];
-    protected $options     = [
+    protected $options = [
         '--cluster' => 'Treat the ID as a cluster; create one issue per feedback item in it.',
         '--dry-run' => 'Print what would be created without calling the GitHub API.',
     ];
@@ -39,9 +39,9 @@ class FeedbackGithubCommand extends BaseCommand
      */
     public function run(array $params): int
     {
-        $id      = isset($params[0]) && ctype_digit((string) $params[0]) ? (int) $params[0] : null;
+        $id      = isset($params[0]) && ctype_digit($params[0]) ? (int) $params[0] : null;
         $cluster = array_key_exists('cluster', $params) || CLI::getOption('cluster') !== null;
-        $dryRun  = array_key_exists('dry-run', $params)  || CLI::getOption('dry-run') !== null;
+        $dryRun  = array_key_exists('dry-run', $params) || CLI::getOption('dry-run') !== null;
 
         if ($id === null || $id <= 0) {
             CLI::error('Usage: feedback:github <id> [--cluster] [--dry-run]');
@@ -49,9 +49,9 @@ class FeedbackGithubCommand extends BaseCommand
             return EXIT_ERROR;
         }
 
-        $token = (string) (env('GITHUB_TOKEN') ?: '');
-        $owner = (string) (env('GITHUB_OWNER') ?: '');
-        $repo  = (string) (env('GITHUB_REPO')  ?: '');
+        $token = (string) (env('GITHUB_TOKEN') ?? '');
+        $owner = (string) (env('GITHUB_OWNER') ?? '');
+        $repo  = (string) (env('GITHUB_REPO')  ?? '');
 
         if (! $dryRun) {
             if ($token === '') {
@@ -127,8 +127,10 @@ class FeedbackGithubCommand extends BaseCommand
 
     private function processItem(object $item, FeedbackModel $feedbackModel, bool $dryRun, ?string $clusterPriority): void
     {
-        if (! empty($item->github_issue_url)) {
-            CLI::write(CLI::color("Feedback #{$item->id} already exported: {$item->github_issue_url}", 'yellow'));
+        $issueUrl = isset($item->github_issue_url) ? (string) $item->github_issue_url : '';
+
+        if ($issueUrl !== '') {
+            CLI::write(CLI::color("Feedback #{$item->id} already exported: {$issueUrl}", 'yellow'));
 
             return;
         }
@@ -143,20 +145,26 @@ class FeedbackGithubCommand extends BaseCommand
         $lines[] = '---';
         $lines[] = '**Category:** ' . $category;
 
-        if (! empty($item->email)) {
-            $lines[] = '**Email:** ' . $item->email;
+        $email = isset($item->email) ? (string) $item->email : '';
+
+        if ($email !== '') {
+            $lines[] = '**Email:** ' . $email;
         }
 
-        if (! empty($item->url_context)) {
-            $lines[] = '**URL:** ' . $item->url_context;
+        $urlContext = isset($item->url_context) ? (string) $item->url_context : '';
+
+        if ($urlContext !== '') {
+            $lines[] = '**URL:** ' . $urlContext;
         }
 
-        if (isset($item->sentiment) && $item->sentiment !== null) {
+        if (isset($item->sentiment)) {
             $lines[] = '**Sentiment:** ' . $item->sentiment;
         }
 
-        if (! empty($item->created_at)) {
-            $lines[] = '**Submitted:** ' . $item->created_at;
+        $createdAt = isset($item->created_at) ? (string) $item->created_at : '';
+
+        if ($createdAt !== '') {
+            $lines[] = '**Submitted:** ' . $createdAt;
         }
 
         $body = implode("\n", $lines);

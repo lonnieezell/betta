@@ -40,12 +40,12 @@ class Services extends BaseService
             return static::getSharedInstance('github');
         }
 
-        /** @var Betta $config */
         $config = config('Betta');
+        assert($config instanceof Betta);
 
-        $token = (string) (env('GITHUB_TOKEN') ?: $config->githubToken);
-        $owner = (string) (env('GITHUB_OWNER') ?: $config->githubOwner);
-        $repo  = (string) (env('GITHUB_REPO')  ?: $config->githubRepo);
+        $token = (string) (env('GITHUB_TOKEN') ?? $config->githubToken);
+        $owner = (string) (env('GITHUB_OWNER') ?? $config->githubOwner);
+        $repo  = (string) (env('GITHUB_REPO')  ?? $config->githubRepo);
 
         return new GitHubService($token, $owner, $repo);
     }
