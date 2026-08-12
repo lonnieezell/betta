@@ -46,8 +46,8 @@ class FeedbackAnalyzeCommand extends BaseCommand
             return EXIT_ERROR;
         }
 
-        /** @var Betta $config */
-        $config = config('Betta');
+        /** @phpstan-ignore codeigniter.factoriesClassConstFetch */
+        $config = config(Betta::class);
 
         $dryRun = array_key_exists('dry-run', $params) || CLI::getOption('dry-run') !== null;
         $apply  = array_key_exists('apply', $params)   || CLI::getOption('apply') !== null;
