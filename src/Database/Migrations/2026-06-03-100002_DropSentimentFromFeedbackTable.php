@@ -26,8 +26,8 @@ class DropSentimentFromFeedbackTable extends Migration
     {
         $this->forge->addColumn('betta_feedback', [
             'sentiment' => [
-                'type' => 'TINYINT',
-                'null' => true,
+                'type'  => 'TINYINT',
+                'null'  => true,
                 'after' => 'url_context',
             ],
         ]);

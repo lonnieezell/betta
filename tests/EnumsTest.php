@@ -52,5 +52,4 @@ final class EnumsTest extends CIUnitTestCase
         $this->assertSame(CategoryEnum::Bug, CategoryEnum::from('bug'));
         $this->assertSame(CategoryEnum::Feature, CategoryEnum::from('feature'));
     }
-
 }
