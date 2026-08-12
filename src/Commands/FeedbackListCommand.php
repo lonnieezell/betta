@@ -30,6 +30,7 @@ class FeedbackListCommand extends BaseCommand
         '--ungrouped' => 'Show only items with no cluster assignment',
         '--cluster'   => 'Filter by cluster ID',
         '--limit'     => 'Maximum rows to return (default: 20)',
+        '--platform'  => 'Filter by platform',
     ];
 
     /**
@@ -42,6 +43,7 @@ class FeedbackListCommand extends BaseCommand
         $ungrouped = array_key_exists('ungrouped', $params) || CLI::getOption('ungrouped') !== null;
         $cluster   = $params['cluster'] ?? CLI::getOption('cluster');
         $limit     = $params['limit'] ?? CLI::getOption('limit');
+        $platform  = $params['platform'] ?? CLI::getOption('platform');
 
         $filters = new FeedbackListFilters(
             category: is_string($category) ? $category : null,
@@ -49,6 +51,7 @@ class FeedbackListCommand extends BaseCommand
             ungrouped: $ungrouped,
             cluster: $cluster !== null ? (int) $cluster : null,
             limit: $limit !== null ? max(1, (int) $limit) : 20,
+            platform: is_string($platform) ? $platform : null,
         );
 
         $rows = (new FeedbackModel())->forList($filters);

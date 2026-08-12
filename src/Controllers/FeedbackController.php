@@ -39,6 +39,7 @@ class FeedbackController extends Controller
         return $this->renderView('page', [
             'categories' => CategoryEnum::cases(),
             'submitUrl'  => $this->config->routePrefix . '/submit',
+            'platforms'  => $this->config->platforms,
         ]);
     }
 
@@ -51,6 +52,8 @@ class FeedbackController extends Controller
         $rules = [
             'category' => 'permit_empty|in_list[bug,ux,feature,other]',
             'message' => 'required',
+            'email'   => 'permit_empty|valid_email',
+            'platform' => 'permit_empty|in_list[' . implode(',', $this->config->platforms) . ']',
         ];
 
         $isJson = $this->isJsonRequest();
@@ -76,9 +79,14 @@ class FeedbackController extends Controller
         $rawCategory = $this->request->getPost('category');
         $category    = ($rawCategory !== null && $rawCategory !== '') ? $rawCategory : 'other';
 
+        $email    = $this->request->getPost('email');
+        $platform = $this->request->getPost('platform');
+
         $model = new FeedbackModel();
         $newId = $model->insert([
             'session_id'  => hash('sha256', session_id()),
+            'email'       => ($email !== null && $email !== '') ? $email : null,
+            'platform'    => ($platform !== null && $platform !== '') ? $platform : null,
             'category'    => CategoryEnum::from($category),
             'message'     => $this->request->getPost('message'),
             'url_context' => ($urlContext !== '') ? $urlContext : null,

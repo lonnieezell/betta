@@ -56,12 +56,46 @@ final class FeedbackControllerTest extends CIUnitTestCase
         Services::injectMock('throttler', $permissive);
     }
 
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+        config(Betta::class)->platforms = [];
+    }
+
     public function testGetFeedbackRendersForm(): void
     {
         $result = $this->get('feedback');
 
         $result->assertStatus(200);
         $result->assertSee('feedback');
+    }
+
+    public function testGetFeedbackShowsEmailField(): void
+    {
+        $result = $this->get('feedback');
+
+        $result->assertStatus(200);
+        $result->assertSeeElement('input[name=email]');
+    }
+
+    public function testGetFeedbackHidesPlatformFieldWhenNotConfigured(): void
+    {
+        $result = $this->get('feedback');
+
+        $result->assertStatus(200);
+        $result->assertDontSeeElement('select[name=platform]');
+    }
+
+    public function testGetFeedbackShowsPlatformFieldWhenConfigured(): void
+    {
+        config(Betta::class)->platforms = ['windows', 'macos'];
+
+        $result = $this->get('feedback');
+
+        $result->assertStatus(200);
+        $result->assertSeeElement('select[name=platform]');
+        $result->assertSee('windows');
+        $result->assertSee('macos');
     }
 
     public function testGetFeedbackRendersClosedWhenSubmissionsDisabled(): void
@@ -97,7 +131,7 @@ final class FeedbackControllerTest extends CIUnitTestCase
         $this->assertSame(64, strlen((string) $row->session_id)); // sha256 hex length
     }
 
-    public function testPostSubmitEmailFieldIsIgnored(): void
+    public function testPostSubmitStoresEmailWhenProvided(): void
     {
         $this->post('feedback/submit', [
             'message' => 'Test feedback',
@@ -105,7 +139,66 @@ final class FeedbackControllerTest extends CIUnitTestCase
         ]);
 
         $row = (new FeedbackModel())->findAll()[0];
-        $this->assertFalse(property_exists($row, 'email'));
+        $this->assertSame('user@example.com', $row->email);
+    }
+
+    public function testPostSubmitEmailIsNullWhenAbsent(): void
+    {
+        $this->post('feedback/submit', ['message' => 'Test feedback']);
+
+        $row = (new FeedbackModel())->findAll()[0];
+        $this->assertNull($row->email);
+    }
+
+    public function testPostSubmitRejectsInvalidEmail(): void
+    {
+        $result = $this->withHeaders(['Accept' => 'application/json'])
+            ->post('feedback/submit', [
+                'message' => 'Test feedback',
+                'email'   => 'not-an-email',
+            ]);
+
+        $result->assertStatus(422);
+        $json = json_decode((string) $result->response()->getBody(), true);
+        $this->assertArrayHasKey('email', $json['errors']);
+        $this->assertCount(0, (new FeedbackModel())->findAll());
+    }
+
+    public function testPostSubmitStoresPlatformWhenInConfiguredList(): void
+    {
+        config(Betta::class)->platforms = ['windows', 'macos'];
+
+        $this->post('feedback/submit', [
+            'message'  => 'Test feedback',
+            'platform' => 'windows',
+        ]);
+
+        $row = (new FeedbackModel())->findAll()[0];
+        $this->assertSame('windows', $row->platform);
+    }
+
+    public function testPostSubmitPlatformIsNullWhenAbsent(): void
+    {
+        $this->post('feedback/submit', ['message' => 'Test feedback']);
+
+        $row = (new FeedbackModel())->findAll()[0];
+        $this->assertNull($row->platform);
+    }
+
+    public function testPostSubmitRejectsPlatformNotInConfiguredList(): void
+    {
+        config(Betta::class)->platforms = ['windows', 'macos'];
+
+        $result = $this->withHeaders(['Accept' => 'application/json'])
+            ->post('feedback/submit', [
+                'message'  => 'Test feedback',
+                'platform' => 'linux',
+            ]);
+
+        $result->assertStatus(422);
+        $json = json_decode((string) $result->response()->getBody(), true);
+        $this->assertArrayHasKey('platform', $json['errors']);
+        $this->assertCount(0, (new FeedbackModel())->findAll());
     }
 
     public function testPostSubmitStoresSessionIdAsHash(): void

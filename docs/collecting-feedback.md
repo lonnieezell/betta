@@ -55,6 +55,16 @@ public bool $acceptSubmissions = false;
 !!! tip "Flip the switch without a deploy"
     Since `Betta` extends `BaseConfig`, you can also drive `$acceptSubmissions` from a `.env` value: `betta.acceptSubmissions = false`. Useful for quickly closing the form without touching code.
 
+#### `$platforms`
+
+The list of platform values feedback can be tagged with (e.g. for a cross-platform desktop app). Defaults to an empty array, which hides the platform field entirely — no value is stored and no behaviour changes for apps that don't ship cross-platform software.
+
+```php
+public array $platforms = ['windows', 'macos'];
+```
+
+A submitted platform is validated against this list — anything else is rejected.
+
 ## What gets saved
 
 Every successful submission stores:
@@ -65,6 +75,7 @@ Every successful submission stores:
 | `category` | POST `category` field | One of `bug`, `ux`, `feature`, `other` |
 | `message` | POST `message` field | Required |
 | `email` | POST `email` field | Optional; validated if provided |
+| `platform` | POST `platform` field | Optional; only accepted when `$platforms` is non-empty, and must match one of its values |
 | `url_context` | POST `url_context` field, then `Referer` header | The page the user was on when they submitted |
 
 The `url_context` hidden field is populated by JavaScript (`window.location.href`) before submission, so you get the exact page — not just the previous URL from the `Referer` header.
@@ -87,6 +98,7 @@ You don't have to use `page.php`. Render just the form fragment anywhere:
 <?= view('Myth\Betta\Views\form', [
     'categories' => \Myth\Betta\Enums\CategoryEnum::cases(),
     'submitUrl'  => config(\Myth\Betta\Config\Betta::class)->routePrefix . '/submit',
+    'platforms'  => config(\Myth\Betta\Config\Betta::class)->platforms,
 ]) ?>
 ```
 

@@ -16,6 +16,7 @@ namespace Tests;
 use CodeIgniter\CLI\CLI;
 use CodeIgniter\Test\CIUnitTestCase;
 use CodeIgniter\Test\Mock\MockInputOutput;
+use Myth\Betta\Config\Betta;
 use Myth\Betta\Enums\StatusEnum;
 use Myth\Betta\Models\FeedbackClusterModel;
 use Myth\Betta\Models\FeedbackModel;
@@ -69,6 +70,27 @@ final class FeedbackReviewCommandTest extends CIUnitTestCase
         $this->assertStringContainsString('Cannot log in', $output);
         $this->assertStringContainsString('https://example.com/login', $output);
         $this->assertStringNotContainsString('Email:', $output);
+    }
+
+    public function testDisplaysEmailWhenPresent(): void
+    {
+        $id     = $this->feedback->insert(['message' => 'Follow up please', 'email' => 'user@example.com']);
+        $output = $this->runCommand("feedback:review {$id}", "q\n");
+
+        $this->assertStringContainsString('Email:   user@example.com', $output);
+    }
+
+    public function testDisplaysPlatformWhenPresent(): void
+    {
+        config(Betta::class)->platforms = ['windows', 'macos'];
+        $this->feedback                 = new FeedbackModel();
+
+        $id     = $this->feedback->insert(['message' => 'Crashes on launch', 'platform' => 'windows']);
+        $output = $this->runCommand("feedback:review {$id}", "q\n");
+
+        $this->assertStringContainsString('Platform: windows', $output);
+
+        config(Betta::class)->platforms = [];
     }
 
     public function testViewingItemImmediatelySetsStatusReviewed(): void

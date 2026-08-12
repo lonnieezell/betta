@@ -5,6 +5,7 @@ use Myth\Betta\Enums\CategoryEnum;
 /**
  * @var list<CategoryEnum> $categories
  * @var string             $submitUrl
+ * @var list<string>       $platforms
  */
 ?>
 <!DOCTYPE html>
@@ -17,9 +18,10 @@ use Myth\Betta\Enums\CategoryEnum;
 <body>
     <main>
         <h1>Share Your Feedback</h1>
+        <?php $formData = ['categories' => $categories, 'submitUrl' => $submitUrl, 'platforms' => $platforms]; ?>
         <?= is_file(APPPATH . 'Views/vendor/betta/form.php')
-            ? view('vendor/betta/form', ['categories' => $categories, 'submitUrl' => $submitUrl])
-            : view('Myth\Betta\Views\form', ['categories' => $categories, 'submitUrl' => $submitUrl]) ?>
+            ? view('vendor/betta/form', $formData)
+            : view('Myth\Betta\Views\form', $formData) ?>
     </main>
 </body>
 </html>

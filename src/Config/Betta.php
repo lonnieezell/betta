@@ -47,6 +47,15 @@ class Betta extends BaseConfig
     public int $rateLimitWindow = 60;
 
     /**
+     * Valid platform values feedback can be tagged with (e.g. ['windows', 'macos']).
+     * Leave empty to hide the platform field entirely — no behaviour change for
+     * apps that don't ship cross-platform software.
+     *
+     * @var list<string>
+     */
+    public array $platforms = [];
+
+    /**
      * GitHub personal access token (needs `repo` scope).
      * Set via GITHUB_TOKEN environment variable — never hard-code credentials.
      */

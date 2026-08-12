@@ -13,7 +13,10 @@ declare(strict_types=1);
 
 namespace Myth\Betta\Models;
 
+use CodeIgniter\Database\ConnectionInterface;
 use CodeIgniter\Model;
+use CodeIgniter\Validation\ValidationInterface;
+use Myth\Betta\Config\Betta;
 use Myth\Betta\DTOs\FeedbackListFilters;
 use Myth\Betta\Enums\CategoryEnum;
 use Myth\Betta\Enums\StatusEnum;
@@ -27,6 +30,8 @@ class FeedbackModel extends Model
     protected $useSoftDeletes   = false;
     protected $allowedFields    = [
         'session_id',
+        'email',
+        'platform',
         'category',
         'message',
         'url_context',
@@ -49,9 +54,19 @@ class FeedbackModel extends Model
 
     protected $validationRules = [
         'message'   => 'required',
+        'email'    => 'permit_empty|valid_email',
         'category' => 'permit_empty|in_list[bug,ux,feature,other]',
         'status'   => 'permit_empty|in_list[new,reviewed,grouped,dismissed]',
     ];
+
+    public function __construct(?ConnectionInterface $db = null, ?ValidationInterface $validation = null)
+    {
+        parent::__construct($db, $validation);
+
+        /** @phpstan-ignore codeigniter.factoriesClassConstFetch */
+        $platforms = config(Betta::class)->platforms;
+        $this->validationRules['platform'] = 'permit_empty|in_list[' . implode(',', $platforms) . ']';
+    }
 
     /**
      * Returns feedback rows joined with cluster labels, applying the given filters.
@@ -69,6 +84,10 @@ class FeedbackModel extends Model
 
         if ($filters->category !== null) {
             $builder->where('f.category', $filters->category);
+        }
+
+        if ($filters->platform !== null) {
+            $builder->where('f.platform', $filters->platform);
         }
 
         if ($filters->ungrouped) {

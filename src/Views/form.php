@@ -5,6 +5,7 @@ use Myth\Betta\Enums\CategoryEnum;
 /**
  * @var list<CategoryEnum> $categories
  * @var string             $submitUrl
+ * @var list<string>       $platforms
  */
 ?>
 <div class="betta-feedback-form">
@@ -37,6 +38,28 @@ use Myth\Betta\Enums\CategoryEnum;
                 <?php endforeach ?>
             </select>
         </div>
+
+        <div>
+            <label for="betta-email">Email (optional)</label>
+            <input type="email" id="betta-email" name="email" value="<?= set_value('email') ?>">
+            <span data-error="email"></span>
+        </div>
+
+        <?php if ($platforms !== []): ?>
+        <div>
+            <label for="betta-platform">Platform</label>
+            <select id="betta-platform" name="platform">
+                <option value="">—</option>
+                <?php foreach ($platforms as $platform): ?>
+                    <option value="<?= esc($platform) ?>"
+                        <?= set_select('platform', $platform) ?>>
+                        <?= esc($platform) ?>
+                    </option>
+                <?php endforeach ?>
+            </select>
+            <span data-error="platform"></span>
+        </div>
+        <?php endif ?>
 
         <div>
             <label for="betta-message">Message <span aria-hidden="true">*</span></label>

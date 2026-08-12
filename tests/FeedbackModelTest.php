@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Tests;
 
 use CodeIgniter\Test\CIUnitTestCase;
+use Myth\Betta\Config\Betta;
 use Myth\Betta\Enums\CategoryEnum;
 use Myth\Betta\Enums\StatusEnum;
 use Myth\Betta\Models\FeedbackModel;
@@ -39,6 +40,12 @@ final class FeedbackModelTest extends CIUnitTestCase
         $this->db->table('betta_feedback')->truncate();
         $this->db->table('feedback_clusters')->truncate();
         $this->model = new FeedbackModel();
+    }
+
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+        config(Betta::class)->platforms = [];
     }
 
     public function testInsertAndFindReturnsEnumInstances(): void
@@ -91,6 +98,61 @@ final class FeedbackModelTest extends CIUnitTestCase
 
         $this->model->delete($id);
         $this->assertNull($this->model->find($id));
+    }
+
+    public function testInsertStoresEmailWhenProvided(): void
+    {
+        $id  = $this->model->insert(['message' => 'Follow up with me', 'email' => 'user@example.com']);
+        $row = $this->model->find($id);
+
+        $this->assertSame('user@example.com', $row->email);
+    }
+
+    public function testEmailIsNullByDefault(): void
+    {
+        $id  = $this->model->insert(['message' => 'No email given']);
+        $row = $this->model->find($id);
+
+        $this->assertNull($row->email);
+    }
+
+    public function testInsertStoresPlatformWhenInConfiguredList(): void
+    {
+        config(Betta::class)->platforms = ['windows', 'macos'];
+
+        $model = new FeedbackModel();
+        $id    = $model->insert(['message' => 'Crashes on launch', 'platform' => 'windows']);
+        $row   = $model->find($id);
+
+        $this->assertSame('windows', $row->platform);
+    }
+
+    public function testPlatformIsNullByDefault(): void
+    {
+        $id  = $this->model->insert(['message' => 'No platform given']);
+        $row = $this->model->find($id);
+
+        $this->assertNull($row->platform);
+    }
+
+    public function testInsertRejectsPlatformNotInConfiguredList(): void
+    {
+        config(Betta::class)->platforms = ['windows', 'macos'];
+
+        $model  = new FeedbackModel();
+        $result = $model->insert(['message' => 'test', 'platform' => 'linux']);
+
+        $this->assertFalse($result);
+    }
+
+    public function testInsertRejectsAnyPlatformWhenConfiguredListEmpty(): void
+    {
+        config(Betta::class)->platforms = [];
+
+        $model  = new FeedbackModel();
+        $result = $model->insert(['message' => 'test', 'platform' => 'windows']);
+
+        $this->assertFalse($result);
     }
 
     public function testAllEnumRoundTrips(): void

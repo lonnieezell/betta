@@ -21,6 +21,7 @@ readonly class FeedbackListFilters
         public bool $ungrouped = false,
         public ?int $cluster = null,
         public int $limit = 20,
+        public ?string $platform = null,
     ) {
     }
 }

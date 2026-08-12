@@ -16,6 +16,7 @@ namespace Tests;
 use CodeIgniter\CLI\CLI;
 use CodeIgniter\Test\CIUnitTestCase;
 use CodeIgniter\Test\Mock\MockInputOutput;
+use Myth\Betta\Config\Betta;
 use Myth\Betta\Enums\CategoryEnum;
 use Myth\Betta\Enums\StatusEnum;
 use Myth\Betta\Models\FeedbackClusterModel;
@@ -44,6 +45,12 @@ final class FeedbackListCommandTest extends CIUnitTestCase
         $this->db->table('feedback_clusters')->truncate();
         $this->feedback = new FeedbackModel();
         $this->clusters = new FeedbackClusterModel();
+    }
+
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+        config(Betta::class)->platforms = [];
     }
 
     // -------------------------------------------------------------------------
@@ -121,6 +128,24 @@ final class FeedbackListCommandTest extends CIUnitTestCase
 
         $this->assertStringContainsString('Bug report', $output);
         $this->assertStringNotContainsString('Feature request', $output);
+    }
+
+    // -------------------------------------------------------------------------
+    // --platform flag
+    // -------------------------------------------------------------------------
+
+    public function testPlatformFlagFiltersCorrectly(): void
+    {
+        config(Betta::class)->platforms = ['windows', 'macos'];
+        $this->feedback = new FeedbackModel();
+
+        $this->feedback->insert(['message' => 'Windows crash', 'platform' => 'windows', 'status' => StatusEnum::New]);
+        $this->feedback->insert(['message' => 'Mac crash', 'platform' => 'macos', 'status' => StatusEnum::New]);
+
+        $output = $this->runCommand('feedback:list --platform windows');
+
+        $this->assertStringContainsString('Windows crash', $output);
+        $this->assertStringNotContainsString('Mac crash', $output);
     }
 
     // -------------------------------------------------------------------------
