@@ -23,7 +23,7 @@ use RuntimeException;
 
 class FeedbackGithubCommand extends BaseCommand
 {
-    private const RATE_LIMIT_WARN_THRESHOLD = 100;
+    private const int RATE_LIMIT_WARN_THRESHOLD = 100;
 
     protected $group       = 'Betta';
     protected $name        = 'feedback:github';
