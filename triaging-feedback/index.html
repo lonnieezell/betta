@@ -21,7 +21,7 @@
       
       
       <link rel="icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
     
     
       
@@ -29,7 +29,7 @@
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
       
         
         <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -844,15 +844,17 @@
 <h2 id="the-triage-loop">The triage loop</h2>
 <p>Each item is displayed in full:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>--- Feedback #42 (bug / new) ---
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>Email:   user@example.com
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>URL:     https://example.com/login
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>Date:    2026-06-01 14:22:35
-<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>
-<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>The login button doesn&#39;t respond on mobile Safari. I&#39;ve tried three times
-<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>and it just sits there. No error message either.
-<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>
-<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>Action (a=assign, n=new cluster, d=dismiss, q=quit):
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>URL:     https://example.com/login
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>Date:    2026-06-01 14:22:35
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>Email:   user@example.com
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>Platform: windows
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>The login button doesn&#39;t respond on mobile Safari. I&#39;ve tried three times
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>and it just sits there. No error message either.
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>Action (a=assign, n=new cluster, d=dismiss, q=quit):
 </code></pre></div>
+<p><code>Email:</code> and <code>Platform:</code> lines only appear when the submitter provided a value — most anonymous submissions won't show either.</p>
 <p>As soon as the item is displayed, its status flips to <code>reviewed</code> — so even if you quit immediately, you won't see it again in the default <code>new</code> queue.</p>
 <h2 id="actions">Actions</h2>
 <h3 id="a-assign-to-an-existing-cluster"><code>a</code> — Assign to an existing cluster</h3>
@@ -888,9 +890,9 @@
 <div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>$ php spark feedback:review
 <a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>
 <a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>--- Feedback #55 (bug / new) ---
-<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>Email:   alice@example.com
-<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>URL:     https://app.example.com/checkout
-<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>Date:    2026-06-01 18:05:00
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>URL:     https://app.example.com/checkout
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>Date:    2026-06-01 18:05:00
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>Email:   alice@example.com
 <a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>
 <a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a>Payment fails on the final step with no error shown.
 <a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a>
@@ -899,26 +901,25 @@
 <a id="__codelineno-7-12" name="__codelineno-7-12" href="#__codelineno-7-12"></a>Created cluster &#39;Checkout Bugs&#39; and assigned feedback 55.
 <a id="__codelineno-7-13" name="__codelineno-7-13" href="#__codelineno-7-13"></a>
 <a id="__codelineno-7-14" name="__codelineno-7-14" href="#__codelineno-7-14"></a>--- Feedback #56 (ux / new) ---
-<a id="__codelineno-7-15" name="__codelineno-7-15" href="#__codelineno-7-15"></a>Email:   —
-<a id="__codelineno-7-16" name="__codelineno-7-16" href="#__codelineno-7-16"></a>URL:     https://app.example.com/settings
-<a id="__codelineno-7-17" name="__codelineno-7-17" href="#__codelineno-7-17"></a>Date:    2026-06-01 18:12:00
-<a id="__codelineno-7-18" name="__codelineno-7-18" href="#__codelineno-7-18"></a>
-<a id="__codelineno-7-19" name="__codelineno-7-19" href="#__codelineno-7-19"></a>The settings sidebar overlaps the main content on iPad.
-<a id="__codelineno-7-20" name="__codelineno-7-20" href="#__codelineno-7-20"></a>
-<a id="__codelineno-7-21" name="__codelineno-7-21" href="#__codelineno-7-21"></a>Action (a=assign, n=new cluster, d=dismiss, q=quit): a
-<a id="__codelineno-7-22" name="__codelineno-7-22" href="#__codelineno-7-22"></a>[1] Login UX Issues
-<a id="__codelineno-7-23" name="__codelineno-7-23" href="#__codelineno-7-23"></a>[2] Checkout Bugs
-<a id="__codelineno-7-24" name="__codelineno-7-24" href="#__codelineno-7-24"></a>
-<a id="__codelineno-7-25" name="__codelineno-7-25" href="#__codelineno-7-25"></a>Cluster ID: 1
-<a id="__codelineno-7-26" name="__codelineno-7-26" href="#__codelineno-7-26"></a>Feedback 56 assigned to cluster 1.
-<a id="__codelineno-7-27" name="__codelineno-7-27" href="#__codelineno-7-27"></a>
-<a id="__codelineno-7-28" name="__codelineno-7-28" href="#__codelineno-7-28"></a>--- Feedback #57 (other / new) ---
-<a id="__codelineno-7-29" name="__codelineno-7-29" href="#__codelineno-7-29"></a>...
-<a id="__codelineno-7-30" name="__codelineno-7-30" href="#__codelineno-7-30"></a>
-<a id="__codelineno-7-31" name="__codelineno-7-31" href="#__codelineno-7-31"></a>Action (a=assign, n=new cluster, d=dismiss, q=quit): d
-<a id="__codelineno-7-32" name="__codelineno-7-32" href="#__codelineno-7-32"></a>Feedback 57 dismissed.
-<a id="__codelineno-7-33" name="__codelineno-7-33" href="#__codelineno-7-33"></a>
-<a id="__codelineno-7-34" name="__codelineno-7-34" href="#__codelineno-7-34"></a>No more items to review.
+<a id="__codelineno-7-15" name="__codelineno-7-15" href="#__codelineno-7-15"></a>URL:     https://app.example.com/settings
+<a id="__codelineno-7-16" name="__codelineno-7-16" href="#__codelineno-7-16"></a>Date:    2026-06-01 18:12:00
+<a id="__codelineno-7-17" name="__codelineno-7-17" href="#__codelineno-7-17"></a>
+<a id="__codelineno-7-18" name="__codelineno-7-18" href="#__codelineno-7-18"></a>The settings sidebar overlaps the main content on iPad.
+<a id="__codelineno-7-19" name="__codelineno-7-19" href="#__codelineno-7-19"></a>
+<a id="__codelineno-7-20" name="__codelineno-7-20" href="#__codelineno-7-20"></a>Action (a=assign, n=new cluster, d=dismiss, q=quit): a
+<a id="__codelineno-7-21" name="__codelineno-7-21" href="#__codelineno-7-21"></a>[1] Login UX Issues
+<a id="__codelineno-7-22" name="__codelineno-7-22" href="#__codelineno-7-22"></a>[2] Checkout Bugs
+<a id="__codelineno-7-23" name="__codelineno-7-23" href="#__codelineno-7-23"></a>
+<a id="__codelineno-7-24" name="__codelineno-7-24" href="#__codelineno-7-24"></a>Cluster ID: 1
+<a id="__codelineno-7-25" name="__codelineno-7-25" href="#__codelineno-7-25"></a>Feedback 56 assigned to cluster 1.
+<a id="__codelineno-7-26" name="__codelineno-7-26" href="#__codelineno-7-26"></a>
+<a id="__codelineno-7-27" name="__codelineno-7-27" href="#__codelineno-7-27"></a>--- Feedback #57 (other / new) ---
+<a id="__codelineno-7-28" name="__codelineno-7-28" href="#__codelineno-7-28"></a>...
+<a id="__codelineno-7-29" name="__codelineno-7-29" href="#__codelineno-7-29"></a>
+<a id="__codelineno-7-30" name="__codelineno-7-30" href="#__codelineno-7-30"></a>Action (a=assign, n=new cluster, d=dismiss, q=quit): d
+<a id="__codelineno-7-31" name="__codelineno-7-31" href="#__codelineno-7-31"></a>Feedback 57 dismissed.
+<a id="__codelineno-7-32" name="__codelineno-7-32" href="#__codelineno-7-32"></a>
+<a id="__codelineno-7-33" name="__codelineno-7-33" href="#__codelineno-7-33"></a>No more items to review.
 </code></pre></div>
 <h2 id="next-steps">Next steps</h2>
 <ul>
@@ -1027,7 +1028,7 @@
       <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.instant", "content.code.copy", "navigation.footer", "content.action.edit", "navigation.top", "search.suggest", "search.highlight", "search.share"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
       
     
   </body>
