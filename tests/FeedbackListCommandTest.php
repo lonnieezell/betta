@@ -137,7 +137,7 @@ final class FeedbackListCommandTest extends CIUnitTestCase
     public function testPlatformFlagFiltersCorrectly(): void
     {
         config(Betta::class)->platforms = ['windows', 'macos'];
-        $this->feedback = new FeedbackModel();
+        $this->feedback                 = new FeedbackModel();
 
         $this->feedback->insert(['message' => 'Windows crash', 'platform' => 'windows', 'status' => StatusEnum::New]);
         $this->feedback->insert(['message' => 'Mac crash', 'platform' => 'macos', 'status' => StatusEnum::New]);

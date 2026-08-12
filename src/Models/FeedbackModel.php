@@ -53,7 +53,7 @@ class FeedbackModel extends Model
     ];
 
     protected $validationRules = [
-        'message'   => 'required',
+        'message'  => 'required',
         'email'    => 'permit_empty|valid_email',
         'category' => 'permit_empty|in_list[bug,ux,feature,other]',
         'status'   => 'permit_empty|in_list[new,reviewed,grouped,dismissed]',

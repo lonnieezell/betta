@@ -53,8 +53,8 @@ class FeedbackController extends Controller
 
         $rules = [
             'category' => 'permit_empty|in_list[bug,ux,feature,other]',
-            'message' => 'required',
-            'email'   => 'permit_empty|valid_email',
+            'message'  => 'required',
+            'email'    => 'permit_empty|valid_email',
             'platform' => $model->platformRule(),
         ];
 
