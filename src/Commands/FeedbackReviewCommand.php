@@ -106,11 +106,11 @@ class FeedbackReviewCommand extends BaseCommand
         CLI::write('URL:     ' . ($item->url_context ?? '—'));
         CLI::write('Date:    ' . ($item->created_at ?? '—'));
 
-        if (! empty($item->email)) {
+        if ($item->email !== null && $item->email !== '') {
             CLI::write('Email:   ' . $item->email);
         }
 
-        if (! empty($item->platform)) {
+        if ($item->platform !== null && $item->platform !== '') {
             CLI::write('Platform: ' . $item->platform);
         }
 

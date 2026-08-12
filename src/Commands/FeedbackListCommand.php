@@ -74,10 +74,12 @@ class FeedbackListCommand extends BaseCommand
                 $row->category,
                 $row->status,
                 $row->cluster_label ?? '—',
+                $row->email ?? '—',
+                $row->platform ?? '—',
                 $preview,
             ];
         }
 
-        CLI::table($tableData, ['ID', 'Category', 'Status', 'Cluster', 'Message']);
+        CLI::table($tableData, ['ID', 'Category', 'Status', 'Cluster', 'Email', 'Platform', 'Message']);
     }
 }

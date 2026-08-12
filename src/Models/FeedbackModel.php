@@ -63,9 +63,19 @@ class FeedbackModel extends Model
     {
         parent::__construct($db, $validation);
 
+        $this->validationRules['platform'] = $this->platformRule();
+    }
+
+    /**
+     * Builds the `platform` validation rule from Config\Betta::$platforms, so the
+     * controller and model always validate against the same configured list.
+     */
+    public function platformRule(): string
+    {
         /** @phpstan-ignore codeigniter.factoriesClassConstFetch */
         $platforms = config(Betta::class)->platforms;
-        $this->validationRules['platform'] = 'permit_empty|in_list[' . implode(',', $platforms) . ']';
+
+        return 'permit_empty|in_list[' . implode(',', $platforms) . ']';
     }
 
     /**
@@ -76,7 +86,7 @@ class FeedbackModel extends Model
     public function forList(FeedbackListFilters $filters): array
     {
         $builder = $this->db->table('betta_feedback AS f')
-            ->select('f.id, f.category, f.status, f.message, fc.label AS cluster_label')
+            ->select('f.id, f.category, f.status, f.message, f.email, f.platform, fc.label AS cluster_label')
             ->join('feedback_clusters AS fc', 'fc.id = f.cluster_id', 'left')
             ->where('f.status', $filters->status)
             ->orderBy('f.created_at', 'DESC')

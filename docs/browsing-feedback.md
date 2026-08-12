@@ -11,13 +11,13 @@ php spark feedback:list
 This returns up to 20 `new` items, sorted newest first:
 
 ```
-+----+----------+--------+-----------+---------------------------------------------------+
-| ID | Category | Status | Cluster   | Message                                           |
-+----+----------+--------+-----------+---------------------------------------------------+
-| 42 | bug      | new    | —         | The login button doesn't respond on mobile Safari |
-| 41 | ux       | new    | Login UX  | The password field loses focus when I tap it…     |
-| 40 | feature  | new    | —         | Could you add dark mode to the dashboard?         |
-+----+----------+--------+-----------+---------------------------------------------------+
++----+----------+--------+-----------+-------------------+----------+-----------------------------------------------------+
+| ID | Category | Status | Cluster   | Email             | Platform | Message                                               |
++----+----------+--------+-----------+-------------------+----------+-----------------------------------------------------+
+| 42 | bug      | new    | —         | —                 | windows  | The login button doesn't respond on mobile Safari    |
+| 41 | ux       | new    | Login UX  | user@example.com  | —        | The password field loses focus when I tap it…        |
+| 40 | feature  | new    | —         | —                 | —        | Could you add dark mode to the dashboard?             |
++----+----------+--------+-----------+-------------------+----------+-----------------------------------------------------+
 ```
 
 Dismissed items are always hidden unless you ask for them explicitly.
@@ -77,6 +77,14 @@ Override the default 20-row cap.
 php spark feedback:list --limit 50
 ```
 
+### `--platform`
+
+Filter by platform. Accepted values depend on your app's `Config\Betta::$platforms` list.
+
+```bash
+php spark feedback:list --platform windows
+```
+
 ## Output columns
 
 | Column | Description |
@@ -85,6 +93,8 @@ php spark feedback:list --limit 50
 | Category | `bug`, `ux`, `feature`, or `other` |
 | Status | Current workflow status |
 | Cluster | Cluster label, or `—` if ungrouped |
+| Email | Submitter's email, or `—` if not provided |
+| Platform | The tagged platform, or `—` if not provided |
 | Message | First 50 characters of the submission (truncated with `…` if longer) |
 
 ## Next steps

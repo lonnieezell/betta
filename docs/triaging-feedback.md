@@ -24,15 +24,18 @@ Each item is displayed in full:
 
 ```
 --- Feedback #42 (bug / new) ---
-Email:   user@example.com
 URL:     https://example.com/login
 Date:    2026-06-01 14:22:35
+Email:   user@example.com
+Platform: windows
 
 The login button doesn't respond on mobile Safari. I've tried three times
 and it just sits there. No error message either.
 
 Action (a=assign, n=new cluster, d=dismiss, q=quit):
 ```
+
+`Email:` and `Platform:` lines only appear when the submitter provided a value — most anonymous submissions won't show either.
 
 As soon as the item is displayed, its status flips to `reviewed` — so even if you quit immediately, you won't see it again in the default `new` queue.
 
@@ -96,9 +99,9 @@ You've got a batch of new feedback after a release. Here's a typical session:
 $ php spark feedback:review
 
 --- Feedback #55 (bug / new) ---
-Email:   alice@example.com
 URL:     https://app.example.com/checkout
 Date:    2026-06-01 18:05:00
+Email:   alice@example.com
 
 Payment fails on the final step with no error shown.
 
@@ -107,7 +110,6 @@ Cluster label: Checkout Bugs
 Created cluster 'Checkout Bugs' and assigned feedback 55.
 
 --- Feedback #56 (ux / new) ---
-Email:   —
 URL:     https://app.example.com/settings
 Date:    2026-06-01 18:12:00
 

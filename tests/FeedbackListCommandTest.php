@@ -245,6 +245,27 @@ final class FeedbackListCommandTest extends CIUnitTestCase
         $this->assertStringContainsString('—', $output);
     }
 
+    public function testPlatformColumnShownWhenPresent(): void
+    {
+        config(Betta::class)->platforms = ['windows', 'macos'];
+        $this->feedback                 = new FeedbackModel();
+
+        $this->feedback->insert(['message' => 'Crashes on launch', 'platform' => 'windows', 'status' => StatusEnum::New]);
+
+        $output = $this->runCommand('feedback:list');
+
+        $this->assertStringContainsString('windows', $output);
+    }
+
+    public function testEmailColumnShownWhenPresent(): void
+    {
+        $this->feedback->insert(['message' => 'Follow up please', 'email' => 'user@example.com', 'status' => StatusEnum::New]);
+
+        $output = $this->runCommand('feedback:list');
+
+        $this->assertStringContainsString('user@example.com', $output);
+    }
+
     public function testMessageTruncatedAt50CharsWithEllipsis(): void
     {
         $long = str_repeat('x', 60);

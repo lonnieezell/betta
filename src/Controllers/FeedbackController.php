@@ -49,11 +49,13 @@ class FeedbackController extends Controller
             return redirect()->to($this->config->routePrefix);
         }
 
+        $model = new FeedbackModel();
+
         $rules = [
             'category' => 'permit_empty|in_list[bug,ux,feature,other]',
             'message' => 'required',
             'email'   => 'permit_empty|valid_email',
-            'platform' => 'permit_empty|in_list[' . implode(',', $this->config->platforms) . ']',
+            'platform' => $model->platformRule(),
         ];
 
         $isJson = $this->isJsonRequest();
@@ -82,7 +84,6 @@ class FeedbackController extends Controller
         $email    = $this->request->getPost('email');
         $platform = $this->request->getPost('platform');
 
-        $model = new FeedbackModel();
         $newId = $model->insert([
             'session_id'  => hash('sha256', session_id()),
             'email'       => ($email !== null && $email !== '') ? $email : null,

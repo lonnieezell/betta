@@ -80,6 +80,19 @@ final class FeedbackReviewCommandTest extends CIUnitTestCase
         $this->assertStringContainsString('Email:   user@example.com', $output);
     }
 
+    public function testDisplaysPlatformWhenValueIsZero(): void
+    {
+        config(Betta::class)->platforms = ['0', 'macos'];
+        $this->feedback                 = new FeedbackModel();
+
+        $id     = $this->feedback->insert(['message' => 'Old device', 'platform' => '0']);
+        $output = $this->runCommand("feedback:review {$id}", "q\n");
+
+        $this->assertStringContainsString('Platform: 0', $output);
+
+        config(Betta::class)->platforms = [];
+    }
+
     public function testDisplaysPlatformWhenPresent(): void
     {
         config(Betta::class)->platforms = ['windows', 'macos'];

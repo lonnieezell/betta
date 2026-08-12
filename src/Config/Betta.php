@@ -51,6 +51,9 @@ class Betta extends BaseConfig
      * Leave empty to hide the platform field entirely — no behaviour change for
      * apps that don't ship cross-platform software.
      *
+     * Values must not contain commas — the list is joined into an `in_list` validation
+     * rule, so a comma would be parsed as a separator between two values.
+     *
      * @var list<string>
      */
     public array $platforms = [];
