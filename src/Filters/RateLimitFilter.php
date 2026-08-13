@@ -16,7 +16,6 @@ namespace Myth\Betta\Filters;
 use CodeIgniter\Filters\FilterInterface;
 use CodeIgniter\HTTP\RequestInterface;
 use CodeIgniter\HTTP\ResponseInterface;
-use Myth\Betta\Config\Betta;
 
 class RateLimitFilter implements FilterInterface
 {
@@ -25,8 +24,7 @@ class RateLimitFilter implements FilterInterface
      */
     public function before(RequestInterface $request, $arguments = null): ?ResponseInterface
     {
-        /** @phpstan-ignore codeigniter.factoriesClassConstFetch */
-        $config    = config(Betta::class);
+        $config    = config('Betta');
         $throttler = service('throttler');
 
         if ($throttler->check($request->getIPAddress(), $config->rateLimitRequests, $config->rateLimitWindow, 1)) {
