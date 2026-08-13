@@ -12,12 +12,9 @@ declare(strict_types=1);
  */
 
 use CodeIgniter\Router\RouteCollection;
-use Myth\Betta\Config\Betta;
 
 /** @var RouteCollection $routes */
-
-/** @phpstan-ignore codeigniter.factoriesClassConstFetch */
-$betta  = config(Betta::class);
+$betta  = config('Betta');
 $prefix = $betta->routePrefix;
 
 $routes->get($prefix, '\Myth\Betta\Controllers\FeedbackController::index');

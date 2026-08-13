@@ -16,7 +16,6 @@ namespace Myth\Betta\Models;
 use CodeIgniter\Database\ConnectionInterface;
 use CodeIgniter\Model;
 use CodeIgniter\Validation\ValidationInterface;
-use Myth\Betta\Config\Betta;
 use Myth\Betta\DTOs\FeedbackListFilters;
 use Myth\Betta\Enums\CategoryEnum;
 use Myth\Betta\Enums\StatusEnum;
@@ -72,8 +71,7 @@ class FeedbackModel extends Model
      */
     public function platformRule(): string
     {
-        /** @phpstan-ignore codeigniter.factoriesClassConstFetch */
-        $platforms = config(Betta::class)->platforms;
+        $platforms = config('Betta')->platforms;
 
         return 'permit_empty|in_list[' . implode(',', $platforms) . ']';
     }

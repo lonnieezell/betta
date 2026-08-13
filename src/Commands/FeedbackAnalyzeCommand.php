@@ -16,7 +16,6 @@ namespace Myth\Betta\Commands;
 use CodeIgniter\CLI\BaseCommand;
 use CodeIgniter\CLI\CLI;
 use Exception;
-use Myth\Betta\Config\Betta;
 use Myth\Betta\Enums\StatusEnum;
 use Myth\Betta\Models\FeedbackClusterModel;
 use Myth\Betta\Models\FeedbackModel;
@@ -46,8 +45,7 @@ class FeedbackAnalyzeCommand extends BaseCommand
             return EXIT_ERROR;
         }
 
-        /** @phpstan-ignore codeigniter.factoriesClassConstFetch */
-        $config = config(Betta::class);
+        $config = config('Betta');
 
         $dryRun = array_key_exists('dry-run', $params) || CLI::getOption('dry-run') !== null;
         $apply  = array_key_exists('apply', $params)   || CLI::getOption('apply') !== null;

@@ -26,8 +26,7 @@ class FeedbackController extends Controller
 
     public function __construct()
     {
-        /** @phpstan-ignore codeigniter.factoriesClassConstFetch */
-        $this->config = config(Betta::class);
+        $this->config = config('Betta');
     }
 
     public function index(): string
