@@ -40,7 +40,6 @@ class Services extends BaseService
         }
 
         $config = config('Betta');
-        assert($config instanceof Betta);
 
         $token = (string) (env('GITHUB_TOKEN') ?? $config->githubToken);
         $owner = (string) (env('GITHUB_OWNER') ?? $config->githubOwner);
