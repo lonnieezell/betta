@@ -15,6 +15,7 @@ namespace Myth\Betta\Commands;
 
 use CodeIgniter\CLI\BaseCommand;
 use CodeIgniter\CLI\CLI;
+use Myth\Betta\Enums\ClusterStatusEnum;
 use Myth\Betta\Enums\PriorityEnum;
 use Myth\Betta\Models\FeedbackClusterModel;
 
@@ -26,6 +27,7 @@ class FeedbackClustersCommand extends BaseCommand
     protected $arguments   = [];
     protected $options     = [
         '--priority' => 'Filter by priority (low, medium, high, critical)',
+        '--status'   => 'Filter by status (active, resolved, dismissed, all). Dismissed are hidden by default.',
         '--sort'     => 'Sort by: updated_at (default) or count',
     ];
 
@@ -35,6 +37,7 @@ class FeedbackClustersCommand extends BaseCommand
     public function run(array $params): void
     {
         $priorityVal = $params['priority'] ?? CLI::getOption('priority');
+        $statusVal   = $params['status'] ?? CLI::getOption('status');
         $sort        = $params['sort'] ?? CLI::getOption('sort') ?? 'updated_at';
 
         $priority = null;
@@ -43,9 +46,22 @@ class FeedbackClustersCommand extends BaseCommand
             $priority = PriorityEnum::from($priorityVal);
         }
 
+        $status = null;
+
+        if (is_string($statusVal)) {
+            if ($statusVal !== 'all' && ClusterStatusEnum::tryFrom($statusVal) === null) {
+                CLI::error("Invalid status '{$statusVal}'. Valid values: active, resolved, dismissed, all.");
+
+                return;
+            }
+
+            $status = $statusVal;
+        }
+
         $clusters = (new FeedbackClusterModel())->findAllWithCount(
             priority: $priority,
             sort: (string) $sort,
+            status: $status,
         );
 
         if ($clusters === []) {
@@ -61,11 +77,12 @@ class FeedbackClustersCommand extends BaseCommand
                 (string) $cluster->id,
                 $cluster->label,
                 $cluster->priority->value,
+                $cluster->status,
                 (string) $cluster->item_count,
                 $cluster->updated_at,
             ];
         }
 
-        CLI::table($tableData, ['ID', 'Label', 'Priority', 'Items', 'Updated']);
+        CLI::table($tableData, ['ID', 'Label', 'Priority', 'Status', 'Items', 'Updated']);
     }
 }

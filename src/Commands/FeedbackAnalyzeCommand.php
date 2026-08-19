@@ -16,6 +16,8 @@ namespace Myth\Betta\Commands;
 use CodeIgniter\CLI\BaseCommand;
 use CodeIgniter\CLI\CLI;
 use Exception;
+use Myth\Betta\Enums\ClusterStatusEnum;
+use Myth\Betta\Enums\PriorityEnum;
 use Myth\Betta\Enums\StatusEnum;
 use Myth\Betta\Models\FeedbackClusterModel;
 use Myth\Betta\Models\FeedbackModel;
@@ -74,7 +76,11 @@ class FeedbackAnalyzeCommand extends BaseCommand
             $items,
         );
         $clustersData = array_map(
-            static fn (object $c): array => ['id' => $c->id, 'label' => $c->label],
+            static fn (object $c): array => [
+                'id'              => $c->id,
+                'label'           => $c->label,
+                'priority_locked' => $c->priority_locked,
+            ],
             $existingClusters,
         );
 
@@ -141,12 +147,14 @@ class FeedbackAnalyzeCommand extends BaseCommand
     {
         CLI::write('');
         $existingId = $suggestion['existing_cluster_id'] ?? null;
+        $existing   = null;
 
         if ($existingId !== null) {
             $existingLabel = '';
 
             foreach ($clustersData as $c) {
                 if ($c['id'] === $existingId) {
+                    $existing      = $c;
                     $existingLabel = " → existing cluster #{$existingId}";
                     break;
                 }
@@ -158,6 +166,7 @@ class FeedbackAnalyzeCommand extends BaseCommand
         }
 
         CLI::write("Summary: {$suggestion['summary']}");
+        CLI::write('Priority: ' . $this->describePriority($suggestion, $existing));
         CLI::write('Items: ' . implode(', ', (array) $suggestion['ids']));
     }
 
@@ -173,6 +182,39 @@ class FeedbackAnalyzeCommand extends BaseCommand
     }
 
     /**
+     * The priority applySuggestion() would actually write, phrased for display.
+     *
+     * @param array<string, mixed>      $suggestion
+     * @param array<string, mixed>|null $existing   The cluster being merged into, if any.
+     */
+    private function describePriority(array $suggestion, ?array $existing): string
+    {
+        $priority = $this->suggestedPriority($suggestion);
+
+        if ($existing === null) {
+            return ($priority ?? PriorityEnum::Medium)->value;
+        }
+
+        if ($existing['priority_locked'] === true) {
+            return 'unchanged (locked)';
+        }
+
+        return $priority instanceof PriorityEnum ? $priority->value : 'unchanged';
+    }
+
+    /**
+     * The priority the AI suggested, or null when it supplied none the enum recognises.
+     *
+     * @param array<string, mixed> $suggestion
+     */
+    private function suggestedPriority(array $suggestion): ?PriorityEnum
+    {
+        $priority = $suggestion['priority'] ?? null;
+
+        return is_string($priority) ? PriorityEnum::tryFrom($priority) : null;
+    }
+
+    /**
      * @param array<string, mixed> $suggestion
      */
     private function applySuggestion(
@@ -181,21 +223,41 @@ class FeedbackAnalyzeCommand extends BaseCommand
         FeedbackClusterModel $clusterModel,
     ): void {
         $existingId = $suggestion['existing_cluster_id'] ?? null;
+        $priority   = $this->suggestedPriority($suggestion);
 
         if ($existingId !== null) {
             $existingId = (int) $existingId;
+            $cluster    = $clusterModel->find($existingId);
 
-            if ($clusterModel->find($existingId) === null) {
+            if ($cluster === null) {
                 CLI::error("Cluster {$existingId} no longer exists; skipping suggestion.");
 
                 return;
             }
 
             $clusterId = $existingId;
+            $changes   = [];
+
+            // A manual priority edit locks the cluster; the AI must not overrule it.
+            if (! $cluster->priority_locked && $priority !== null) {
+                $changes['priority'] = $priority;
+            }
+
+            // New feedback reopens a resolved cluster, but a dismissed one stays dismissed.
+            if ($cluster->status === ClusterStatusEnum::Resolved->value) {
+                $changes['status'] = ClusterStatusEnum::Active->value;
+            }
+
+            if ($changes !== []) {
+                $clusterModel->update($clusterId, $changes);
+            }
         } else {
             $clusterId = $clusterModel->insert([
-                'label'   => $suggestion['label'],
-                'summary' => $suggestion['summary'] ?? '',
+                'label'           => $suggestion['label'],
+                'summary'         => $suggestion['summary'] ?? '',
+                'priority'        => $priority ?? PriorityEnum::Medium,
+                'status'          => ClusterStatusEnum::Active->value,
+                'priority_locked' => false,
             ]);
 
             if ($clusterId === false) {

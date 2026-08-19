@@ -25,6 +25,7 @@ Each suggestion looks like this:
 ```
 New cluster: Login & Auth Issues
 Summary: Users are having trouble signing in and resetting passwords.
+Priority: high
 Items: 14, 27, 31, 58
 Action ([y] Accept / [n] Skip / [e] Edit label):
 ```
@@ -34,6 +35,7 @@ When the AI spots an existing cluster that fits, it'll suggest assigning to it i
 ```
 Cluster: Mobile Crashes → existing cluster #3
 Summary: App crashes reported on iOS 17 and Android 14.
+Priority: critical
 Items: 22, 39
 Action ([y] Accept / [n] Skip / [e] Edit label):
 ```
@@ -45,6 +47,24 @@ Action ([y] Accept / [n] Skip / [e] Edit label):
 | `y` | Accept the suggestion as-is. Creates or updates the cluster and assigns the items. |
 | `n` | Skip this suggestion. Items stay ungrouped. |
 | `e` | Edit the AI-suggested label before saving. The prompt pre-fills the AI label — overwrite it and press Enter. |
+
+## Priority and status
+
+The AI scores every suggestion `low`, `medium`, `high`, or `critical`, weighing how many people reported the same thing against how severe it sounds. What happens to that score depends on the cluster it lands in:
+
+| Target | What gets written |
+|--------|-------------------|
+| A brand-new cluster | The AI's priority, status `active`, priority unlocked. |
+| An existing cluster with an unlocked priority | Items are assigned and the priority is re-scored, so a cluster that's growing fast climbs on its own. |
+| An existing cluster with a locked priority | Items are assigned; the priority you set by hand is left alone. See [Priority locking](managing-clusters.md#priority-locking). |
+| A `resolved` cluster | Items are assigned and the cluster flips back to `active` — a recurrence of a fixed issue resurfaces rather than disappearing into a resolved cluster. |
+| A `dismissed` cluster | Items are assigned and the cluster stays `dismissed`. Nothing is lost or duplicated, and it stays out of your default `feedback:clusters` view. |
+
+If the AI returns a priority the package doesn't recognise, a new cluster falls back to `medium` and an existing cluster keeps the priority it already had.
+
+Clusters of every status — including `resolved` and `dismissed` ones — are offered to the AI as merge targets, so matching feedback attaches to the right cluster's history instead of spawning a duplicate.
+
+These rules are identical in interactive mode and under `--apply`, so a nightly `feedback:analyze --apply` behaves exactly like a run you sat through.
 
 ## Modes
 
@@ -91,7 +111,7 @@ The default is `50`. `--limit` at the CLI always takes precedence.
 
 | Method | What it returns |
 |--------|----------------|
-| `systemPrompt()` | Instructs the AI to produce 3–8 clusters and reference existing labels |
+| `systemPrompt()` | Instructs the AI to produce 3–8 clusters, reference existing labels, and assign a priority |
 | `userPrompt()` | Existing cluster labels + ungrouped item IDs and messages |
 | `schema()` | JSON schema defining the expected response shape |
 
@@ -105,13 +125,15 @@ Each AI suggestion has this shape:
 {
   "label": "Login & Auth Issues",
   "summary": "Users are having trouble signing in and resetting passwords.",
+  "priority": "high",
   "ids": [14, 27, 31, 58],
   "existing_cluster_id": null
 }
 ```
 
 - `existing_cluster_id` — `null` means create a new cluster; an integer means assign items to that existing cluster ID.
-- `label` and `summary` are required. `ids` is required and must be non-empty for the suggestion to do anything.
+- `label`, `summary` and `priority` are required. `ids` is required and must be non-empty for the suggestion to do anything.
+- `priority` must be one of `low`, `medium`, `high`, `critical`.
 
 ## Error handling
 

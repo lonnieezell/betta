@@ -15,6 +15,7 @@ namespace Tests;
 
 use CodeIgniter\Test\CIUnitTestCase;
 use Myth\Betta\Enums\CategoryEnum;
+use Myth\Betta\Enums\ClusterStatusEnum;
 use Myth\Betta\Enums\PriorityEnum;
 use Myth\Betta\Enums\StatusEnum;
 
@@ -45,6 +46,13 @@ final class EnumsTest extends CIUnitTestCase
         $this->assertSame('medium', PriorityEnum::Medium->value);
         $this->assertSame('high', PriorityEnum::High->value);
         $this->assertSame('critical', PriorityEnum::Critical->value);
+    }
+
+    public function testClusterStatusEnumCases(): void
+    {
+        $this->assertSame('active', ClusterStatusEnum::Active->value);
+        $this->assertSame('resolved', ClusterStatusEnum::Resolved->value);
+        $this->assertSame('dismissed', ClusterStatusEnum::Dismissed->value);
     }
 
     public function testCategoryEnumFromValue(): void

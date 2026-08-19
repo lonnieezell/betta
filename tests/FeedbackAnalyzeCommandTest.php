@@ -16,6 +16,8 @@ namespace Tests;
 use CodeIgniter\CLI\CLI;
 use CodeIgniter\Test\Mock\MockInputOutput;
 use Config\Services;
+use Myth\Betta\Enums\ClusterStatusEnum;
+use Myth\Betta\Enums\PriorityEnum;
 use Myth\Betta\Enums\StatusEnum;
 use Tests\Support\FakeScribeService;
 use Tests\Support\FeedbackCommandTestCase;
@@ -238,6 +240,210 @@ final class FeedbackAnalyzeCommandTest extends FeedbackCommandTestCase
         $clusters = $this->clusters->findAll();
         $this->assertCount(1, $clusters);
         $this->assertSame('Login Issues', $clusters[0]->label);
+    }
+
+    // -------------------------------------------------------------------------
+    // Priority and status lifecycle
+    // -------------------------------------------------------------------------
+
+    public function testNewClusterUsesAISuppliedPriorityAndDefaultLifecycle(): void
+    {
+        $id = $this->feedback->insert(['message' => 'App loses my data']);
+        $this->injectScribe([[
+            'label'               => 'Data Loss',
+            'summary'             => 'Work disappears',
+            'priority'            => 'critical',
+            'ids'                 => [$id],
+            'existing_cluster_id' => null,
+        ]]);
+
+        $this->runCommand('feedback:analyze --apply');
+
+        $cluster = $this->clusters->first();
+        $this->assertSame(PriorityEnum::Critical, $cluster->priority);
+        $this->assertSame(ClusterStatusEnum::Active->value, $cluster->status);
+        $this->assertFalse($cluster->priority_locked);
+    }
+
+    public function testNewClusterFallsBackToMediumWhenPriorityIsUnusable(): void
+    {
+        $id = $this->feedback->insert(['message' => 'Something happened']);
+        $this->injectScribe([[
+            'label'               => 'Misc',
+            'summary'             => 'Assorted reports',
+            'priority'            => 'ludicrous',
+            'ids'                 => [$id],
+            'existing_cluster_id' => null,
+        ]]);
+
+        $this->runCommand('feedback:analyze --apply');
+
+        $this->assertSame(PriorityEnum::Medium, $this->clusters->first()->priority);
+    }
+
+    public function testGrowthUpdatesPriorityOnUnlockedCluster(): void
+    {
+        $clusterId = $this->clusters->insert(['label' => 'Login Issues', 'priority' => PriorityEnum::Low]);
+        $id        = $this->feedback->insert(['message' => 'Still cannot log in']);
+        $this->injectScribe([[
+            'label'               => 'Login Issues',
+            'summary'             => 'More login problems',
+            'priority'            => 'high',
+            'ids'                 => [$id],
+            'existing_cluster_id' => $clusterId,
+        ]]);
+
+        $this->runCommand('feedback:analyze --apply');
+
+        $this->assertSame(PriorityEnum::High, $this->clusters->find($clusterId)->priority);
+    }
+
+    public function testGrowthLeavesPriorityAloneOnLockedCluster(): void
+    {
+        $clusterId = $this->clusters->insert([
+            'label'           => 'Login Issues',
+            'priority'        => PriorityEnum::Low,
+            'priority_locked' => true,
+        ]);
+        $id = $this->feedback->insert(['message' => 'Still cannot log in']);
+        $this->injectScribe([[
+            'label'               => 'Login Issues',
+            'summary'             => 'More login problems',
+            'priority'            => 'critical',
+            'ids'                 => [$id],
+            'existing_cluster_id' => $clusterId,
+        ]]);
+
+        $this->runCommand('feedback:analyze --apply');
+
+        $cluster = $this->clusters->find($clusterId);
+        $this->assertSame(PriorityEnum::Low, $cluster->priority);
+        $this->assertSame($clusterId, $this->feedback->find($id)->cluster_id);
+    }
+
+    public function testGrowthIntoDismissedClusterLeavesItDismissed(): void
+    {
+        $clusterId = $this->clusters->insert([
+            'label'  => 'Wontfix Requests',
+            'status' => ClusterStatusEnum::Dismissed->value,
+        ]);
+        $id = $this->feedback->insert(['message' => 'Please add dark mode again']);
+        $this->injectScribe([[
+            'label'               => 'Wontfix Requests',
+            'summary'             => 'More of the same',
+            'priority'            => 'high',
+            'ids'                 => [$id],
+            'existing_cluster_id' => $clusterId,
+        ]]);
+
+        $this->runCommand('feedback:analyze --apply');
+
+        $cluster = $this->clusters->find($clusterId);
+        $this->assertSame(ClusterStatusEnum::Dismissed->value, $cluster->status);
+        $this->assertSame($clusterId, $this->feedback->find($id)->cluster_id);
+        $this->assertSame(StatusEnum::Grouped, $this->feedback->find($id)->status);
+    }
+
+    public function testGrowthIntoResolvedClusterReopensIt(): void
+    {
+        $clusterId = $this->clusters->insert([
+            'label'  => 'Checkout Crash',
+            'status' => ClusterStatusEnum::Resolved->value,
+        ]);
+        $id = $this->feedback->insert(['message' => 'Checkout crashed again']);
+        $this->injectScribe([[
+            'label'               => 'Checkout Crash',
+            'summary'             => 'It is back',
+            'priority'            => 'high',
+            'ids'                 => [$id],
+            'existing_cluster_id' => $clusterId,
+        ]]);
+
+        $this->runCommand('feedback:analyze --apply');
+
+        $cluster = $this->clusters->find($clusterId);
+        $this->assertSame(ClusterStatusEnum::Active->value, $cluster->status);
+        $this->assertSame(PriorityEnum::High, $cluster->priority);
+    }
+
+    public function testInteractiveAcceptAppliesTheSamePriorityRules(): void
+    {
+        $clusterId = $this->clusters->insert([
+            'label'    => 'Login Issues',
+            'priority' => PriorityEnum::Low,
+            'status'   => ClusterStatusEnum::Resolved->value,
+        ]);
+        $id = $this->feedback->insert(['message' => 'Login broke again']);
+        $this->injectScribe([[
+            'label'               => 'Login Issues',
+            'summary'             => 'Regression',
+            'priority'            => 'critical',
+            'ids'                 => [$id],
+            'existing_cluster_id' => $clusterId,
+        ]]);
+
+        $this->runCommand('feedback:analyze', "y\n");
+
+        $cluster = $this->clusters->find($clusterId);
+        $this->assertSame(PriorityEnum::Critical, $cluster->priority);
+        $this->assertSame(ClusterStatusEnum::Active->value, $cluster->status);
+    }
+
+    public function testDryRunReportsLockedPriorityAsUnchanged(): void
+    {
+        $clusterId = $this->clusters->insert([
+            'label'           => 'Login Issues',
+            'priority'        => PriorityEnum::Low,
+            'priority_locked' => true,
+        ]);
+        $id = $this->feedback->insert(['message' => 'Cannot log in']);
+        $this->injectScribe([[
+            'label'               => 'Login Issues',
+            'summary'             => 'Login problems',
+            'priority'            => 'critical',
+            'ids'                 => [$id],
+            'existing_cluster_id' => $clusterId,
+        ]]);
+
+        $output = $this->runCommand('feedback:analyze --dry-run');
+
+        $this->assertStringContainsString('unchanged (locked)', $output);
+        $this->assertStringNotContainsString('Priority: critical', $output);
+    }
+
+    public function testDryRunReportsUnusablePriorityOnExistingClusterAsUnchanged(): void
+    {
+        $clusterId = $this->clusters->insert(['label' => 'Login Issues', 'priority' => PriorityEnum::High]);
+        $id        = $this->feedback->insert(['message' => 'Cannot log in']);
+        $this->injectScribe([[
+            'label'               => 'Login Issues',
+            'summary'             => 'Login problems',
+            'priority'            => 'ludicrous',
+            'ids'                 => [$id],
+            'existing_cluster_id' => $clusterId,
+        ]]);
+
+        $output = $this->runCommand('feedback:analyze --dry-run');
+
+        $this->assertStringContainsString('Priority: unchanged', $output);
+    }
+
+    public function testDryRunShowsPriorityAndWritesNothing(): void
+    {
+        $clusterId = $this->clusters->insert(['label' => 'Login Issues', 'priority' => PriorityEnum::Low]);
+        $id        = $this->feedback->insert(['message' => 'Cannot log in']);
+        $this->injectScribe([[
+            'label'               => 'Login Issues',
+            'summary'             => 'Login problems',
+            'priority'            => 'critical',
+            'ids'                 => [$id],
+            'existing_cluster_id' => $clusterId,
+        ]]);
+
+        $output = $this->runCommand('feedback:analyze --dry-run');
+
+        $this->assertStringContainsString('critical', $output);
+        $this->assertSame(PriorityEnum::Low, $this->clusters->find($clusterId)->priority);
     }
 
     // -------------------------------------------------------------------------

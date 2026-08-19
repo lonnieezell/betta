@@ -15,6 +15,7 @@ namespace Myth\Betta\Commands;
 
 use CodeIgniter\CLI\BaseCommand;
 use CodeIgniter\CLI\CLI;
+use Myth\Betta\Enums\ClusterStatusEnum;
 use Myth\Betta\Enums\PriorityEnum;
 use Myth\Betta\Models\FeedbackClusterModel;
 
@@ -28,7 +29,8 @@ class FeedbackClusterEditCommand extends BaseCommand
     ];
     protected $options = [
         '--label'    => 'New label',
-        '--priority' => 'New priority (low, medium, high, critical)',
+        '--priority' => 'New priority (low, medium, high, critical). Locks the priority against AI updates.',
+        '--status'   => 'New status (active, resolved, dismissed)',
     ];
 
     /**
@@ -39,11 +41,24 @@ class FeedbackClusterEditCommand extends BaseCommand
         $id          = isset($params[0]) ? (int) $params[0] : null;
         $label       = $params['label'] ?? CLI::getOption('label');
         $priorityVal = $params['priority'] ?? CLI::getOption('priority');
+        $statusVal   = $params['status'] ?? CLI::getOption('status');
 
-        if ($label === null && $priorityVal === null) {
-            CLI::error('Provide at least --label or --priority.');
+        if ($label === null && $priorityVal === null && $statusVal === null) {
+            CLI::error('Provide at least --label, --priority, or --status.');
 
             return;
+        }
+
+        $status = null;
+
+        if (is_string($statusVal)) {
+            $status = ClusterStatusEnum::tryFrom($statusVal);
+
+            if ($status === null) {
+                CLI::error("Invalid status '{$statusVal}'. Valid values: active, resolved, dismissed.");
+
+                return;
+            }
         }
 
         $model   = new FeedbackClusterModel();
@@ -61,8 +76,15 @@ class FeedbackClusterEditCommand extends BaseCommand
             $data['label'] = $label;
         }
 
+        // A priority set by hand is a deliberate judgement call, so lock it
+        // against being overwritten by the next feedback:analyze run.
         if (is_string($priorityVal)) {
-            $data['priority'] = PriorityEnum::from($priorityVal);
+            $data['priority']        = PriorityEnum::from($priorityVal);
+            $data['priority_locked'] = true;
+        }
+
+        if ($status !== null) {
+            $data['status'] = $status->value;
         }
 
         $model->update($id, $data);

@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Myth\Betta\Prompts;
 
+use Myth\Betta\Enums\PriorityEnum;
+
 class ClusterFeedbackPrompt
 {
     /**
@@ -31,6 +33,11 @@ class ClusterFeedbackPrompt
             You are a feedback analyst. Group the provided feedback items into between 3 and 8 meaningful clusters.
             Where possible, reference existing cluster labels to avoid fragmentation.
             Each cluster should have a concise label and a one-sentence summary of the items it contains.
+            Assign each cluster a priority, weighing how many items it contains and how often the same
+            complaint recurs against the apparent severity of what is being reported: use "critical" for
+            things that block people entirely or lose their data, "high" for widely-reported or badly
+            broken behaviour, "medium" for ordinary problems and common requests, and "low" for minor
+            annoyances and one-off nice-to-haves.
             Return only valid JSON matching the provided schema.
             PROMPT;
     }
@@ -69,7 +76,7 @@ class ClusterFeedbackPrompt
             'type'  => 'array',
             'items' => [
                 'type'       => 'object',
-                'required'   => ['label', 'summary', 'ids'],
+                'required'   => ['label', 'summary', 'ids', 'priority'],
                 'properties' => [
                     'label' => [
                         'type'        => 'string',
@@ -78,6 +85,11 @@ class ClusterFeedbackPrompt
                     'summary' => [
                         'type'        => 'string',
                         'description' => 'A one-sentence summary of the feedback items in this cluster',
+                    ],
+                    'priority' => [
+                        'type'        => 'string',
+                        'enum'        => array_column(PriorityEnum::cases(), 'value'),
+                        'description' => 'How urgently this cluster needs attention',
                     ],
                     'ids' => [
                         'type'        => 'array',

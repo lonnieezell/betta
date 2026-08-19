@@ -16,6 +16,7 @@ namespace Tests;
 use CodeIgniter\CLI\CLI;
 use CodeIgniter\Test\CIUnitTestCase;
 use CodeIgniter\Test\Mock\MockInputOutput;
+use Myth\Betta\Enums\ClusterStatusEnum;
 use Myth\Betta\Enums\PriorityEnum;
 use Myth\Betta\Enums\StatusEnum;
 use Myth\Betta\Models\FeedbackClusterModel;
@@ -103,6 +104,59 @@ final class FeedbackClustersCommandTest extends CIUnitTestCase
         $this->assertLessThan(strpos($output, 'Few'), strpos($output, 'Many'));
     }
 
+    public function testClustersListShowsStatusColumn(): void
+    {
+        $this->clusters->insert(['label' => 'Resolved thing', 'status' => ClusterStatusEnum::Resolved->value]);
+
+        $output = $this->runCommand('feedback:clusters');
+
+        $this->assertStringContainsString('Status', $output);
+        $this->assertStringContainsString('resolved', $output);
+    }
+
+    public function testClustersListHidesDismissedByDefault(): void
+    {
+        $this->clusters->insert(['label' => 'Active cluster']);
+        $this->clusters->insert(['label' => 'Dismissed cluster', 'status' => ClusterStatusEnum::Dismissed->value]);
+
+        $output = $this->runCommand('feedback:clusters');
+
+        $this->assertStringContainsString('Active cluster', $output);
+        $this->assertStringNotContainsString('Dismissed cluster', $output);
+    }
+
+    public function testClustersListStatusAllIncludesDismissed(): void
+    {
+        $this->clusters->insert(['label' => 'Active cluster']);
+        $this->clusters->insert(['label' => 'Dismissed cluster', 'status' => ClusterStatusEnum::Dismissed->value]);
+
+        $output = $this->runCommand('feedback:clusters --status all');
+
+        $this->assertStringContainsString('Active cluster', $output);
+        $this->assertStringContainsString('Dismissed cluster', $output);
+    }
+
+    public function testClustersListFiltersByStatus(): void
+    {
+        $this->clusters->insert(['label' => 'Active cluster']);
+        $this->clusters->insert(['label' => 'Dismissed cluster', 'status' => ClusterStatusEnum::Dismissed->value]);
+
+        $output = $this->runCommand('feedback:clusters --status dismissed');
+
+        $this->assertStringContainsString('Dismissed cluster', $output);
+        $this->assertStringNotContainsString('Active cluster', $output);
+    }
+
+    public function testClustersListRejectsUnknownStatus(): void
+    {
+        $this->clusters->insert(['label' => 'Active cluster']);
+
+        $output = $this->runCommand('feedback:clusters --status nonsense');
+
+        $this->assertStringContainsString('nonsense', $output);
+        $this->assertStringNotContainsString('Active cluster', $output);
+    }
+
     // -------------------------------------------------------------------------
     // feedback:cluster:create
     // -------------------------------------------------------------------------
@@ -187,6 +241,56 @@ final class FeedbackClustersCommandTest extends CIUnitTestCase
         $output = $this->runCommand('feedback:cluster:edit 9999 --label "x"');
 
         $this->assertStringContainsString('9999', $output);
+    }
+
+    public function testClusterEditPriorityLocksTheCluster(): void
+    {
+        $id = $this->clusters->insert(['label' => 'Cluster']);
+
+        $this->runCommand("feedback:cluster:edit {$id} --priority high");
+
+        $this->assertTrue($this->clusters->find($id)->priority_locked);
+    }
+
+    public function testClusterEditUpdatesStatus(): void
+    {
+        $id = $this->clusters->insert(['label' => 'Cluster']);
+
+        $this->runCommand("feedback:cluster:edit {$id} --status resolved");
+
+        $this->assertSame(ClusterStatusEnum::Resolved->value, $this->clusters->find($id)->status);
+    }
+
+    public function testClusterEditStatusDoesNotLockPriority(): void
+    {
+        $id = $this->clusters->insert(['label' => 'Cluster']);
+
+        $this->runCommand("feedback:cluster:edit {$id} --status dismissed");
+
+        $this->assertFalse($this->clusters->find($id)->priority_locked);
+    }
+
+    public function testClusterEditUpdatesLabelPriorityAndStatusTogether(): void
+    {
+        $id = $this->clusters->insert(['label' => 'Old', 'priority' => PriorityEnum::Low]);
+
+        $this->runCommand("feedback:cluster:edit {$id} --label \"New\" --priority critical --status resolved");
+
+        $cluster = $this->clusters->find($id);
+        $this->assertSame('New', $cluster->label);
+        $this->assertSame(PriorityEnum::Critical, $cluster->priority);
+        $this->assertSame(ClusterStatusEnum::Resolved->value, $cluster->status);
+        $this->assertTrue($cluster->priority_locked);
+    }
+
+    public function testClusterEditRejectsUnknownStatus(): void
+    {
+        $id = $this->clusters->insert(['label' => 'Cluster']);
+
+        $output = $this->runCommand("feedback:cluster:edit {$id} --status nonsense");
+
+        $this->assertStringContainsString('nonsense', $output);
+        $this->assertSame(ClusterStatusEnum::Active->value, $this->clusters->find($id)->status);
     }
 
     // -------------------------------------------------------------------------

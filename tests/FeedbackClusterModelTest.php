@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Tests;
 
 use CodeIgniter\Test\CIUnitTestCase;
+use Myth\Betta\Enums\ClusterStatusEnum;
 use Myth\Betta\Enums\PriorityEnum;
 use Myth\Betta\Enums\StatusEnum;
 use Myth\Betta\Models\FeedbackClusterModel;
@@ -145,6 +146,60 @@ final class FeedbackClusterModelTest extends CIUnitTestCase
     }
 
     // -------------------------------------------------------------------------
+    // status and priority_locked
+    // -------------------------------------------------------------------------
+
+    public function testDefaultStatusIsActive(): void
+    {
+        $id  = $this->model->insert(['label' => 'Fresh cluster']);
+        $row = $this->model->find($id);
+
+        $this->assertSame(ClusterStatusEnum::Active->value, $row->status);
+    }
+
+    public function testDefaultPriorityLockedIsFalse(): void
+    {
+        $id  = $this->model->insert(['label' => 'Fresh cluster']);
+        $row = $this->model->find($id);
+
+        $this->assertFalse($row->priority_locked);
+    }
+
+    public function testStatusIsWritable(): void
+    {
+        $id = $this->model->insert(['label' => 'Cluster']);
+        $this->model->update($id, ['status' => ClusterStatusEnum::Resolved->value]);
+
+        $this->assertSame(ClusterStatusEnum::Resolved->value, $this->model->find($id)->status);
+    }
+
+    public function testPriorityLockedIsWritable(): void
+    {
+        $id = $this->model->insert(['label' => 'Cluster']);
+        $this->model->update($id, ['priority_locked' => true]);
+
+        $this->assertTrue($this->model->find($id)->priority_locked);
+    }
+
+    public function testAllClusterStatusEnumRoundTrips(): void
+    {
+        foreach (ClusterStatusEnum::cases() as $status) {
+            $id  = $this->model->insert(['label' => 'test', 'status' => $status->value]);
+            $row = $this->model->find($id);
+
+            $this->assertSame($status->value, $row->status);
+        }
+    }
+
+    public function testInvalidStatusFailsValidation(): void
+    {
+        $result = $this->model->insert(['label' => 'Bad status', 'status' => 'nonsense']);
+
+        $this->assertFalse($result);
+        $this->assertArrayHasKey('status', $this->model->errors());
+    }
+
+    // -------------------------------------------------------------------------
     // findAllWithCount — filter and sort
     // -------------------------------------------------------------------------
 
@@ -187,6 +242,39 @@ final class FeedbackClusterModelTest extends CIUnitTestCase
 
         $this->assertSame('Cluster A updated', $results[0]->label);
         $this->assertSame('Cluster B', $results[1]->label);
+    }
+
+    public function testFindAllWithCountExcludesDismissedByDefault(): void
+    {
+        $this->model->insert(['label' => 'Active cluster']);
+        $this->model->insert(['label' => 'Dismissed cluster', 'status' => ClusterStatusEnum::Dismissed->value]);
+
+        $results = $this->model->findAllWithCount();
+
+        $this->assertCount(1, $results);
+        $this->assertSame('Active cluster', $results[0]->label);
+    }
+
+    public function testFindAllWithCountWithAllIncludesDismissed(): void
+    {
+        $this->model->insert(['label' => 'Active cluster']);
+        $this->model->insert(['label' => 'Dismissed cluster', 'status' => ClusterStatusEnum::Dismissed->value]);
+
+        $results = $this->model->findAllWithCount(status: 'all');
+
+        $this->assertCount(2, $results);
+    }
+
+    public function testFindAllWithCountFiltersByStatus(): void
+    {
+        $this->model->insert(['label' => 'Active cluster']);
+        $this->model->insert(['label' => 'Dismissed cluster', 'status' => ClusterStatusEnum::Dismissed->value]);
+        $this->model->insert(['label' => 'Resolved cluster', 'status' => ClusterStatusEnum::Resolved->value]);
+
+        $results = $this->model->findAllWithCount(status: ClusterStatusEnum::Dismissed->value);
+
+        $this->assertCount(1, $results);
+        $this->assertSame('Dismissed cluster', $results[0]->label);
     }
 
     // -------------------------------------------------------------------------

@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Myth\Betta\Models;
 
 use CodeIgniter\Model;
+use Myth\Betta\Enums\ClusterStatusEnum;
 use Myth\Betta\Enums\PriorityEnum;
 use Myth\Betta\Enums\StatusEnum;
 
@@ -28,6 +29,8 @@ class FeedbackClusterModel extends Model
         'label',
         'summary',
         'priority',
+        'status',
+        'priority_locked',
     ];
     protected $useTimestamps = true;
     protected $dateFormat    = 'datetime';
@@ -38,8 +41,15 @@ class FeedbackClusterModel extends Model
      * @var array<string, string>
      */
     protected array $casts = [
-        'priority' => 'enum[' . PriorityEnum::class . ']',
+        'priority'        => 'enum[' . PriorityEnum::class . ']',
+        'priority_locked' => 'int-bool',
     ];
+
+    protected function initialize(): void
+    {
+        $this->validationRules['status'] = 'permit_empty|in_list['
+            . implode(',', array_column(ClusterStatusEnum::cases(), 'value')) . ']';
+    }
 
     /**
      * Deletes a cluster and resets all non-dismissed items in that cluster:
@@ -62,11 +72,16 @@ class FeedbackClusterModel extends Model
      * return type is consistent regardless of DB driver.
      *
      * @param 'count'|'updated_at' $sort
+     * @param string|null          $status Null excludes dismissed clusters; 'all' includes every
+     *                                     status; any other value filters to exactly that status.
      *
      * @return list<object>
      */
-    public function findAllWithCount(?PriorityEnum $priority = null, string $sort = 'updated_at'): array
-    {
+    public function findAllWithCount(
+        ?PriorityEnum $priority = null,
+        string $sort = 'updated_at',
+        ?string $status = null,
+    ): array {
         $builder = $this->db->table('feedback_clusters AS fc')
             ->select('fc.*, COUNT(fb.id) AS item_count')
             ->join('betta_feedback AS fb', 'fb.cluster_id = fc.id', 'left')
@@ -74,6 +89,12 @@ class FeedbackClusterModel extends Model
 
         if ($priority !== null) {
             $builder->where('fc.priority', $priority->value);
+        }
+
+        if ($status === null) {
+            $builder->where('fc.status !=', ClusterStatusEnum::Dismissed->value);
+        } elseif ($status !== 'all') {
+            $builder->where('fc.status', $status);
         }
 
         if ($sort === 'count') {
