@@ -70,7 +70,7 @@ class FeedbackController extends Controller
         }
 
         $posted     = $this->request->getPost('url_context');
-        $urlContext = ($posted !== null && $posted !== '')
+        $urlContext = is_string($posted) && $posted !== ''
             ? $posted
             : $this->request->getHeaderLine('Referer');
 

@@ -241,6 +241,18 @@ final class FeedbackControllerTest extends CIUnitTestCase
         $this->assertSame('https://example.com/page', $row->url_context);
     }
 
+    public function testPostSubmitIgnoresNonStringUrlContext(): void
+    {
+        $this->withHeaders(['Referer' => 'https://example.com/referer-page'])
+            ->post('feedback/submit', [
+                'message'     => 'Test',
+                'url_context' => ['https://example.com/one', 'https://example.com/two'],
+            ]);
+
+        $row = (new FeedbackModel())->findAll()[0];
+        $this->assertSame('https://example.com/referer-page', $row->url_context);
+    }
+
     public function testPostSubmitStripsQueryParamsFromReferer(): void
     {
         $this->withHeaders(['Referer' => 'https://example.com/reset?token=secret'])
