@@ -93,7 +93,7 @@ return static function (RectorConfig $rectorConfig): void {
     ]);
 
     // Set the target version for refactoring
-    $rectorConfig->phpVersion(PhpVersion::PHP_84);
+    $rectorConfig->phpVersion(PhpVersion::PHP_82);
 
     // Auto-import fully qualified class names
     $rectorConfig->importNames();
