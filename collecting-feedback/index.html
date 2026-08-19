@@ -992,7 +992,7 @@
 <a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>
 <a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="k">class</span> <span class="nc">Betta</span> <span class="k">extends</span> <span class="nx">BettaConfig</span>
 <a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="p">{</span>
-<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>    <span class="k">public</span> <span class="nx">string</span> <span class="nv">$routePrefix</span> <span class="o">=</span> <span class="s1">&#39;feedback&#39;</span><span class="p">;</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>    <span class="k">public</span> <span class="nx">string</span> <span class="nv">$routePrefix</span> <span class="o">=</span> <span class="s1">'feedback'</span><span class="p">;</span>
 <a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>    <span class="k">public</span> <span class="nx">bool</span> <span class="nv">$acceptSubmissions</span> <span class="o">=</span> <span class="k">true</span><span class="p">;</span>
 <a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="p">}</span>
 </code></pre></div>
@@ -1000,7 +1000,7 @@
 <h4 id="routeprefix"><code>$routePrefix</code></h4>
 <p>The URL segment for both routes. Defaults to <code>feedback</code>.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="x">// Registers GET /beta-feedback and POST /beta-feedback/submit</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="x">public string $routePrefix = &#39;beta-feedback&#39;;</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="x">public string $routePrefix = 'beta-feedback';</span>
 </code></pre></div>
 <h4 id="acceptsubmissions"><code>$acceptSubmissions</code></h4>
 <p>Set to <code>false</code> to stop accepting new feedback without removing the routes. Visitors will see <code>closed.php</code> instead of the form.</p>
@@ -1012,7 +1012,7 @@
 </div>
 <h4 id="platforms"><code>$platforms</code></h4>
 <p>The list of platform values feedback can be tagged with (e.g. for a cross-platform desktop app). Defaults to an empty array, which hides the platform field entirely — no value is stored and no behaviour changes for apps that don't ship cross-platform software.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="x">public array $platforms = [&#39;windows&#39;, &#39;macos&#39;];</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="x">public array $platforms = ['windows', 'macos'];</span>
 </code></pre></div>
 <p>A submitted platform is validated against this list — anything else is rejected.</p>
 <h2 id="what-gets-saved">What gets saved</h2>
@@ -1085,10 +1085,10 @@
 </table>
 <h3 id="embedding-the-form-in-your-own-layout">Embedding the form in your own layout</h3>
 <p>You don't have to use <code>page.php</code>. Render just the form fragment anywhere:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="cp">&lt;?</span><span class="o">=</span> <span class="nx">view</span><span class="p">(</span><span class="s1">&#39;Myth\Betta\Views\form&#39;</span><span class="p">,</span> <span class="p">[</span>
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>    <span class="s1">&#39;categories&#39;</span> <span class="o">=&gt;</span> <span class="nx">\Myth\Betta\Enums\CategoryEnum</span><span class="o">::</span><span class="na">cases</span><span class="p">(),</span>
-<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>    <span class="s1">&#39;submitUrl&#39;</span>  <span class="o">=&gt;</span> <span class="nx">config</span><span class="p">(</span><span class="nx">\Myth\Betta\Config\Betta</span><span class="o">::</span><span class="na">class</span><span class="p">)</span><span class="o">-&gt;</span><span class="na">routePrefix</span> <span class="o">.</span> <span class="s1">&#39;/submit&#39;</span><span class="p">,</span>
-<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>    <span class="s1">&#39;platforms&#39;</span>  <span class="o">=&gt;</span> <span class="nx">config</span><span class="p">(</span><span class="nx">\Myth\Betta\Config\Betta</span><span class="o">::</span><span class="na">class</span><span class="p">)</span><span class="o">-&gt;</span><span class="na">platforms</span><span class="p">,</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="cp">&lt;?</span><span class="o">=</span> <span class="nx">view</span><span class="p">(</span><span class="s1">'Myth\Betta\Views\form'</span><span class="p">,</span> <span class="p">[</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>    <span class="s1">'categories'</span> <span class="o">=&gt;</span> <span class="nx">\Myth\Betta\Enums\CategoryEnum</span><span class="o">::</span><span class="na">cases</span><span class="p">(),</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>    <span class="s1">'submitUrl'</span>  <span class="o">=&gt;</span> <span class="nx">config</span><span class="p">(</span><span class="nx">\Myth\Betta\Config\Betta</span><span class="o">::</span><span class="na">class</span><span class="p">)</span><span class="o">-&gt;</span><span class="na">routePrefix</span> <span class="o">.</span> <span class="s1">'/submit'</span><span class="p">,</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>    <span class="s1">'platforms'</span>  <span class="o">=&gt;</span> <span class="nx">config</span><span class="p">(</span><span class="nx">\Myth\Betta\Config\Betta</span><span class="o">::</span><span class="na">class</span><span class="p">)</span><span class="o">-&gt;</span><span class="na">platforms</span><span class="p">,</span>
 <a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="p">])</span> <span class="cp">?&gt;</span>
 </code></pre></div>
 <h3 id="overriding-views">Overriding views</h3>
@@ -1106,12 +1106,12 @@
 <h3 id="json-fetch-path">JSON (fetch path)</h3>
 <p>Send <code>Accept: application/json</code> to get structured responses:</p>
 <p><strong>Success (200)</strong>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="p">{</span><span class="w"> </span><span class="nt">&quot;ok&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w"> </span><span class="p">}</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="p">{</span><span class="w"> </span><span class="nt">"ok"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w"> </span><span class="p">}</span>
 </code></pre></div></p>
 <p><strong>Validation failure (422)</strong>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="p">{</span>
-<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="w">  </span><span class="nt">&quot;errors&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="w">    </span><span class="nt">&quot;message&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;The message field is required.&quot;</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="w">  </span><span class="nt">"errors"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="w">    </span><span class="nt">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"The message field is required."</span>
 <a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="w">  </span><span class="p">}</span>
 <a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="p">}</span>
 </code></pre></div></p>

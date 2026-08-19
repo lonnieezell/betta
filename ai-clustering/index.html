@@ -547,6 +547,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#priority-and-status" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Priority and status
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#modes" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -752,6 +763,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#priority-and-status" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Priority and status
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#modes" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -901,14 +923,16 @@
 <p>Each suggestion looks like this:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>New cluster: Login &amp; Auth Issues
 <a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>Summary: Users are having trouble signing in and resetting passwords.
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>Items: 14, 27, 31, 58
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>Action ([y] Accept / [n] Skip / [e] Edit label):
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>Priority: high
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>Items: 14, 27, 31, 58
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>Action ([y] Accept / [n] Skip / [e] Edit label):
 </code></pre></div>
 <p>When the AI spots an existing cluster that fits, it'll suggest assigning to it instead:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>Cluster: Mobile Crashes → existing cluster #3
 <a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>Summary: App crashes reported on iOS 17 and Android 14.
-<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>Items: 22, 39
-<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>Action ([y] Accept / [n] Skip / [e] Edit label):
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>Priority: critical
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>Items: 22, 39
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>Action ([y] Accept / [n] Skip / [e] Edit label):
 </code></pre></div>
 <h2 id="actions">Actions</h2>
 <table>
@@ -933,6 +957,41 @@
 </tr>
 </tbody>
 </table>
+<h2 id="priority-and-status">Priority and status</h2>
+<p>The AI scores every suggestion <code>low</code>, <code>medium</code>, <code>high</code>, or <code>critical</code>, weighing how many people reported the same thing against how severe it sounds. What happens to that score depends on the cluster it lands in:</p>
+<table>
+<thead>
+<tr>
+<th>Target</th>
+<th>What gets written</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A brand-new cluster</td>
+<td>The AI's priority, status <code>active</code>, priority unlocked.</td>
+</tr>
+<tr>
+<td>An existing cluster with an unlocked priority</td>
+<td>Items are assigned and the priority is re-scored, so a cluster that's growing fast climbs on its own.</td>
+</tr>
+<tr>
+<td>An existing cluster with a locked priority</td>
+<td>Items are assigned; the priority you set by hand is left alone. See <a href="../managing-clusters/#priority-locking">Priority locking</a>.</td>
+</tr>
+<tr>
+<td>A <code>resolved</code> cluster</td>
+<td>Items are assigned and the cluster flips back to <code>active</code> — a recurrence of a fixed issue resurfaces rather than disappearing into a resolved cluster.</td>
+</tr>
+<tr>
+<td>A <code>dismissed</code> cluster</td>
+<td>Items are assigned and the cluster stays <code>dismissed</code>. Nothing is lost or duplicated, and it stays out of your default <code>feedback:clusters</code> view.</td>
+</tr>
+</tbody>
+</table>
+<p>If the AI returns a priority the package doesn't recognise, a new cluster falls back to <code>medium</code> and an existing cluster keeps the priority it already had.</p>
+<p>Clusters of every status — including <code>resolved</code> and <code>dismissed</code> ones — are offered to the AI as merge targets, so matching feedback attaches to the right cluster's history instead of spawning a duplicate.</p>
+<p>These rules are identical in interactive mode and under <code>--apply</code>, so a nightly <code>feedback:analyze --apply</code> behaves exactly like a run you sat through.</p>
 <h2 id="modes">Modes</h2>
 <h3 id="-dry-run"><code>--dry-run</code></h3>
 <p>Prints suggestions without writing anything to the database. Useful for seeing what the AI thinks before committing.</p>
@@ -967,7 +1026,7 @@
 <tbody>
 <tr>
 <td><code>systemPrompt()</code></td>
-<td>Instructs the AI to produce 3–8 clusters and reference existing labels</td>
+<td>Instructs the AI to produce 3–8 clusters, reference existing labels, and assign a priority</td>
 </tr>
 <tr>
 <td><code>userPrompt()</code></td>
@@ -983,15 +1042,17 @@
 <h3 id="response-schema">Response schema</h3>
 <p>Each AI suggestion has this shape:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="p">{</span>
-<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="w">  </span><span class="nt">&quot;label&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Login &amp; Auth Issues&quot;</span><span class="p">,</span>
-<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="w">  </span><span class="nt">&quot;summary&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Users are having trouble signing in and resetting passwords.&quot;</span><span class="p">,</span>
-<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="w">  </span><span class="nt">&quot;ids&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="mi">14</span><span class="p">,</span><span class="w"> </span><span class="mi">27</span><span class="p">,</span><span class="w"> </span><span class="mi">31</span><span class="p">,</span><span class="w"> </span><span class="mi">58</span><span class="p">],</span>
-<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="w">  </span><span class="nt">&quot;existing_cluster_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span>
-<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="p">}</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="w">  </span><span class="nt">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Login &amp; Auth Issues"</span><span class="p">,</span>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="w">  </span><span class="nt">"summary"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Users are having trouble signing in and resetting passwords."</span><span class="p">,</span>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="w">  </span><span class="nt">"priority"</span><span class="p">:</span><span class="w"> </span><span class="s2">"high"</span><span class="p">,</span>
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="w">  </span><span class="nt">"ids"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="mi">14</span><span class="p">,</span><span class="w"> </span><span class="mi">27</span><span class="p">,</span><span class="w"> </span><span class="mi">31</span><span class="p">,</span><span class="w"> </span><span class="mi">58</span><span class="p">],</span>
+<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="w">  </span><span class="nt">"existing_cluster_id"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span>
+<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a><span class="p">}</span>
 </code></pre></div>
 <ul>
 <li><code>existing_cluster_id</code> — <code>null</code> means create a new cluster; an integer means assign items to that existing cluster ID.</li>
-<li><code>label</code> and <code>summary</code> are required. <code>ids</code> is required and must be non-empty for the suggestion to do anything.</li>
+<li><code>label</code>, <code>summary</code> and <code>priority</code> are required. <code>ids</code> is required and must be non-empty for the suggestion to do anything.</li>
+<li><code>priority</code> must be one of <code>low</code>, <code>medium</code>, <code>high</code>, <code>critical</code>.</li>
 </ul>
 <h2 id="error-handling">Error handling</h2>
 <p>If the AI service throws an error, the command prints the message and exits with a non-zero code — it won't silently skip half your data or corrupt anything already written.</p>
