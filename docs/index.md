@@ -7,7 +7,7 @@
 - A public-facing endpoint that accepts feedback via a standard form or `fetch()`
 - Two database tables with enum-typed columns and automatic CI4 model casting
 - `php spark feedback:*` commands for reviewing and clustering feedback from the terminal
-- Optional AI-assisted clustering via [`myth/scribe`](https://github.com/myth/scribe) — but it works great without it
+- Optional AI-assisted clustering via [`lonnieezell/scribe`](https://github.com/lonnieezell/scribe) — but it works great without it
 
 ## Quick start
 
