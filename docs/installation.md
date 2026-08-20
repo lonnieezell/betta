@@ -16,18 +16,19 @@ CI4 auto-discovers the package — routes, Spark commands, and migrations are al
 
 ## Optional: AI clustering
 
-To use `spark feedback:analyze`, install `myth/scribe` and configure an API key:
+To use `spark feedback:analyze`, install `lonnieezell/scribe` and configure an API key:
 
 ```bash
-composer require myth/scribe
+composer require lonnieezell/scribe
 php spark config:publish Myth\Scribe\Config\AI
 ```
 
 Then add your key to `.env`:
 
 ```
-CLAUDE_API_KEY=sk-ant-...
+ANTHROPIC_API_KEY=sk-ant-...
 # or OPENAI_API_KEY=sk-...
+# or GOOGLE_API_KEY=...
 ```
 
 `myth/betta` works fine without Scribe — the `feedback:analyze` command just exits cleanly if it isn't installed.

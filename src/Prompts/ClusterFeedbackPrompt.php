@@ -14,8 +14,10 @@ declare(strict_types=1);
 namespace Myth\Betta\Prompts;
 
 use Myth\Betta\Enums\PriorityEnum;
+use Myth\Scribe\Prompts\BasePrompt;
+use Override;
 
-class ClusterFeedbackPrompt
+class ClusterFeedbackPrompt extends BasePrompt
 {
     /**
      * @param array<int, array<string, mixed>> $items            Ungrouped feedback items: [['id' => int, 'message' => string], ...]
@@ -27,6 +29,7 @@ class ClusterFeedbackPrompt
     ) {
     }
 
+    #[Override]
     public function systemPrompt(): string
     {
         return <<<'PROMPT'
@@ -42,6 +45,7 @@ class ClusterFeedbackPrompt
             PROMPT;
     }
 
+    #[Override]
     public function userPrompt(): string
     {
         $parts = [];
@@ -70,6 +74,7 @@ class ClusterFeedbackPrompt
     /**
      * @return array<string, mixed>
      */
+    #[Override]
     public function schema(): array
     {
         return [

@@ -13,25 +13,37 @@ declare(strict_types=1);
 
 namespace Tests\Support;
 
+use Myth\Scribe\AIResponse;
+use Myth\Scribe\AIService;
+use Myth\Scribe\Config\AI;
 use Myth\Scribe\Exceptions\AIException;
-use Myth\Scribe\Response\ScribeResponse;
+use Myth\Scribe\Prompts\BasePrompt;
+use Override;
 
 /**
- * Test double for the myth/scribe service.
+ * Test double for the scribe AI service, returning canned suggestions instead
+ * of calling a provider.
+ *
+ * It extends the real AIService so that anything type-hinting scribe's service
+ * still accepts it — which also means the prompt it is handed has to be a real
+ * BasePrompt, keeping the double honest about the contract callers must meet.
+ *
  * Inject via Services::injectMock('scribe', new FakeScribeService([...]))
  */
-final readonly class FakeScribeService
+final class FakeScribeService extends AIService
 {
     /**
-     * @param array<int, array<string, mixed>> $suggestions
+     * @param array<int, mixed> $suggestions
      */
     public function __construct(
-        private array $suggestions,
-        private bool $shouldThrow = false,
+        private readonly array $suggestions,
+        private readonly bool $shouldThrow = false,
     ) {
+        parent::__construct(new AI(), []);
     }
 
-    public function run(): ScribeResponse
+    #[Override]
+    public function run(BasePrompt $prompt): AIResponse
     {
         if ($this->shouldThrow) {
             throw new AIException('AI service unavailable');

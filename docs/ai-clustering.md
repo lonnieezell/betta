@@ -2,12 +2,12 @@
 
 `feedback:analyze` uses AI to group your ungrouped feedback into clusters automatically. Instead of manually reading each item and deciding where it belongs, you run the command and get a set of suggested clusters — then accept, skip, or tweak each one.
 
-It requires [`myth/scribe`](https://github.com/myth/scribe) to be installed. The rest of the package works fine without it.
+It requires [`lonnieezell/scribe`](https://github.com/lonnieezell/scribe) to be installed. The rest of the package works fine without it.
 
 ## Prerequisites
 
 ```bash
-composer require myth/scribe
+composer require lonnieezell/scribe
 ```
 
 If you run `feedback:analyze` without Scribe installed, you'll get a clear message and a non-zero exit code — nothing breaks.

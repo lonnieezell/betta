@@ -15,15 +15,15 @@ namespace Myth\Betta\Config;
 
 use CodeIgniter\Config\BaseService;
 use Myth\Betta\Services\GitHubService;
-use Myth\Scribe\Services\ScribeService;
+use Myth\Scribe\AIService;
 
 class Services extends BaseService
 {
     /**
-     * Returns the myth/scribe AI service.
-     * Requires myth/scribe to be installed (guarded by class_exists in callers).
+     * Returns the scribe AI service.
+     * Requires lonnieezell/scribe to be installed (guarded by class_exists in callers).
      */
-    public static function scribe(bool $getShared = true): ScribeService
+    public static function scribe(bool $getShared = true): AIService
     {
         return static::getSharedInstance('scribe', $getShared);
     }

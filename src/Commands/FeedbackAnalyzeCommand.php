@@ -22,14 +22,14 @@ use Myth\Betta\Enums\StatusEnum;
 use Myth\Betta\Models\FeedbackClusterModel;
 use Myth\Betta\Models\FeedbackModel;
 use Myth\Betta\Prompts\ClusterFeedbackPrompt;
+use Myth\Scribe\AIService;
 use Myth\Scribe\Exceptions\AIException;
-use Myth\Scribe\Services\ScribeService;
 
 class FeedbackAnalyzeCommand extends BaseCommand
 {
     protected $group       = 'Betta';
     protected $name        = 'feedback:analyze';
-    protected $description = 'AI-assisted clustering of ungrouped feedback via myth/scribe.';
+    protected $description = 'AI-assisted clustering of ungrouped feedback via lonnieezell/scribe.';
     protected $options     = [
         '--dry-run' => 'Print suggestions without writing to the database.',
         '--apply'   => 'Write all suggestions without interactive prompts.',
@@ -41,8 +41,8 @@ class FeedbackAnalyzeCommand extends BaseCommand
      */
     public function run(array $params): int
     {
-        if (! class_exists(ScribeService::class)) {
-            CLI::error('myth/scribe is not installed. Add it with: composer require myth/scribe');
+        if (! class_exists(AIService::class)) {
+            CLI::error('lonnieezell/scribe is not installed. Add it with: composer require lonnieezell/scribe');
 
             return EXIT_ERROR;
         }
@@ -87,8 +87,8 @@ class FeedbackAnalyzeCommand extends BaseCommand
         $prompt = new ClusterFeedbackPrompt($itemsData, $clustersData);
 
         try {
-            $scribe      = service('scribe');
-            $suggestions = $scribe->run($prompt)->toArray();
+            $scribe   = service('scribe');
+            $response = $scribe->run($prompt)->toArray();
         } catch (AIException $e) {
             CLI::error('AI error: ' . $e->getMessage());
 
@@ -98,6 +98,8 @@ class FeedbackAnalyzeCommand extends BaseCommand
 
             return EXIT_ERROR;
         }
+
+        $suggestions = $this->normalizeSuggestions($response);
 
         if ($dryRun) {
             $this->displaySuggestions($suggestions, $clustersData);
@@ -132,6 +134,39 @@ class FeedbackAnalyzeCommand extends BaseCommand
      * @param array<int, array<string, mixed>> $suggestions
      * @param array<int, array<string, mixed>> $clustersData
      */
+    /**
+     * The schema asks the model for a list of cluster objects, but nothing
+     * enforces that it obliges — scribe hands back whatever JSON came out of
+     * the provider. Anything that isn't a usable suggestion is dropped here so
+     * one malformed entry can't fatal the whole run further down.
+     *
+     * @param array<string, mixed> $decoded
+     *
+     * @return array<int, array<string, mixed>>
+     */
+    private function normalizeSuggestions(array $decoded): array
+    {
+        $suggestions = [];
+
+        foreach ($decoded as $entry) {
+            if (! is_array($entry)) {
+                continue;
+            }
+
+            $suggestion = [];
+
+            foreach ($entry as $key => $value) {
+                $suggestion[(string) $key] = $value;
+            }
+
+            if (isset($suggestion['label'], $suggestion['ids'])) {
+                $suggestions[] = $suggestion;
+            }
+        }
+
+        return $suggestions;
+    }
+
     private function displaySuggestions(array $suggestions, array $clustersData): void
     {
         foreach ($suggestions as $suggestion) {

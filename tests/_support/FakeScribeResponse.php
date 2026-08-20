@@ -13,27 +13,26 @@ declare(strict_types=1);
 
 namespace Tests\Support;
 
-use Myth\Scribe\Response\ScribeResponse;
-use Override;
+use Myth\Scribe\AIResponse;
 
 /**
- * Named test-double response used by FakeScribeService.
+ * A real AIResponse carrying canned suggestions, so tests exercise scribe's
+ * own JSON decoding in toArray() rather than a stubbed-out version of it.
  */
-final class FakeScribeResponse extends ScribeResponse
+final readonly class FakeScribeResponse extends AIResponse
 {
     /**
-     * @param array<int, array<string, mixed>> $data
+     * @param array<int, mixed> $data Suggestion objects, or deliberately
+     *                                malformed entries when a test needs them.
      */
-    public function __construct(private readonly array $data)
+    public function __construct(array $data)
     {
-    }
-
-    /**
-     * @return array<int, array<string, mixed>>
-     */
-    #[Override]
-    public function toArray(): array
-    {
-        return $this->data;
+        parent::__construct(
+            content: json_encode($data, JSON_THROW_ON_ERROR),
+            model: 'fake-model',
+            inputTokens: 0,
+            outputTokens: 0,
+            raw: [],
+        );
     }
 }
