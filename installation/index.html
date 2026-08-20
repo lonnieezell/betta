@@ -721,13 +721,14 @@
 </code></pre></div>
 <p>CI4 auto-discovers the package — routes, Spark commands, and migrations are all wired up with no manual bootstrapping.</p>
 <h2 id="optional-ai-clustering">Optional: AI clustering</h2>
-<p>To use <code>spark feedback:analyze</code>, install <code>myth/scribe</code> and configure an API key:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>composer<span class="w"> </span>require<span class="w"> </span>myth/scribe
+<p>To use <code>spark feedback:analyze</code>, install <code>lonnieezell/scribe</code> and configure an API key:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>composer<span class="w"> </span>require<span class="w"> </span>lonnieezell/scribe
 <a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>php<span class="w"> </span>spark<span class="w"> </span>config:publish<span class="w"> </span>Myth<span class="se">\S</span>cribe<span class="se">\C</span>onfig<span class="se">\A</span>I
 </code></pre></div>
 <p>Then add your key to <code>.env</code>:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>CLAUDE_API_KEY=sk-ant-...
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>ANTHROPIC_API_KEY=sk-ant-...
 <a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a># or OPENAI_API_KEY=sk-...
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a># or GOOGLE_API_KEY=...
 </code></pre></div>
 <p><code>myth/betta</code> works fine without Scribe — the <code>feedback:analyze</code> command just exits cleanly if it isn't installed.</p>
 <h2 id="optional-override-config">Optional: override config</h2>
